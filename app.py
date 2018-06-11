@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_heroku import Heroku
+from flask import render_template
 
 # create an instance of flask = app variable
 app = Flask(__name__)
@@ -14,9 +15,14 @@ heroku = Heroku(app)
 
 #app.config.from_pyfile('models.py')
 
-from models import db
+from models import db, Recipe
 
-
+#############################HOME PAGE##########################################
+@app.route('/')
+def index():
+    recipe_count = Recipe.query.count()
+    recipes_list = Recipe.query.limit(30).all()
+    return render_template('index.html', recipe_count=str(recipe_count), recipes_list=recipes_list)
 
 
 if __name__ == '__main__':

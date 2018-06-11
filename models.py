@@ -81,6 +81,9 @@ class Recipe(db.Model):
     allergens = db.relationship('Allergen', secondary='recipe_allergen', backref='recipe', lazy='dynamic')
     dietaries = db.relationship('Dietary', secondary='recipe_dietary', backref='recipe', lazy='dynamic')
 
+    def __repr__(self):
+        return '<Recipe>' % self.recipe_name
+
 class Ingredient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     ingredient_name = db.Column(String(150), nullable=False, unique=True)

@@ -1,0 +1,8 @@
+{% extends 'base.html'%} {% block content %}
+<div class="row">
+    <p>{{ recipe_count }}</p>
+    {% for recipe in recipes_list %}
+        {{ recipe.recipe_name }}
+    {% endfor %}
+</div>
+{% endblock %}
