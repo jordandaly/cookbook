@@ -1,0 +1,98 @@
+{% extends 'base.html'%} {% block content %}
+<div class="row">
+    <h3>Categories</h3>
+    <p>{{ category_count }}</p>
+    <ul>
+    {% for category in categories_list %}
+        <li>{{ category.category_name }}</li>
+    {% endfor %}
+    </ul>
+</div>
+<div class="row">
+    <form method="POST" action=/add_category>
+        <label for="category" >New Category:</label>
+        <input type="text" id="category" name="category" required>
+        <button>Submit</button>
+    </form>
+</div>
+<div class="row">
+    <h3>Courses</h3>
+    <p>{{ course_count }}</p>
+    <ul>
+    {% for course in courses_list %}
+        <li>{{ course.course_name }}</li>
+    {% endfor %}
+    </ul>
+</div>
+<div class="row">
+    <form method="POST" action=/add_course>
+        <label for="course" >New Course:</label>
+        <input type="text" id="course" name="course" required>
+        <button>Submit</button>
+    </form>
+</div>
+<div class="row">
+    <h3>Cuisines</h3>
+    <p>{{ cuisine_count }}</p>
+    <ul>
+    {% for cuisine in cuisines_list %}
+        <li>{{ cuisine.cuisine_name }}</li>
+    {% endfor %}
+    </ul>
+</div>
+<div class="row">
+    <form method="POST" action=/add_cuisine>
+        <label for="cuisine" >New Cuisine:</label>
+        <input type="text" id="cuisine" name="cuisine" required>
+        <button>Submit</button>
+    </form>
+</div>
+<div class="row">
+    <h3>Countries</h3>
+    <p>{{ country_count }}</p>
+    <ul>
+    {% for country in countries_list %}
+        <li>{{ country.country_name }}</li>
+    {% endfor %}
+    </ul>
+</div>
+<div class="row">
+    <form method="POST" action=/add_country>
+        <label for="country" >New Country:</label>
+        <input type="text" id="country" name="country" required>
+        <button>Submit</button>
+    </form>
+</div>
+<div class="row">
+    <h3>Allergens</h3>
+    <p>{{ allergen_count }}</p>
+    <ul>
+    {% for allergen in allergens_list %}
+        <li>{{ allergen.allergen_name }}</li>
+    {% endfor %}
+    </ul>
+</div>
+<div class="row">
+    <form method="POST" action=/add_allergen>
+        <label for="allergen" >New Allergen:</label>
+        <input type="text" id="allergen" name="allergen" required>
+        <button>Submit</button>
+    </form>
+</div>
+<div class="row">
+    <h3>Dietaries</h3>
+    <p>{{ dietary_count }}</p>
+    <ul>
+    {% for dietary in dietaries_list %}
+        <li>{{ dietary.dietary_name }}</li>
+    {% endfor %}
+    </ul>
+</div>
+<div class="row">
+    <form method="POST" action=/add_dietary>
+        <label for="dietary" >New Dietary:</label>
+        <input type="text" id="dietary" name="dietary" required>
+        <button>Submit</button>
+    </form>
+</div>
+{% endblock %}
