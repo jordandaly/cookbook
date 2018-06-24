@@ -75,20 +75,20 @@ class Country(db.Model):
     def __repr__(self):
         return '<Country>' % self.country_name
 
-class Step(db.Model):
+class Method(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'), nullable=False)
-    recipe = db.relationship('Recipe', backref=db.backref('steps', lazy=True))
-    step_number = db.Column(db.Integer)
-    step_description = db.Column(Text)
+    recipe = db.relationship('Recipe', backref=db.backref('methods', lazy=True))
+    #step_number = db.Column(db.Integer)
+    method_description = db.Column(Text)
 
-    def __init__(self, step_number, step_description, recipe):
-        self.step_number = step_number
-        self.step_description = step_description
+    def __init__(self, method_description, recipe):
+        #self.step_number = step_number
+        self.method_description = method_description
         self.recipe = recipe
     
     def __repr__(self):
-        return '<Step>' % self.step_description
+        return '<Method>' % self.method_description
 
 class Allergen(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -178,7 +178,7 @@ class Measurement(db.Model):
 
     #quantities = db.relationship('Quantity', backref='measurement', lazy='dynamic')
 
-    def __init__(self, ingredient_name):
+    def __init__(self, measurement_name):
         self.measurement_name = measurement_name
     
     def __repr__(self):

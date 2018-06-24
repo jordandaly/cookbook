@@ -64,6 +64,29 @@
     </form>
 </div>
 <div class="row">
+    <h3>Authors</h3>
+    <p>{{ author_count }}</p>
+    <ul>
+    {% for author in authors_list %}
+        <li>{{ author.author_name }}</li>
+    {% endfor %}
+    </ul>
+</div>
+<div class="row">
+    <form method="POST" action=/add_author>
+        <label for="author" >New Author Name:</label>
+        <input type="text" id="author" name="author" required>
+        <label for="author_country" >New Author Country:</label>
+        <!-- <input type="text" id="author_country" name="author_country" required> -->
+        <select id="author_country" name="author_country">
+            {% for country in countries_list %}
+            <option value="{{country.id}}" SELECTED>{{country.country_name}}</option>
+            {% endfor %}
+        </select>
+        <button>Submit</button>
+    </form>
+</div>
+<div class="row">
     <h3>Allergens</h3>
     <p>{{ allergen_count }}</p>
     <ul>
@@ -92,6 +115,22 @@
     <form method="POST" action=/add_dietary>
         <label for="dietary" >New Dietary:</label>
         <input type="text" id="dietary" name="dietary" required>
+        <button>Submit</button>
+    </form>
+</div>
+<div class="row">
+    <h3>Measurements</h3>
+    <p>{{ measurement_count }}</p>
+    <ul>
+    {% for measurement in measurements_list %}
+        <li>{{ measurement.measurement_name }}</li>
+    {% endfor %}
+    </ul>
+</div>
+<div class="row">
+    <form method="POST" action=/add_measurement>
+        <label for="measurement" >New Measurement:</label>
+        <input type="text" id="measurement" name="measurement" required>
         <button>Submit</button>
     </form>
 </div>

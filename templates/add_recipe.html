@@ -1,0 +1,66 @@
+{% extends 'base.html'%} {% block content %}
+<div class="row">
+    <form method="POST" action=/add_recipe>
+        <label for="recipe_name" >Recipe Name:</label>
+        <input type="text" id="recipe_name" name="recipe_name" required>
+        
+        <label for="recipe_description" >Recipe Description:</label>
+        <input type="text" id="recipe_description" name="recipe_description">
+        
+        <label for="preparation_time" >Preparation Time:</label>
+        <input type="number" id="preparation_time" name="preparation_time" required>
+        
+        <label for="cooking_time" >Cooking Time:</label>
+        <input type="number" id="cooking_time" name="cooking_time" required>
+        
+        <label for="servings" >Servings:</label>
+        <input type="number" id="servings" name="servings" required>
+
+        <label for="category" >Category:</label>
+        <select id="recipe_category" name="recipe_category">
+            {% for category in categories_list %}
+            <option value="{{category.id}}" SELECTED>{{category.category_name}}</option>
+            {% endfor %}
+        </select>
+
+        <label for="course" >Course:</label>
+        <select id="recipe_course" name="recipe_course">
+            {% for course in courses_list %}
+            <option value="{{course.id}}" SELECTED>{{course.course_name}}</option>
+            {% endfor %}
+        </select>
+
+        <label for="cuisine" >Cuisine:</label>
+        <select id="recipe_cuisine" name="recipe_cuisine">
+            {% for cuisine in cuisines_list %}
+            <option value="{{cuisine.id}}" SELECTED>{{cuisine.cuisine_name}}</option>
+            {% endfor %}
+        </select>
+
+        <label for="author" >Author:</label>
+        <select id="recipe_author" name="recipe_author">
+            {% for author in authors_list %}
+            <option value="{{author.id}}" SELECTED>{{author.author_name}}</option>
+            {% endfor %}
+        </select>
+
+        <label for="quantity" >Quantity:</label>
+        <input type="number" id="quantity" name="quantity" required>
+
+        <label for="quantity_measurement" >Measurement:</label>
+        <select id="quantity_measurement" name="quantity_measurement">
+            {% for measurement in measurements_list %}
+            <option value="{{measurement.id}}" SELECTED>{{measurement.measurement_name}}</option>
+            {% endfor %}
+        </select>
+
+        <label for="ingredient" >Ingredient:</label>
+        <input type="text" id="ingredient" name="ingredient" required>
+
+        <label for="method" >Method:</label>
+        <input type="text" id="method" name="method" required>
+        
+        <button>Submit</button>
+    </form>
+</div>
+{% endblock %}

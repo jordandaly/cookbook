@@ -15,7 +15,7 @@ heroku = Heroku(app)
 
 #app.config.from_pyfile('models.py')
 
-from models import db, Recipe, Category, Course, Cuisine, Country, Allergen, Dietary
+from models import db, Recipe, Category, Course, Cuisine, Country, Allergen, Dietary, Author, Measurement, Quantity, Ingredient, Method
 
 #############################HOME PAGE##########################################
 @app.route('/')
@@ -24,12 +24,53 @@ def index():
     recipes_list = Recipe.query.limit(100).all()
     return render_template('index.html', recipe_count=str(recipe_count), recipes_list=recipes_list)
 
-# @app.route('/add_recipe', methods = ['GET','POST'])
-# def add_recipe():
-#     recipe = Recipe(request.form['recipe_name'])
-#     db.session.add(category)
-#     db.session.commit()
-#     return redirect(url_for('index'))
+@app.route('/add_recipe', methods = ['GET','POST'])
+def add_recipe():
+        categories_list = Category.query.limit(100).all()
+        courses_list = Course.query.limit(100).all()
+        cuisines_list = Cuisine.query.limit(100).all()
+        authors_list = Author.query.limit(100).all()
+        measurements_list = Measurement.query.limit(100).all()
+        if request.method == 'POST':
+            recipe_category = Category.query.filter_by(id=request.form['recipe_category']).first()
+            recipe_course = Course.query.filter_by(id=request.form['recipe_course']).first()
+            recipe_cuisine = Cuisine.query.filter_by(id=request.form['recipe_cuisine']).first()
+            recipe_author = Author.query.filter_by(id=request.form['recipe_author']).first()
+
+            recipe = Recipe(request.form['recipe_name'], 
+            request.form['recipe_description'], 
+            request.form['preparation_time'], 
+            request.form['cooking_time'], 
+            request.form['servings'],
+            recipe_category,
+            recipe_course,
+            recipe_cuisine,
+            recipe_author)
+
+            db.session.add(recipe)
+
+            quantity_measurement = Measurement.query.filter_by(id=request.form['quantity_measurement']).first()
+            quantity_recipe = Recipe.query.filter_by(id=recipe.id).first()
+            quantity_ingredient = Ingredient(request.form['ingredient'])
+
+            quantity = Quantity(request.form['quantity'], 
+            quantity_recipe,
+            quantity_ingredient,
+            quantity_measurement)
+
+            db.session.add(quantity)
+
+            method_recipe = Recipe.query.filter_by(id=recipe.id).first()
+
+            method = Method(request.form['method'], 
+            method_recipe)
+
+            db.session.add(method)
+
+            db.session.commit()
+            return redirect(url_for('index'))
+        measurements_list = Measurement.query.limit(100).all()
+        return render_template('add_recipe.html', categories_list=categories_list, courses_list=courses_list, cuisines_list=cuisines_list, authors_list=authors_list, measurements_list=measurements_list)
 
 #############################MANAGE STATIC DATA##########################################
 @app.route('/manage_static_data')
@@ -46,12 +87,18 @@ def manage_static_data():
     country_count = Country.query.count()
     countries_list = Country.query.limit(250).all()
 
+    author_count = Author.query.count()
+    authors_list = Author.query.limit(100).all()
+
     allergen_count = Allergen.query.count()
     allergens_list = Allergen.query.limit(100).all()
 
     dietary_count = Dietary.query.count()
     dietaries_list = Dietary.query.limit(100).all()
-    return render_template('manage_static_data.html', category_count=str(category_count), categories_list=categories_list, course_count=str(course_count), courses_list=courses_list, cuisine_count=str(cuisine_count), cuisines_list=cuisines_list, country_count=str(country_count), countries_list=countries_list, allergen_count=str(allergen_count), allergens_list=allergens_list, dietary_count=str(dietary_count), dietaries_list=dietaries_list)
+
+    measurement_count = Measurement.query.count()
+    measurements_list = Measurement.query.limit(100).all()
+    return render_template('manage_static_data.html', category_count=str(category_count), categories_list=categories_list, course_count=str(course_count), courses_list=courses_list, cuisine_count=str(cuisine_count), cuisines_list=cuisines_list, country_count=str(country_count), countries_list=countries_list, author_count=str(author_count), authors_list=authors_list, allergen_count=str(allergen_count), allergens_list=allergens_list, dietary_count=str(dietary_count), dietaries_list=dietaries_list, measurement_count=str(measurement_count), measurements_list=measurements_list)
 
 #############################CATEGORY##########################################
 @app.route('/add_category', methods = ['POST'])
@@ -85,6 +132,16 @@ def add_country():
     db.session.commit()
     return redirect(url_for('manage_static_data'))
 
+#############################AUTHOR##########################################
+@app.route('/add_author', methods = ['POST'])
+def add_author():
+    author_country = Country.query.filter_by(id=request.form['author_country']).first()
+    author = Author(request.form['author'])
+    author_country.authors.append(author)
+    db.session.add(author_country)
+    db.session.commit()
+    return redirect(url_for('manage_static_data'))
+
 #############################ALLERGEN##########################################
 @app.route('/add_allergen', methods = ['POST'])
 def add_allergen():
@@ -100,7 +157,13 @@ def add_dietary():
     db.session.add(dietary)
     db.session.commit()
     return redirect(url_for('manage_static_data'))
-
+#############################MEASUREMENT##########################################
+@app.route('/add_measurement', methods = ['POST'])
+def add_measurement():
+    measurement = Measurement(request.form['measurement'])
+    db.session.add(measurement)
+    db.session.commit()
+    return redirect(url_for('manage_static_data'))
 
 if __name__ == '__main__':
     app.run()

@@ -1,5 +1,6 @@
 {% extends 'base.html'%} {% block content %}
 <p><a href="{{ url_for('manage_static_data') }}">Manage Static Data</a></p>
+<p><a href="{{ url_for('add_recipe') }}">Add New Recipe</a></p>
 <div class="row">
     <p>{{ recipe_count }}</p>
     {% for recipe in recipes_list %}
