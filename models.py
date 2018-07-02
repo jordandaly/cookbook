@@ -141,7 +141,7 @@ class Recipe(db.Model):
     author = db.relationship('Author', backref=db.backref('recipes', lazy=True))
 
     #steps = db.relationship('Step', backref='recipe', lazy='dynamic')
-    #quantities = db.relationship('Quantity', backref='recipe', lazy='dynamic')
+    # quantities = db.relationship('Quantity')
     
     allergens = db.relationship('Allergen', secondary='recipe_allergen', backref='recipe', lazy='dynamic')
     dietaries = db.relationship('Dietary', secondary='recipe_dietary', backref='recipe', lazy='dynamic')
@@ -164,7 +164,7 @@ class Ingredient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     ingredient_name = db.Column(String(150), nullable=False, unique=True)
 
-    #quantities = db.relationship('Quantity', backref='ingredient', lazy='dynamic')
+    # quantities = db.relationship('Quantity')
 
     def __init__(self, ingredient_name):
         self.ingredient_name = ingredient_name
@@ -176,7 +176,7 @@ class Measurement(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     measurement_name = db.Column(String(150), nullable=False, unique=True)
 
-    #quantities = db.relationship('Quantity', backref='measurement', lazy='dynamic')
+    # quantities = db.relationship('Quantity')
 
     def __init__(self, measurement_name):
         self.measurement_name = measurement_name

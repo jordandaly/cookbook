@@ -2,6 +2,11 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_heroku import Heroku
 from flask import render_template, redirect, url_for, request
+from wtforms import Form
+from wtforms import FieldList
+from wtforms import Form as NoCsrfForm
+from wtforms.fields import StringField, FormField, SubmitField, FloatField, SelectField
+from wtforms.validators import DataRequired
 
 # create an instance of flask = app variable
 app = Flask(__name__)
@@ -15,6 +20,28 @@ heroku = Heroku(app)
 
 #app.config.from_pyfile('models.py')
 
+UNITS = [('kg', 'Kilograms'),
+         ('g', 'Grams'),
+         ('L', 'Litres'),
+         ('ml', 'Millilitres'),
+         ('oz', 'Ounces'),
+         ('lb', 'Pounds'),
+         ('tbsp', 'Table Spoons'),
+         ('tsp', 'Tea')] 
+
+# - - - Forms - - -
+class QuantityForm(NoCsrfForm):
+    # this forms is never exposed so we can use the non CSRF version
+    quantity = FloatField('Quantity', validators=[DataRequired()])
+    ingredient = StringField('Ingredient', validators=[DataRequired()])
+    measurement = SelectField('Measurement', choices=UNITS)
+  
+
+class CombinedForm(Form):
+    # we must provide empth Phone() instances else populate_obj will fail
+    quantities = FieldList(FormField(QuantityForm, default=lambda: Quantity()))
+    submit = SubmitField('Submit')
+
 from models import db, Recipe, Category, Course, Cuisine, Country, Allergen, Dietary, Author, Measurement, Quantity, Ingredient, Method
 
 #############################HOME PAGE##########################################
@@ -24,6 +51,7 @@ def index():
     recipes_list = Recipe.query.limit(100).all()
     return render_template('index.html', recipe_count=str(recipe_count), recipes_list=recipes_list)
 
+#############################ADD RECIPE##########################################
 @app.route('/add_recipe', methods = ['GET','POST'])
 def add_recipe():
         categories_list = Category.query.limit(100).all()
@@ -31,6 +59,17 @@ def add_recipe():
         cuisines_list = Cuisine.query.limit(100).all()
         authors_list = Author.query.limit(100).all()
         measurements_list = Measurement.query.limit(100).all()
+        quantity = Quantity.query.first()
+        recipe = Recipe.query.first()
+        ingredient = Ingredient.query.first()
+        measurement = Measurement.query.first()
+        # if Recipe has no quantities, provide an empty one so table is rendered
+        if len(recipe.quantities) == 0:
+            recipe.quantities = [Quantity(quantity=0, recipe=recipe, ingredient=ingredient, measurement=measurement)]
+        #     recipe.quantities = [Quantity.query.first()]
+        form = CombinedForm(obj=recipe)
+        # form.quantities.choices = [(m.id, m.measurement_name) for m in Measurement.query.order_by('measurement_name')]
+        
         if request.method == 'POST':
             recipe_category = Category.query.filter_by(id=request.form['recipe_category']).first()
             recipe_course = Course.query.filter_by(id=request.form['recipe_course']).first()
@@ -49,16 +88,20 @@ def add_recipe():
 
             db.session.add(recipe)
 
-            quantity_measurement = Measurement.query.filter_by(id=request.form['quantity_measurement']).first()
-            quantity_recipe = Recipe.query.filter_by(id=recipe.id).first()
-            quantity_ingredient = Ingredient(request.form['ingredient'])
+            # quantity_measurement = Measurement.query.filter_by(id=request.form['quantity_measurement']).first()
+            # quantity_recipe = Recipe.query.filter_by(id=recipe.id).first()
+            # quantity_ingredient = Ingredient(request.form['ingredient'])
 
-            quantity = Quantity(request.form['quantity'], 
-            quantity_recipe,
-            quantity_ingredient,
-            quantity_measurement)
+            # quantity = Quantity(request.form['quantity'], 
+            # quantity_recipe,
+            # quantity_ingredient,
+            # quantity_measurement)
 
-            db.session.add(quantity)
+            # db.session.add(quantity)
+
+            
+            if form.validate_on_submit():
+                form.populate_obj(recipe)
 
             method_recipe = Recipe.query.filter_by(id=recipe.id).first()
 
@@ -70,7 +113,7 @@ def add_recipe():
             db.session.commit()
             return redirect(url_for('index'))
         measurements_list = Measurement.query.limit(100).all()
-        return render_template('add_recipe.html', categories_list=categories_list, courses_list=courses_list, cuisines_list=cuisines_list, authors_list=authors_list, measurements_list=measurements_list)
+        return render_template('add_recipe.html', categories_list=categories_list, courses_list=courses_list, cuisines_list=cuisines_list, authors_list=authors_list, measurements_list=measurements_list, form=form)
 
 #############################MANAGE STATIC DATA##########################################
 @app.route('/manage_static_data')
