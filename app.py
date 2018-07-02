@@ -33,8 +33,9 @@ UNITS = [('kg', 'Kilograms'),
 class QuantityForm(NoCsrfForm):
     # this forms is never exposed so we can use the non CSRF version
     quantity = FloatField('Quantity', validators=[DataRequired()])
-    ingredient = StringField('Ingredient', validators=[DataRequired()])
     measurement = SelectField('Measurement', choices=UNITS)
+    ingredient = StringField('Ingredient', validators=[DataRequired()])
+    
   
 
 class CombinedForm(Form):

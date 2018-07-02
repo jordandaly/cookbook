@@ -25,7 +25,7 @@ class Category(db.Model):
         self.category_name = category_name
 
     def __repr__(self):
-        return '<Category>' % self.category_name
+        return '<Category %r>' % self.category_name
 
 class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -37,7 +37,7 @@ class Course(db.Model):
         self.course_name = course_name
 
     def __repr__(self):
-        return '<Course>' % self.course_name
+        return '<Course %r>' % self.course_name
 
 class Cuisine(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -49,7 +49,7 @@ class Cuisine(db.Model):
         self.cuisine_name = cuisine_name
 
     def __repr__(self):
-        return '<Cuisine>' % self.cuisine_name
+        return '<Cuisine %r>' % self.cuisine_name
 
 class Author(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -63,7 +63,7 @@ class Author(db.Model):
         self.author_name = author_name
     
     def __repr__(self):
-        return '<Author>' % self.author_name
+        return '<Author %r>' % self.author_name
 
 class Country(db.Model):
     id = Column(db.Integer, primary_key=True)
@@ -73,7 +73,7 @@ class Country(db.Model):
         self.country_name = country_name
     
     def __repr__(self):
-        return '<Country>' % self.country_name
+        return '<Country %r>' % self.country_name
 
 class Method(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -88,7 +88,7 @@ class Method(db.Model):
         self.recipe = recipe
     
     def __repr__(self):
-        return '<Method>' % self.method_description
+        return '<Method %r>' % self.method_description
 
 class Allergen(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -98,7 +98,7 @@ class Allergen(db.Model):
         self.allergen_name = allergen_name
     
     def __repr__(self):
-        return '<Allergen>' % self.allergen_name
+        return '<Allergen %r>' % self.allergen_name
 
 db.Table('recipe_allergen',
     db.Column('recipe_id', db.Integer, db.ForeignKey('recipe.id')),
@@ -113,7 +113,7 @@ class Dietary(db.Model):
         self.dietary_name = dietary_name
     
     def __repr__(self):
-        return '<Dietary>' % self.dietary_name
+        return '<Dietary %r>' % self.dietary_name
 
 db.Table('recipe_dietary',
     db.Column('recipe_id', db.Integer, db.ForeignKey('recipe.id')),
@@ -158,7 +158,7 @@ class Recipe(db.Model):
         self.author = author
 
     def __repr__(self):
-        return '<Recipe>' % self.recipe_name
+        return '<Recipe %r>' % self.recipe_name
 
 class Ingredient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -170,7 +170,7 @@ class Ingredient(db.Model):
         self.ingredient_name = ingredient_name
     
     def __repr__(self):
-        return '<Ingredient>' % self.ingredient_name
+        return '<Ingredient %r>' % self.ingredient_name
 
 class Measurement(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -182,7 +182,7 @@ class Measurement(db.Model):
         self.measurement_name = measurement_name
     
     def __repr__(self):
-        return '<Measurement>' % self.measurement_name
+        return '<Measurement %r>' % self.measurement_name
 
 
 class Quantity(db.Model):
@@ -205,6 +205,6 @@ class Quantity(db.Model):
         self.measurement = measurement
     
     def __repr__(self):
-        return '<Quantity>' % self.quantity
+        return '<Quantity %r>' % self.quantity
     
     
