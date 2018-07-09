@@ -1,4 +1,6 @@
 {% extends 'base.html'%} {% block content %}
+<p><a href="{{ url_for('index') }}">Home</a></p>
+<p><a href="{{ url_for('recipe_list') }}">Recipe List</a></p>
 <div class="row">
     <h3>Categories</h3>
     <p>{{ category_count }}</p>
@@ -134,4 +136,20 @@
         <button>Submit</button>
     </form>
 </div>
+<div class="row">
+        <h3>Ingredients</h3>
+        <p>{{ ingredient_count }}</p>
+        <ul>
+        {% for ingredient in ingredients_list %}
+            <li>{{ ingredient.ingredient_name }}</li>
+        {% endfor %}
+        </ul>
+    </div>
+    <div class="row">
+        <form method="POST" action=/add_ingredient>
+            <label for="ingredient" >New Ingredient:</label>
+            <input type="text" id="ingredient" name="ingredient" required>
+            <button>Submit</button>
+        </form>
+    </div>
 {% endblock %}

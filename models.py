@@ -5,11 +5,12 @@ from datetime import datetime
 from sqlalchemy import Boolean, Column, Date, DateTime, Integer, SmallInteger, String, Text, text, ARRAY, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
-
+from flask_migrate import Migrate
 
 
 # constructor method
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 
 class Test(db.Model):
@@ -25,7 +26,7 @@ class Category(db.Model):
         self.category_name = category_name
 
     def __repr__(self):
-        return '<Category>' % self.category_name
+        return '<Category %r>' % self.category_name
 
 class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -37,7 +38,7 @@ class Course(db.Model):
         self.course_name = course_name
 
     def __repr__(self):
-        return '<Course>' % self.course_name
+        return '<Course %r>' % self.course_name
 
 class Cuisine(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -49,7 +50,7 @@ class Cuisine(db.Model):
         self.cuisine_name = cuisine_name
 
     def __repr__(self):
-        return '<Cuisine>' % self.cuisine_name
+        return '<Cuisine %r>' % self.cuisine_name
 
 class Author(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -63,7 +64,7 @@ class Author(db.Model):
         self.author_name = author_name
     
     def __repr__(self):
-        return '<Author>' % self.author_name
+        return '<Author %r>' % self.author_name
 
 class Country(db.Model):
     id = Column(db.Integer, primary_key=True)
@@ -73,22 +74,24 @@ class Country(db.Model):
         self.country_name = country_name
     
     def __repr__(self):
-        return '<Country>' % self.country_name
+        return '<Country %r>' % self.country_name
 
 class Method(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'), nullable=False)
     recipe = db.relationship('Recipe', backref=db.backref('methods', lazy=True))
-    #step_number = db.Column(db.Integer)
     method_description = db.Column(Text)
+    #step_number = db.Column(db.Integer)
 
-    def __init__(self, method_description, recipe):
+
+    def __init__(self, recipe, method_description):
         #self.step_number = step_number
-        self.method_description = method_description
         self.recipe = recipe
+        self.method_description = method_description
+        
     
     def __repr__(self):
-        return '<Method>' % self.method_description
+        return '<Method %r>' % self.method_description
 
 class Allergen(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -98,7 +101,7 @@ class Allergen(db.Model):
         self.allergen_name = allergen_name
     
     def __repr__(self):
-        return '<Allergen>' % self.allergen_name
+        return '<Allergen %r>' % self.allergen_name
 
 db.Table('recipe_allergen',
     db.Column('recipe_id', db.Integer, db.ForeignKey('recipe.id')),
@@ -113,7 +116,7 @@ class Dietary(db.Model):
         self.dietary_name = dietary_name
     
     def __repr__(self):
-        return '<Dietary>' % self.dietary_name
+        return '<Dietary %r>' % self.dietary_name
 
 db.Table('recipe_dietary',
     db.Column('recipe_id', db.Integer, db.ForeignKey('recipe.id')),
@@ -141,7 +144,7 @@ class Recipe(db.Model):
     author = db.relationship('Author', backref=db.backref('recipes', lazy=True))
 
     #steps = db.relationship('Step', backref='recipe', lazy='dynamic')
-    #quantities = db.relationship('Quantity', backref='recipe', lazy='dynamic')
+    # quantities = db.relationship('Quantity')
     
     allergens = db.relationship('Allergen', secondary='recipe_allergen', backref='recipe', lazy='dynamic')
     dietaries = db.relationship('Dietary', secondary='recipe_dietary', backref='recipe', lazy='dynamic')
@@ -158,31 +161,31 @@ class Recipe(db.Model):
         self.author = author
 
     def __repr__(self):
-        return '<Recipe>' % self.recipe_name
+        return '<Recipe %r>' % self.recipe_name
 
 class Ingredient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     ingredient_name = db.Column(String(150), nullable=False, unique=True)
 
-    #quantities = db.relationship('Quantity', backref='ingredient', lazy='dynamic')
+    # quantities = db.relationship('Quantity')
 
     def __init__(self, ingredient_name):
         self.ingredient_name = ingredient_name
     
     def __repr__(self):
-        return '<Ingredient>' % self.ingredient_name
+        return '<Ingredient %r>' % self.ingredient_name
 
 class Measurement(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     measurement_name = db.Column(String(150), nullable=False, unique=True)
 
-    #quantities = db.relationship('Quantity', backref='measurement', lazy='dynamic')
+    # quantities = db.relationship('Quantity')
 
     def __init__(self, measurement_name):
         self.measurement_name = measurement_name
     
     def __repr__(self):
-        return '<Measurement>' % self.measurement_name
+        return '<Measurement %r>' % self.measurement_name
 
 
 class Quantity(db.Model):
@@ -205,6 +208,6 @@ class Quantity(db.Model):
         self.measurement = measurement
     
     def __repr__(self):
-        return '<Quantity>' % self.quantity
+        return '<Quantity %r>' % self.quantity
     
     

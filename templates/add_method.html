@@ -1,0 +1,11 @@
+{% extends 'base.html'%} {% block content %}
+<div class="row">
+    <form method="POST" action="{{ url_for('add_method', id=recipe.id) }}">
+
+        <label for="method" >Method:</label>
+        <input type="text" id="method" name="method" required>
+        
+        <button>Submit</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html'%} {% block content %}
+<div class="row">
+    <h1>{{ recipe.recipe_name }}</h1>
+    <p>{{ recipe.recipe_description }}</p>
+    <p>{{ recipe.preparation_time }}</p>
+    <p>{{ recipe.cooking_time }}</p>
+    <p>{{ recipe.servings }}</p>
+    <p>{{ recipe.category.category_name }}</p>
+    <p>{{ recipe.course.course_name }}</p>
+    <p>{{ recipe.cuisine.cuisine_name }}</p>
+    <p>{{ recipe.author.author_name }}</p>
+</div>
+<div class="row">   
+    <a href="{{ url_for('add_quantity', id=recipe.id) }}">Add New Ingredient</a>
+    {% for quantity in quantity_list %}
+    <p>{{ quantity.quantity }}</p>
+    <p>{{ quantity.measurement.measurement_name }}</p>
+    <p>{{ quantity.ingredient.ingredient_name }}</p>
+    {% endfor %}
+</div>
+<div class="row">  
+    <a href="{{ url_for('add_method', id=recipe.id) }}">Add New Method</a>
+    {% for method in method_list %}
+    <p>{{ method.method_description }}</p>
+    {% endfor %}
+</div>
+{% endblock %}
