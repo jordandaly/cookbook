@@ -6,7 +6,7 @@
     <p>{{ category_count }}</p>
     <ul>
     {% for category in categories_list %}
-        <li>{{ category.category_name }}</li>
+        <li>{{ category.category_name }} <a href="{{ url_for('edit_category', id=category.id) }}">Edit</a> <a href="{{ url_for('delete_category', id=category.id) }}">Delete</a></li>
     {% endfor %}
     </ul>
 </div>
@@ -22,7 +22,7 @@
     <p>{{ course_count }}</p>
     <ul>
     {% for course in courses_list %}
-        <li>{{ course.course_name }}</li>
+        <li>{{ course.course_name }} <a href="{{ url_for('edit_course', id=course.id) }}">Edit</a> <a href="{{ url_for('delete_course', id=course.id) }}">Delete</a></li>
     {% endfor %}
     </ul>
 </div>
@@ -38,7 +38,7 @@
     <p>{{ cuisine_count }}</p>
     <ul>
     {% for cuisine in cuisines_list %}
-        <li>{{ cuisine.cuisine_name }}</li>
+        <li>{{ cuisine.cuisine_name }} <a href="{{ url_for('edit_cuisine', id=cuisine.id) }}">Edit</a> <a href="{{ url_for('delete_cuisine', id=cuisine.id) }}">Delete</a></li>
     {% endfor %}
     </ul>
 </div>
@@ -54,7 +54,7 @@
     <p>{{ country_count }}</p>
     <ul>
     {% for country in countries_list %}
-        <li>{{ country.country_name }}</li>
+        <li>{{ country.country_name}} <a href="{{ url_for('edit_country', id=country.id) }}">Edit</a> <a href="{{ url_for('delete_country', id=country.id) }}">Delete</a></li>
     {% endfor %}
     </ul>
 </div>
@@ -70,7 +70,7 @@
     <p>{{ author_count }}</p>
     <ul>
     {% for author in authors_list %}
-        <li>{{ author.author_name }}</li>
+        <li>{{ author.author_name }} <a href="{{ url_for('edit_author', id=author.id) }}">Edit</a> <a href="{{ url_for('delete_author', id=author.id) }}">Delete</a></li>
     {% endfor %}
     </ul>
 </div>
@@ -93,7 +93,7 @@
     <p>{{ allergen_count }}</p>
     <ul>
     {% for allergen in allergens_list %}
-        <li>{{ allergen.allergen_name }}</li>
+        <li>{{ allergen.allergen_name }} <a href="{{ url_for('edit_allergen', id=allergen.id) }}">Edit</a> <a href="{{ url_for('delete_allergen', id=allergen.id) }}">Delete</a></li>
     {% endfor %}
     </ul>
 </div>
@@ -109,7 +109,7 @@
     <p>{{ dietary_count }}</p>
     <ul>
     {% for dietary in dietaries_list %}
-        <li>{{ dietary.dietary_name }}</li>
+        <li>{{ dietary.dietary_name }} <a href="{{ url_for('edit_dietary', id=dietary.id) }}">Edit</a> <a href="{{ url_for('delete_dietary', id=dietary.id) }}">Delete</a></li>
     {% endfor %}
     </ul>
 </div>
@@ -125,7 +125,7 @@
     <p>{{ measurement_count }}</p>
     <ul>
     {% for measurement in measurements_list %}
-        <li>{{ measurement.measurement_name }}</li>
+        <li>{{ measurement.measurement_name }} <a href="{{ url_for('edit_measurement', id=measurement.id) }}">Edit</a> <a href="{{ url_for('delete_measurement', id=measurement.id) }}">Delete</a></li>
     {% endfor %}
     </ul>
 </div>
@@ -141,7 +141,7 @@
         <p>{{ ingredient_count }}</p>
         <ul>
         {% for ingredient in ingredients_list %}
-            <li>{{ ingredient.ingredient_name }}</li>
+            <li>{{ ingredient.ingredient_name }} <a href="{{ url_for('edit_ingredient', id=ingredient.id) }}">Edit</a> <a href="{{ url_for('delete_ingredient', id=ingredient.id) }}">Delete</a></li>
         {% endfor %}
         </ul>
     </div>

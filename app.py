@@ -76,6 +76,48 @@ def add_recipe():
         
         return render_template('add_recipe.html', categories_list=categories_list, courses_list=courses_list, cuisines_list=cuisines_list, authors_list=authors_list)
 
+@app.route('/edit_recipe/<id>')
+def edit_recipe(id):
+        recipe = Recipe.query.get(id)
+        categories_list = Category.query.limit(100).all()
+        courses_list = Course.query.limit(100).all()
+        cuisines_list = Cuisine.query.limit(100).all()
+        authors_list = Author.query.limit(100).all()
+        return render_template('edit_recipe.html', recipe=recipe, categories_list=categories_list, courses_list=courses_list, cuisines_list=cuisines_list, authors_list=authors_list)
+
+@app.route('/update_recipe/<id>', methods = ['GET','POST'])
+def update_recipe(id):
+        categories_list = Category.query.limit(100).all()
+        courses_list = Course.query.limit(100).all()
+        cuisines_list = Cuisine.query.limit(100).all()
+        authors_list = Author.query.limit(100).all()
+        
+        
+        if request.method == 'POST':
+            recipe = Recipe.query.get(id)
+
+            recipe.recipe_name = request.form['recipe_name']
+            recipe.recipe_description = request.form['recipe_description']
+            recipe.preparation_time = request.form['preparation_time']
+            recipe.cooking_time = request.form['cooking_time']
+            recipe.servings = request.form['servings']
+            recipe.recipe_category = Category.query.filter_by(id=request.form['recipe_category']).first()
+            recipe.recipe_course = Course.query.filter_by(id=request.form['recipe_course']).first()
+            recipe.recipe_cuisine = Cuisine.query.filter_by(id=request.form['recipe_cuisine']).first()
+            recipe.recipe_author = Author.query.filter_by(id=request.form['recipe_author']).first()
+
+            db.session.commit()
+            return redirect(url_for('recipe_list'))
+        
+        return redirect(url_for('recipe_list'))
+
+@app.route('/delete_recipe/<id>')
+def delete_recipe(id):
+    recipe = Recipe.query.get(id)
+    db.session.delete(recipe)
+    db.session.commit()
+    return redirect(url_for('recipe_list'))
+
 #############################ADD INGREDIENT##########################################
 @app.route('/add_quantity/<id>', methods = ['GET','POST'])
 def add_quantity(id):
@@ -102,6 +144,44 @@ def add_quantity(id):
         
         return render_template('add_quantity.html', measurements_list=measurements_list, ingredients_list=ingredients_list, recipe=quantity_recipe)
 
+@app.route('/edit_quantity/<id>')
+def edit_quantity(id):
+        quantity = Quantity.query.get(id)
+        quantity_recipe = Recipe.query.get(quantity.recipe_id)
+        ingredients_list = Ingredient.query.limit(500).all()
+        measurements_list = Measurement.query.limit(100).all()
+        return render_template('edit_quantity.html', quantity=quantity, ingredients_list=ingredients_list, measurements_list=measurements_list, recipe=quantity_recipe)
+
+@app.route('/update_quantity/<id>', methods = ['GET','POST'])
+def update_quantity(id):
+        quantity = Quantity.query.get(id)
+        quantity_recipe = Recipe.query.get(quantity.recipe_id)
+        ingredients_list = Ingredient.query.limit(500).all()
+        measurements_list = Measurement.query.limit(100).all()
+        
+        
+        if request.method == 'POST':
+            quantity = Quantity.query.get(id)
+
+            quantity.quantity = request.form['quantity']
+            quantity.recipe = quantity_recipe
+            quantity.measurement = Measurement.query.filter_by(id=request.form['quantity_measurement']).first()
+            quantity.ingredient = Ingredient.query.filter_by(id=request.form['quantity_ingredient']).first()
+
+
+            db.session.commit()
+            return redirect(url_for('recipe_detail', id=quantity_recipe.id))
+        
+        return redirect(url_for('recipe_detail', id=quantity_recipe.id))
+
+@app.route('/delete_quantity/<id>')
+def delete_quantity(id):
+    quantity = Quantity.query.get(id)
+    quantity_recipe = Recipe.query.get(quantity.recipe_id)
+    db.session.delete(quantity)
+    db.session.commit()
+    return redirect(url_for('recipe_detail', id=quantity_recipe.id))
+
 #############################ADD METHOD##########################################
 @app.route('/add_method/<id>', methods = ['GET','POST'])
 def add_method(id):       
@@ -118,6 +198,37 @@ def add_method(id):
             return redirect(url_for('recipe_detail', id=id))
         
         return render_template('add_method.html', recipe=method_recipe)
+
+@app.route('/edit_method/<id>')
+def edit_method(id):
+        method = Method.query.get(id)
+        method_recipe = Recipe.query.get(method.recipe_id)
+        return render_template('edit_method.html', method=method, recipe=method_recipe)
+
+@app.route('/update_method/<id>', methods = ['GET','POST'])
+def update_method(id):
+        method = Method.query.get(id)
+        method_recipe = Recipe.query.get(method.recipe_id)
+        
+        
+        if request.method == 'POST':
+            method = Method.query.get(id)
+
+            method.method_description = request.form['method']
+            method.recipe = method_recipe
+
+            db.session.commit()
+            return redirect(url_for('recipe_detail', id=method_recipe.id))
+        
+        return redirect(url_for('recipe_detail', id=method_recipe.id))
+
+@app.route('/delete_method/<id>')
+def delete_method(id):
+    method = Method.query.get(id)
+    method_recipe = Recipe.query.get(method.recipe_id)
+    db.session.delete(method)
+    db.session.commit()
+    return redirect(url_for('recipe_detail', id=method_recipe.id))
 
 #############################MANAGE STATIC DATA##########################################
 @app.route('/manage_static_data')
@@ -158,11 +269,49 @@ def add_category():
     db.session.commit()
     return redirect(url_for('manage_static_data'))
 
+@app.route('/edit_category/<id>')
+def edit_category(id):
+    category = Category.query.get(id)
+    return render_template('edit_category.html', category=category)
+
+@app.route('/update_category/<id>', methods = ['POST'])
+def update_category(id):
+    category = Category.query.get(id)
+    category.category_name = request.form['category']
+    db.session.commit()
+    return redirect(url_for('manage_static_data'))
+
+@app.route('/delete_category/<id>')
+def delete_category(id):
+    category = Category.query.get(id)
+    db.session.delete(category)
+    db.session.commit()
+    return redirect(url_for('manage_static_data'))
+
 #############################COURSE##########################################
 @app.route('/add_course', methods = ['POST'])
 def add_course():
     course = Course(request.form['course'])
     db.session.add(course)
+    db.session.commit()
+    return redirect(url_for('manage_static_data'))
+
+@app.route('/edit_course/<id>')
+def edit_course(id):
+    course = Course.query.get(id)
+    return render_template('edit_course.html', course=course)
+
+@app.route('/update_course/<id>', methods = ['POST'])
+def update_course(id):
+    course = Course.query.get(id)
+    course.course_name = request.form['course']
+    db.session.commit()
+    return redirect(url_for('manage_static_data'))
+
+@app.route('/delete_course/<id>')
+def delete_course(id):
+    course = Course.query.get(id)
+    db.session.delete(course)
     db.session.commit()
     return redirect(url_for('manage_static_data'))
 
@@ -174,11 +323,49 @@ def add_cuisine():
     db.session.commit()
     return redirect(url_for('manage_static_data'))
 
+@app.route('/edit_cuisine/<id>')
+def edit_cuisine(id):
+    cuisine = Cuisine.query.get(id)
+    return render_template('edit_cuisine.html', cuisine=cuisine)
+
+@app.route('/update_cuisine/<id>', methods = ['POST'])
+def update_cuisine(id):
+    cuisine = Cuisine.query.get(id)
+    cuisine.cuisine_name = request.form['cuisine']
+    db.session.commit()
+    return redirect(url_for('manage_static_data'))
+
+@app.route('/delete_cuisine/<id>')
+def delete_cuisine(id):
+    cuisine = Cuisine.query.get(id)
+    db.session.delete(cuisine)
+    db.session.commit()
+    return redirect(url_for('manage_static_data'))
+
 #############################COUNTRY##########################################
 @app.route('/add_country', methods = ['POST'])
 def add_country():
     country = Country(request.form['country'])
     db.session.add(country)
+    db.session.commit()
+    return redirect(url_for('manage_static_data'))
+
+@app.route('/edit_country/<id>')
+def edit_country(id):
+    country = Country.query.get(id)
+    return render_template('edit_country.html', country=country)
+
+@app.route('/update_country/<id>', methods = ['POST'])
+def update_country(id):
+    country = Country.query.get(id)
+    country.country_name = request.form['country']
+    db.session.commit()
+    return redirect(url_for('manage_static_data'))
+
+@app.route('/delete_country/<id>')
+def delete_country(id):
+    country = Country.query.get(id)
+    db.session.delete(country)
     db.session.commit()
     return redirect(url_for('manage_static_data'))
 
@@ -192,11 +379,51 @@ def add_author():
     db.session.commit()
     return redirect(url_for('manage_static_data'))
 
+@app.route('/edit_author/<id>')
+def edit_author(id):
+    author = Author.query.get(id)
+    countries_list = Country.query.limit(250).all()
+    return render_template('edit_author.html', author=author, countries_list=countries_list)
+
+@app.route('/update_author/<id>', methods = ['POST'])
+def update_author(id):
+    author = Author.query.get(id)
+    author.author_name = request.form['author']
+    author.country = Country.query.filter_by(id=request.form['author_country']).first()
+    db.session.commit()
+    return redirect(url_for('manage_static_data'))
+
+@app.route('/delete_author/<id>')
+def delete_author(id):
+    author = Author.query.get(id)
+    db.session.delete(author)
+    db.session.commit()
+    return redirect(url_for('manage_static_data'))
+
 #############################ALLERGEN##########################################
 @app.route('/add_allergen', methods = ['POST'])
 def add_allergen():
     allergen = Allergen(request.form['allergen'])
     db.session.add(allergen)
+    db.session.commit()
+    return redirect(url_for('manage_static_data'))
+
+@app.route('/edit_allergen/<id>')
+def edit_allergen(id):
+    allergen = Allergen.query.get(id)
+    return render_template('edit_allergen.html', allergen=allergen)
+
+@app.route('/update_allergen/<id>', methods = ['POST'])
+def update_allergen(id):
+    allergen = Allergen.query.get(id)
+    allergen.allergen_name = request.form['allergen']
+    db.session.commit()
+    return redirect(url_for('manage_static_data'))
+
+@app.route('/delete_allergen/<id>')
+def delete_allergen(id):
+    allergen = Allergen.query.get(id)
+    db.session.delete(allergen)
     db.session.commit()
     return redirect(url_for('manage_static_data'))
 
@@ -207,6 +434,25 @@ def add_dietary():
     db.session.add(dietary)
     db.session.commit()
     return redirect(url_for('manage_static_data'))
+
+@app.route('/edit_dietary/<id>')
+def edit_dietary(id):
+    dietary = Dietary.query.get(id)
+    return render_template('edit_dietary.html', dietary=dietary)
+
+@app.route('/update_dietary/<id>', methods = ['POST'])
+def update_dietary(id):
+    dietary = Dietary.query.get(id)
+    dietary.dietary_name = request.form['dietary']
+    db.session.commit()
+    return redirect(url_for('manage_static_data'))
+
+@app.route('/delete_dietary/<id>')
+def delete_dietary(id):
+    dietary = Dietary.query.get(id)
+    db.session.delete(dietary)
+    db.session.commit()
+    return redirect(url_for('manage_static_data'))
 #############################MEASUREMENT##########################################
 @app.route('/add_measurement', methods = ['POST'])
 def add_measurement():
@@ -215,11 +461,49 @@ def add_measurement():
     db.session.commit()
     return redirect(url_for('manage_static_data'))
 
+@app.route('/edit_measurement/<id>')
+def edit_measurement(id):
+    measurement = Measurement.query.get(id)
+    return render_template('edit_measurement.html', measurement=measurement)
+
+@app.route('/update_measurement/<id>', methods = ['POST'])
+def update_measurement(id):
+    measurement = Measurement.query.get(id)
+    measurement.measurement_name = request.form['measurement']
+    db.session.commit()
+    return redirect(url_for('manage_static_data'))
+
+@app.route('/delete_measurement/<id>')
+def delete_measurement(id):
+    measurement = Measurement.query.get(id)
+    db.session.delete(measurement)
+    db.session.commit()
+    return redirect(url_for('manage_static_data'))
+
 #############################INGREDIENT##########################################
 @app.route('/add_ingredient', methods = ['POST'])
 def add_ingredient():
     ingredient = Ingredient(request.form['ingredient'])
     db.session.add(ingredient)
+    db.session.commit()
+    return redirect(url_for('manage_static_data'))
+
+@app.route('/edit_ingredient/<id>')
+def edit_ingredient(id):
+    ingredient = Ingredient.query.get(id)
+    return render_template('edit_ingredient.html', ingredient=ingredient)
+
+@app.route('/update_ingredient/<id>', methods = ['POST'])
+def update_ingredient(id):
+    ingredient = Ingredient.query.get(id)
+    ingredient.ingredient_name = request.form['ingredient']
+    db.session.commit()
+    return redirect(url_for('manage_static_data'))
+
+@app.route('/delete_ingredient/<id>')
+def delete_ingredient(id):
+    ingredient = Ingredient.query.get(id)
+    db.session.delete(ingredient)
     db.session.commit()
     return redirect(url_for('manage_static_data'))
 

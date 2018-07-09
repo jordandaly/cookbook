@@ -78,7 +78,7 @@ class Country(db.Model):
 
 class Method(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'), nullable=False)
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id', ondelete="CASCADE"), nullable=False)
     recipe = db.relationship('Recipe', backref=db.backref('methods', lazy=True))
     method_description = db.Column(Text)
     #step_number = db.Column(db.Integer)
@@ -192,7 +192,7 @@ class Quantity(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     quantity = db.Column(db.Float)
     
-    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'), nullable=False)
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id', ondelete="CASCADE"), nullable=False)
     recipe = db.relationship('Recipe', backref=db.backref('quantities', lazy=True))
     
     ingredient_id = db.Column(db.Integer, db.ForeignKey('ingredient.id'), nullable=False)

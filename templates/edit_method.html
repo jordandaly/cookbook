@@ -1,0 +1,12 @@
+{% extends 'base.html'%} {% block content %}
+<div class="row">
+    <h1>Edit Method</h1>
+    <form method="POST" action="{{ url_for('update_method', id=method.id) }}">
+
+        <label for="method" >Method:</label>
+        <input type="text" id="method" name="method" value="{{ method.method_description }}" required>
+        
+        <button>Submit</button>
+    </form>
+</div>
+{% endblock %}

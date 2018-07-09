@@ -1,0 +1,12 @@
+{% extends 'base.html'%} {% block content %}
+<div class="row">
+    <h1>Edit Course</h1>
+    <form method="POST" action="{{ url_for('update_course', id=course.id) }}">
+
+        <label for="course" >Course Name:</label>
+        <input type="text" id="course" name="course" value="{{ course.course_name }}" required>
+        
+        <button>Submit</button>
+    </form>
+</div>
+{% endblock %}

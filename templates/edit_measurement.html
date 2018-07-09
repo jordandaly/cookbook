@@ -1,0 +1,12 @@
+{% extends 'base.html'%} {% block content %}
+<div class="row">
+    <h1>Edit Measurement</h1>
+    <form method="POST" action="{{ url_for('update_measurement', id=measurement.id) }}">
+
+        <label for="measurement" >Measurement Name:</label>
+        <input type="text" id="measurement" name="measurement" value="{{ measurement.measurement_name }}" required>
+        
+        <button>Submit</button>
+    </form>
+</div>
+{% endblock %}

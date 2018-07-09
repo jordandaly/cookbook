@@ -11,17 +11,18 @@
     <p>{{ recipe.author.author_name }}</p>
 </div>
 <div class="row">   
-    <a href="{{ url_for('add_quantity', id=recipe.id) }}">Add New Ingredient</a>
+    <a href="{{ url_for('add_quantity', id=recipe.id) }}">Add New Ingredient</a> 
+    <h3>Ingredients</h3>
     {% for quantity in quantity_list %}
-    <p>{{ quantity.quantity }}</p>
-    <p>{{ quantity.measurement.measurement_name }}</p>
-    <p>{{ quantity.ingredient.ingredient_name }}</p>
+    <p>{{ quantity.quantity }} {{ quantity.measurement.measurement_name }} {{ quantity.ingredient.ingredient_name }}</p><a href="{{ url_for('edit_quantity', id=quantity.id) }}">Edit</a> <a href="{{ url_for('delete_quantity', id=quantity.id) }}">Delete</a>
     {% endfor %}
 </div>
 <div class="row">  
     <a href="{{ url_for('add_method', id=recipe.id) }}">Add New Method</a>
+    <h3>Method</h3>
     {% for method in method_list %}
     <p>{{ method.method_description }}</p>
+    <a href="{{ url_for('edit_method', id=method.id) }}">Edit</a> <a href="{{ url_for('delete_method', id=method.id) }}">Delete</a>
     {% endfor %}
 </div>
 {% endblock %}
