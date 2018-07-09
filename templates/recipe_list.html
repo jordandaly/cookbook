@@ -1,10 +1,17 @@
 {% extends 'base.html'%} {% block content %}
-<p><a href="{{ url_for('add_recipe') }}">Add New Recipe</a></p>
 <div class="row">
     <p>{{ recipe_count }}</p>
-    <ul>
+    <ul class="collapsible">
     {% for recipe in recipes_list %}
-        <li>{{ recipe.recipe_name }} <a href="{{ url_for('recipe_detail', id=recipe.id) }}">Recipe Details</a> <a href="{{ url_for('edit_recipe', id=recipe.id) }}">Edit</a> <a href="{{ url_for('delete_recipe', id=recipe.id) }}">Delete</a></li>
+        <li>
+             
+        <div class="collapsible-header"><i class="material-icons">expand_more</i>{{ recipe.recipe_name }}
+        </div>
+        <div class="collapsible-body"><span>{{ recipe.recipe_description }}</span>
+            <a href="{{ url_for('recipe_detail', id=recipe.id) }}"><i class="material-icons">navigate_next</i></a> 
+            <a href="{{ url_for('edit_recipe', id=recipe.id) }}"><i class="material-icons">edit</i></a> 
+            <a href="{{ url_for('delete_recipe', id=recipe.id) }}"><i class="material-icons">delete</i></a></div>
+        </li>
     {% endfor %}
     </ul>
 </div>

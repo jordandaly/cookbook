@@ -16,33 +16,42 @@
         <label for="servings" >Servings:</label>
         <input type="number" id="servings" name="servings" required>
 
-        <label for="category" >Category:</label>
-        <select id="recipe_category" name="recipe_category">
-            {% for category in categories_list %}
-            <option value="{{category.id}}" SELECTED>{{category.category_name}}</option>
-            {% endfor %}
-        </select>
+        <div class="input-field col s12">
+            <label for="category" >Category:</label>
+            <select id="recipe_category" name="recipe_category">
+                {% for category in categories_list %}
+                <option value="{{category.id}}" SELECTED>{{category.category_name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="input-field col s12">
+            <label for="course" >Course:</label>
+            <select id="recipe_course" name="recipe_course">
+                {% for course in courses_list %}
+                <option value="{{course.id}}" SELECTED>{{course.course_name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="input-field col s12">
+            <label for="cuisine" >Cuisine:</label>
+            <select id="recipe_cuisine" name="recipe_cuisine">
+                {% for cuisine in cuisines_list %}
+                <option value="{{cuisine.id}}" SELECTED>{{cuisine.cuisine_name}}</option>
+                {% endfor %}
+            </select>
+        </div>
 
-        <label for="course" >Course:</label>
-        <select id="recipe_course" name="recipe_course">
-            {% for course in courses_list %}
-            <option value="{{course.id}}" SELECTED>{{course.course_name}}</option>
-            {% endfor %}
-        </select>
-
-        <label for="cuisine" >Cuisine:</label>
-        <select id="recipe_cuisine" name="recipe_cuisine">
-            {% for cuisine in cuisines_list %}
-            <option value="{{cuisine.id}}" SELECTED>{{cuisine.cuisine_name}}</option>
-            {% endfor %}
-        </select>
-
-        <label for="author" >Author:</label>
-        <select id="recipe_author" name="recipe_author">
-            {% for author in authors_list %}
-            <option value="{{author.id}}" SELECTED>{{author.author_name}}</option>
-            {% endfor %}
-        </select>
+        <div class="input-field col s12">
+            <label for="author" >Author:</label>
+            <select id="recipe_author" name="recipe_author">
+                {% for author in authors_list %}
+                <option value="{{author.id}}" SELECTED>{{author.author_name}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
 
         <!-- <label for="quantity" >Quantity:</label>
         <input type="number" id="quantity" name="quantity" required>
@@ -57,7 +66,9 @@
         <label for="ingredient" >Ingredient:</label>
         <input type="text" id="ingredient" name="ingredient" required> -->
         
-        <button>Submit</button>
+        <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+            <i class="material-icons right">send</i>
+          </button>
     </form>
 </div>
 {% endblock %}

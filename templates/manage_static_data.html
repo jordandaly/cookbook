@@ -1,80 +1,81 @@
 {% extends 'base.html'%} {% block content %}
-<p><a href="{{ url_for('index') }}">Home</a></p>
-<p><a href="{{ url_for('recipe_list') }}">Recipe List</a></p>
 <div class="row">
-    <h3>Categories</h3>
+    <div class="col s12 m4">
+      <div class="card-panel teal lighten-5">
+        <h3>Categories</h3>
     <p>{{ category_count }}</p>
     <ul>
     {% for category in categories_list %}
         <li>{{ category.category_name }} <a href="{{ url_for('edit_category', id=category.id) }}">Edit</a> <a href="{{ url_for('delete_category', id=category.id) }}">Delete</a></li>
     {% endfor %}
     </ul>
-</div>
-<div class="row">
     <form method="POST" action=/add_category>
         <label for="category" >New Category:</label>
         <input type="text" id="category" name="category" required>
-        <button>Submit</button>
+        <button class="waves-effect waves-light btn-small">Add</button>
     </form>
-</div>
-<div class="row">
-    <h3>Courses</h3>
+      </div>
+    </div>
+    <div class="col s12 m4">
+      <div class="card-panel teal lighten-5">
+        <h3>Courses</h3>
     <p>{{ course_count }}</p>
     <ul>
     {% for course in courses_list %}
         <li>{{ course.course_name }} <a href="{{ url_for('edit_course', id=course.id) }}">Edit</a> <a href="{{ url_for('delete_course', id=course.id) }}">Delete</a></li>
     {% endfor %}
     </ul>
-</div>
-<div class="row">
     <form method="POST" action=/add_course>
         <label for="course" >New Course:</label>
         <input type="text" id="course" name="course" required>
-        <button>Submit</button>
+        <button class="waves-effect waves-light btn-small">Add</button>
     </form>
-</div>
-<div class="row">
-    <h3>Cuisines</h3>
+      </div>
+    </div>
+    <div class="col s12 m4">
+      <div class="card-panel teal lighten-5">
+        <h3>Cuisines</h3>
     <p>{{ cuisine_count }}</p>
     <ul>
     {% for cuisine in cuisines_list %}
         <li>{{ cuisine.cuisine_name }} <a href="{{ url_for('edit_cuisine', id=cuisine.id) }}">Edit</a> <a href="{{ url_for('delete_cuisine', id=cuisine.id) }}">Delete</a></li>
     {% endfor %}
     </ul>
-</div>
-<div class="row">
     <form method="POST" action=/add_cuisine>
         <label for="cuisine" >New Cuisine:</label>
         <input type="text" id="cuisine" name="cuisine" required>
-        <button>Submit</button>
+        <button class="waves-effect waves-light btn-small">Add</button>
     </form>
-</div>
-<div class="row">
-    <h3>Countries</h3>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s12 m4">
+      <div class="card-panel teal lighten-5">
+        <h3>Countries</h3>
     <p>{{ country_count }}</p>
     <ul>
     {% for country in countries_list %}
         <li>{{ country.country_name}} <a href="{{ url_for('edit_country', id=country.id) }}">Edit</a> <a href="{{ url_for('delete_country', id=country.id) }}">Delete</a></li>
     {% endfor %}
     </ul>
-</div>
-<div class="row">
     <form method="POST" action=/add_country>
         <label for="country" >New Country:</label>
         <input type="text" id="country" name="country" required>
-        <button>Submit</button>
+        <button class="waves-effect waves-light btn-small">Add</button>
     </form>
-</div>
-<div class="row">
-    <h3>Authors</h3>
+        </span>
+      </div>
+    </div>
+    <div class="col s12 m4">
+      <div class="card-panel teal lighten-5">
+        <h3>Authors</h3>
     <p>{{ author_count }}</p>
     <ul>
     {% for author in authors_list %}
         <li>{{ author.author_name }} <a href="{{ url_for('edit_author', id=author.id) }}">Edit</a> <a href="{{ url_for('delete_author', id=author.id) }}">Delete</a></li>
     {% endfor %}
     </ul>
-</div>
-<div class="row">
     <form method="POST" action=/add_author>
         <label for="author" >New Author Name:</label>
         <input type="text" id="author" name="author" required>
@@ -85,58 +86,66 @@
             <option value="{{country.id}}" SELECTED>{{country.country_name}}</option>
             {% endfor %}
         </select>
-        <button>Submit</button>
+        <button class="waves-effect waves-light btn-small">Add</button>
     </form>
-</div>
-<div class="row">
-    <h3>Allergens</h3>
+        </span>
+      </div>
+    </div>
+    <div class="col s12 m4">
+      <div class="card-panel teal lighten-5">
+        <h3>Allergens</h3>
     <p>{{ allergen_count }}</p>
     <ul>
     {% for allergen in allergens_list %}
         <li>{{ allergen.allergen_name }} <a href="{{ url_for('edit_allergen', id=allergen.id) }}">Edit</a> <a href="{{ url_for('delete_allergen', id=allergen.id) }}">Delete</a></li>
     {% endfor %}
     </ul>
-</div>
-<div class="row">
     <form method="POST" action=/add_allergen>
         <label for="allergen" >New Allergen:</label>
         <input type="text" id="allergen" name="allergen" required>
-        <button>Submit</button>
+        <button class="waves-effect waves-light btn-small">Add</button>
     </form>
-</div>
-<div class="row">
-    <h3>Dietaries</h3>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s12 m4">
+      <div class="card-panel teal lighten-5">
+        <h3>Dietaries</h3>
     <p>{{ dietary_count }}</p>
     <ul>
     {% for dietary in dietaries_list %}
         <li>{{ dietary.dietary_name }} <a href="{{ url_for('edit_dietary', id=dietary.id) }}">Edit</a> <a href="{{ url_for('delete_dietary', id=dietary.id) }}">Delete</a></li>
     {% endfor %}
     </ul>
-</div>
-<div class="row">
     <form method="POST" action=/add_dietary>
         <label for="dietary" >New Dietary:</label>
         <input type="text" id="dietary" name="dietary" required>
-        <button>Submit</button>
+        <button class="waves-effect waves-light btn-small">Add</button>
     </form>
-</div>
-<div class="row">
-    <h3>Measurements</h3>
+        </span>
+      </div>
+    </div>
+    <div class="col s12 m4">
+      <div class="card-panel teal lighten-5">
+        <h3>Measurements</h3>
     <p>{{ measurement_count }}</p>
     <ul>
     {% for measurement in measurements_list %}
         <li>{{ measurement.measurement_name }} <a href="{{ url_for('edit_measurement', id=measurement.id) }}">Edit</a> <a href="{{ url_for('delete_measurement', id=measurement.id) }}">Delete</a></li>
     {% endfor %}
     </ul>
-</div>
-<div class="row">
     <form method="POST" action=/add_measurement>
         <label for="measurement" >New Measurement:</label>
         <input type="text" id="measurement" name="measurement" required>
-        <button>Submit</button>
+        <button class="waves-effect waves-light btn-small">Add</button>
     </form>
-</div>
-<div class="row">
+        </span>
+      </div>
+    </div>
+    <div class="col s12 m4">
+      <div class="card-panel teal lighten-5">
         <h3>Ingredients</h3>
         <p>{{ ingredient_count }}</p>
         <ul>
@@ -144,12 +153,14 @@
             <li>{{ ingredient.ingredient_name }} <a href="{{ url_for('edit_ingredient', id=ingredient.id) }}">Edit</a> <a href="{{ url_for('delete_ingredient', id=ingredient.id) }}">Delete</a></li>
         {% endfor %}
         </ul>
-    </div>
-    <div class="row">
         <form method="POST" action=/add_ingredient>
             <label for="ingredient" >New Ingredient:</label>
             <input type="text" id="ingredient" name="ingredient" required>
-            <button>Submit</button>
+            <button class="waves-effect waves-light btn-small">Add</button>
         </form>
+        </span>
+      </div>
     </div>
+  </div>
+    
 {% endblock %}
