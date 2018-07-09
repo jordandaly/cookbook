@@ -1,6 +1,6 @@
 {% extends 'base.html'%} {% block content %}
 <div class="row">
-    <form method="POST" action=/add_recipe>
+    <form method="POST" action="/add_recipe">
         <label for="recipe_name" >Recipe Name:</label>
         <input type="text" id="recipe_name" name="recipe_name" required>
         
@@ -56,29 +56,6 @@
 
         <label for="ingredient" >Ingredient:</label>
         <input type="text" id="ingredient" name="ingredient" required> -->
-
-        <div data-toggle="fieldset" id="quantity-fieldset">
-            {{ form.quantities.label }}  <button type="button" data-toggle="fieldset-add-row"
-                                             data-target="#quantity-fieldset">+</button>
-           <table>
-               <tr>
-                   <th>Quantity</th>
-                   <th>Measurement</th>
-                   <th>Ingredient</th>
-               </tr>
-               {% for quantity in form.quantities %}
-                   <tr data-toggle="fieldset-entry">
-                       <td>{{ quantity.quantity }}</td>
-                       <td>{{ quantity.measurement }}</td>
-                       <td>{{ quantity.ingredient }}</td>
-                       <td><button type="button" data-toggle="fieldset-remove-row" id="quantity-{{loop.index0}}-remove">-</button></td>
-                   </tr>
-               {% endfor %}
-           </table>
-       </div>
-
-        <label for="method" >Method:</label>
-        <input type="text" id="method" name="method" required>
         
         <button>Submit</button>
     </form>

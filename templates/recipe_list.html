@@ -1,0 +1,11 @@
+{% extends 'base.html'%} {% block content %}
+<p><a href="{{ url_for('add_recipe') }}">Add New Recipe</a></p>
+<div class="row">
+    <p>{{ recipe_count }}</p>
+    <ul>
+    {% for recipe in recipes_list %}
+        <li>{{ recipe.recipe_name }} <a href="{{ url_for('recipe_detail', id=recipe.id) }}">Recipe Details</a></li>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}

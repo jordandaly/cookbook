@@ -5,11 +5,12 @@ from datetime import datetime
 from sqlalchemy import Boolean, Column, Date, DateTime, Integer, SmallInteger, String, Text, text, ARRAY, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
-
+from flask_migrate import Migrate
 
 
 # constructor method
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 
 class Test(db.Model):
@@ -79,13 +80,15 @@ class Method(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id'), nullable=False)
     recipe = db.relationship('Recipe', backref=db.backref('methods', lazy=True))
-    #step_number = db.Column(db.Integer)
     method_description = db.Column(Text)
+    #step_number = db.Column(db.Integer)
 
-    def __init__(self, method_description, recipe):
+
+    def __init__(self, recipe, method_description):
         #self.step_number = step_number
-        self.method_description = method_description
         self.recipe = recipe
+        self.method_description = method_description
+        
     
     def __repr__(self):
         return '<Method %r>' % self.method_description
