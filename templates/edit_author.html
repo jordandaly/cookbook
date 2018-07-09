@@ -1,0 +1,18 @@
+{% extends 'base.html'%} {% block content %}
+<div class="row">
+    <h1>Edit Author</h1>
+    <form method="POST" action="{{ url_for('update_author', id=author.id) }}">
+
+        <label for="author" >Author Name:</label>
+        <input type="text" id="author" name="author" value="{{ author.author_name }}" required>
+
+        <select id="author_country" name="author_country">
+                {% for country in countries_list %}
+                <option value="{{country.id}}" {% if country.id==author.country_id %} SELECTED{% endif %}>{{country.country_name}}</option>
+                {% endfor %}
+            </select>
+        
+        <button>Submit</button>
+    </form>
+</div>
+{% endblock %}

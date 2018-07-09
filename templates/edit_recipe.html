@@ -1,0 +1,51 @@
+{% extends 'base.html'%} {% block content %}
+<div class="row">
+    <h1>Edit Recipe</h1>
+    <form method="POST" action="{{ url_for('update_recipe', id=recipe.id) }}">
+        <label for="recipe_name" >Recipe Name:</label>
+        <input type="text" id="recipe_name" name="recipe_name" value="{{recipe.recipe_name}}" required>
+        
+        <label for="recipe_description" >Recipe Description:</label>
+        <input type="text" id="recipe_description" name="recipe_description" value="{{recipe.recipe_description}}">
+        
+        <label for="preparation_time" >Preparation Time:</label>
+        <input type="number" id="preparation_time" name="preparation_time" value="{{recipe.preparation_time}}" required>
+        
+        <label for="cooking_time" >Cooking Time:</label>
+        <input type="number" id="cooking_time" name="cooking_time" value="{{recipe.cooking_time}}" required>
+        
+        <label for="servings" >Servings:</label>
+        <input type="number" id="servings" name="servings" value="{{recipe.servings}}" required>
+
+        <label for="category" >Category:</label>
+        <select id="recipe_category" name="recipe_category">
+            {% for category in categories_list %}
+            <option value="{{category.id}}" {% if category.id==recipe.category_id %} SELECTED{% endif %}>{{category.category_name}}</option>
+            {% endfor %}
+        </select>
+
+        <label for="course" >Course:</label>
+        <select id="recipe_course" name="recipe_course">
+            {% for course in courses_list %}
+            <option value="{{course.id}}" {% if course.id==recipe.course_id %} SELECTED{% endif %}>{{course.course_name}}</option>
+            {% endfor %}
+        </select>
+
+        <label for="cuisine" >Cuisine:</label>
+        <select id="recipe_cuisine" name="recipe_cuisine">
+            {% for cuisine in cuisines_list %}
+            <option value="{{cuisine.id}}" {% if cuisine.id==recipe.cuisine_id %} SELECTED{% endif %}>{{cuisine.cuisine_name}}</option>
+            {% endfor %}
+        </select>
+
+        <label for="author" >Author:</label>
+        <select id="recipe_author" name="recipe_author">
+            {% for author in authors_list %}
+            <option value="{{author.id}}" {% if author.id==recipe.author_id %} SELECTED{% endif %}>{{author.author_name}}</option>
+            {% endfor %}
+        </select>
+        
+        <button>Submit</button>
+    </form>
+</div>
+{% endblock %}
