@@ -1,7 +1,7 @@
 {% extends 'base.html'%} {% block content %}
 <div class="row">
     <h1>Edit Recipe</h1>
-    <form method="POST" action="{{ url_for('update_recipe', id=recipe.id) }}">
+    <form method="POST" action="{{ url_for('update_recipe', id=recipe.id) }}" enctype="multipart/form-data">
         <label for="recipe_name" >Recipe Name:</label>
         <input type="text" id="recipe_name" name="recipe_name" value="{{recipe.recipe_name}}" required>
         
@@ -44,6 +44,12 @@
             <option value="{{author.id}}" {% if author.id==recipe.author_id %} SELECTED{% endif %}>{{author.author_name}}</option>
             {% endfor %}
         </select>
+
+        {% if recipe.image_url %}
+        <img src="{{ recipe.image_url }}" alt="{{ recipe.image_filename }}" style="width:100%;height:450px;">
+        {% endif %}
+
+        <input type=file name=recipe_image>
         
         <button class="waves-effect waves-light btn" onclick="M.toast({html: 'Recipe Updated!'})">Update Recipe</button>
     </form>

@@ -108,14 +108,12 @@ def edit_recipe(id):
 
 @app.route('/update_recipe/<id>', methods = ['GET','POST'])
 def update_recipe(id):
-        categories_list = Category.query.limit(100).all()
-        courses_list = Course.query.limit(100).all()
-        cuisines_list = Cuisine.query.limit(100).all()
-        authors_list = Author.query.limit(100).all()
-        
         
         if request.method == 'POST':
             recipe = Recipe.query.get(id)
+
+            filename = images.save(request.files['recipe_image'])
+            url = images.url(filename)
 
             recipe.recipe_name = request.form['recipe_name']
             recipe.recipe_description = request.form['recipe_description']
@@ -126,6 +124,8 @@ def update_recipe(id):
             recipe.recipe_course = Course.query.filter_by(id=request.form['recipe_course']).first()
             recipe.recipe_cuisine = Cuisine.query.filter_by(id=request.form['recipe_cuisine']).first()
             recipe.recipe_author = Author.query.filter_by(id=request.form['recipe_author']).first()
+            recipe.image_filename = filename
+            recipe.image_url = url
 
             db.session.commit()
             return redirect(url_for('recipe_list'))
