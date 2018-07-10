@@ -6,7 +6,7 @@
         <label for="method" >Method:</label>
         <input type="text" id="method" name="method" value="{{ method.method_description }}" required>
         
-        <button class="waves-effect waves-light btn">Update method</button>
+        <button class="waves-effect waves-light btn" onclick="M.toast({html: 'Method Updated!'})">Update method</button>
     </form>
 </div>
 {% endblock %}
