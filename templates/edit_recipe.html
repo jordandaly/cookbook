@@ -17,35 +17,35 @@
         <label for="servings" >Servings:</label>
         <input type="number" id="servings" name="servings" value="{{recipe.servings}}" required>
 
-        <label for="category" >Category:</label>
+        <label for="recipe_category" >Category:</label>
         <select id="recipe_category" name="recipe_category">
             {% for category in categories_list %}
             <option value="{{category.id}}" {% if category.id==recipe.category_id %} SELECTED{% endif %}>{{category.category_name}}</option>
             {% endfor %}
         </select>
 
-        <label for="course" >Course:</label>
+        <label for="recipe_course" >Course:</label>
         <select id="recipe_course" name="recipe_course">
             {% for course in courses_list %}
             <option value="{{course.id}}" {% if course.id==recipe.course_id %} SELECTED{% endif %}>{{course.course_name}}</option>
             {% endfor %}
         </select>
 
-        <label for="cuisine" >Cuisine:</label>
+        <label for="recipe_cuisine" >Cuisine:</label>
         <select id="recipe_cuisine" name="recipe_cuisine">
             {% for cuisine in cuisines_list %}
             <option value="{{cuisine.id}}" {% if cuisine.id==recipe.cuisine_id %} SELECTED{% endif %}>{{cuisine.cuisine_name}}</option>
             {% endfor %}
         </select>
 
-        <label for="author" >Author:</label>
+        <label for="recipe_author" >Author:</label>
         <select id="recipe_author" name="recipe_author">
             {% for author in authors_list %}
             <option value="{{author.id}}" {% if author.id==recipe.author_id %} SELECTED{% endif %}>{{author.author_name}}</option>
             {% endfor %}
         </select>
         
-        <button>Submit</button>
+        <button class="waves-effect waves-light btn">Update Recipe</button>
     </form>
 </div>
 {% endblock %}
