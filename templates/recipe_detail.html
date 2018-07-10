@@ -3,6 +3,9 @@
     <div class="row">
         <h1>{{ recipe.recipe_name }}</h1>
         <p>{{ recipe.recipe_description }}</p>
+        {% if recipe.image_url %}
+        <img src="{{ recipe.image_url }}" alt="{{ recipe.image_filename }}" style="width:100%;height:450px;">
+        {% endif %}
         <div class="col s12 m8">
             <p>Category: {{ recipe.category.category_name }}</p>
             <p>Course: {{ recipe.course.course_name }}</p>

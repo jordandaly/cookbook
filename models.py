@@ -143,13 +143,16 @@ class Recipe(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey('author.id'), nullable=False)
     author = db.relationship('Author', backref=db.backref('recipes', lazy=True))
 
+    image_filename = db.Column(db.String, default=None, nullable=True)
+    image_url = db.Column(db.String, default=None, nullable=True)
+
     #steps = db.relationship('Step', backref='recipe', lazy='dynamic')
     # quantities = db.relationship('Quantity')
     
     allergens = db.relationship('Allergen', secondary='recipe_allergen', backref='recipe', lazy='dynamic')
     dietaries = db.relationship('Dietary', secondary='recipe_dietary', backref='recipe', lazy='dynamic')
 
-    def __init__(self, recipe_name, recipe_description, preparation_time, cooking_time, servings, category, course, cuisine, author):
+    def __init__(self, recipe_name, recipe_description, preparation_time, cooking_time, servings, category, course, cuisine, author, image_filename, image_url):
         self.recipe_name = recipe_name
         self.recipe_description = recipe_description
         self.preparation_time = preparation_time
@@ -159,6 +162,8 @@ class Recipe(db.Model):
         self.course = course
         self.cuisine = cuisine
         self.author = author
+        self.image_filename = image_filename
+        self.image_url = image_url
 
     def __repr__(self):
         return '<Recipe %r>' % self.recipe_name

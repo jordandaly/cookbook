@@ -2,6 +2,8 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_heroku import Heroku
 from flask import render_template, redirect, url_for, request
+from flask_uploads import UploadSet, IMAGES, configure_uploads
+import os
 
 # create an instance of flask = app variable
 app = Flask(__name__)
@@ -10,11 +12,25 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://kysizwusmalerj:34940a84c5062
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+# grab the folder of the top-level directory of this project
+BASEDIR = os.path.abspath(os.path.dirname(__file__))
+TOP_LEVEL_DIR = os.path.abspath(os.curdir)
+
+# Uploads
+app.config['UPLOADS_DEFAULT_DEST'] = TOP_LEVEL_DIR + '/static/img/'
+app.config['UPLOADS_DEFAULT_URL'] = 'http://localhost:5000/static/img/'
+ 
+app.config['UPLOADED_IMAGES_DEST'] = TOP_LEVEL_DIR + '/static/img/'
+app.config['UPLOADED_IMAGES_URL'] = 'http://localhost:5000/static/img/'
+
 # get heroku environment variables and pass them to flask
 heroku = Heroku(app)
 
 #app.config.from_pyfile('models.py')
 
+# Configure the image uploading via Flask-Uploads
+images = UploadSet('images', IMAGES)
+configure_uploads(app, images)
 
 
 from models import db, Recipe, Category, Course, Cuisine, Country, Allergen, Dietary, Author, Measurement, Quantity, Ingredient, Method
@@ -59,6 +75,9 @@ def add_recipe():
             recipe_cuisine = Cuisine.query.filter_by(id=request.form['recipe_cuisine']).first()
             recipe_author = Author.query.filter_by(id=request.form['recipe_author']).first()
 
+            filename = images.save(request.files['recipe_image'])
+            url = images.url(filename)
+
             recipe = Recipe(request.form['recipe_name'], 
             request.form['recipe_description'], 
             request.form['preparation_time'], 
@@ -67,7 +86,9 @@ def add_recipe():
             recipe_category,
             recipe_course,
             recipe_cuisine,
-            recipe_author)
+            recipe_author,
+            filename,
+            url)
 
             db.session.add(recipe)
 
