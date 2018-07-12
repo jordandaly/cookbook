@@ -1,0 +1,5 @@
+.dc-chart g.row text {
+    fill: black;
+}
+
+.dc-chart text.pie-slice {fill: black;}

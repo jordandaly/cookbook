@@ -5,9 +5,13 @@ d3.queue()
 
 function makeGraphs(error, recipeData) {
     var ndx = crossfilter(recipeData);
-
+    console.log(recipeData);
     show_category_selector(ndx);
     show_category_graph(ndx);
+
+    show_course_graph(ndx);
+    show_cuisine_graph(ndx);
+    show_author_graph(ndx);
 
     dc.renderAll();
 }
@@ -23,8 +27,8 @@ function show_category_selector(ndx) {
 }
 
 function show_category_graph(ndx) {
-    var categoryDim = ndx.dimension(dc.pluck("recipe_name"));
-    var categoryMix = categoryDim.group().reduceSum(dc.pluck('category'));
+    var categoryDim = ndx.dimension(dc.pluck("category"));
+    var categoryMix = categoryDim.group();
 
     dc.barChart("#category-graph")
         .width(350)
@@ -37,5 +41,91 @@ function show_category_graph(ndx) {
         .xUnits(dc.units.ordinal)
         .elasticY(true)
         .xAxisLabel("Category")
-        .yAxis().ticks(20);
+        .yAxis().tickFormat(d3.format("d"));
+
+}
+
+function show_cuisine_graph(ndx) {
+    var cuisineDim = ndx.dimension(dc.pluck("cuisine"));
+    var cuisineMix = cuisineDim.group();
+
+    dc.rowChart("#cuisine-graph")
+        .width(350)
+        .height(250)
+        .margins({top: 10, right: 50, bottom: 30, left: 50})
+        .dimension(cuisineDim)
+        .group(cuisineMix)
+//        .transitionDuration(500)
+        .rowsCap(20)
+        .elasticX(true)
+        .renderLabel(false)
+        .renderTitleLabel(true)
+        .titleLabelOffsetX(80)
+        .xAxis().ticks(8);
+
+}
+
+function show_course_graph(ndx) {
+    var courseDim = ndx.dimension(dc.pluck("course"));
+    var courseMix = courseDim.group();
+
+    var coursePieChart = dc.pieChart("#course-graph");
+
+    coursePieChart
+        .width(350)
+        .height(250)
+        .dimension(courseDim)
+        .group(courseMix)
+        .innerRadius(50)
+        .transitionDuration(1500)
+        .legend(dc.legend());
+          // example of formatting the legend via svg
+          // http://stackoverflow.com/questions/38430632/how-can-we-add-legends-value-beside-of-legend-with-proper-alignment
+          coursePieChart.on('pretransition', function(coursePieChart) {
+            coursePieChart.selectAll('.dc-legend-item text')
+                  .text('')
+                .append('tspan')
+                  .text(function(d) { return d.name; })
+                .append('tspan')
+                  .attr('x', 100)
+                  .attr('text-anchor', 'end')
+                  .text(function(d) { return d.data; });
+          });
+
+}
+
+function show_category_graph(ndx) {
+    var categoryDim = ndx.dimension(dc.pluck("category"));
+    var categoryMix = categoryDim.group();
+
+    dc.barChart("#category-graph")
+        .width(350)
+        .height(250)
+        .margins({top: 10, right: 50, bottom: 30, left: 50})
+        .dimension(categoryDim)
+        .group(categoryMix)
+        .transitionDuration(500)
+        .x(d3.scale.ordinal())
+        .xUnits(dc.units.ordinal)
+        .elasticY(true)
+        .xAxisLabel("Category")
+        .yAxis().tickFormat(d3.format("d"));
+
+}function show_author_graph(ndx) {
+    var authorDim = ndx.dimension(dc.pluck("author"));
+    var authorMix = authorDim.group();
+
+    dc.barChart("#author-graph")
+        .width(500)
+        .height(250)
+        .margins({top: 10, right: 50, bottom: 30, left: 50})
+        .dimension(authorDim)
+        .group(authorMix)
+        .transitionDuration(500)
+        .x(d3.scale.ordinal())
+        .xUnits(dc.units.ordinal)
+        .elasticY(true)
+        .xAxisLabel("author")
+        .yAxis().tickFormat(d3.format("d"));
+
 }
