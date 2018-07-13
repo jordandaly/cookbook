@@ -5,10 +5,9 @@
     {% for recipe in recipes_list %}
         <li>
              
-        <div class="collapsible-header"><i class="material-icons">expand_more</i>{{ recipe.recipe_name }}
+        <div class="collapsible-header"><i class="material-icons">expand_more</i>{{ recipe.recipe_name }} <a href="{{ url_for('recipe_detail', id=recipe.id) }}"><i class="material-icons">navigate_next</i></a>
         </div>
         <div class="collapsible-body"><span>{{ recipe.recipe_description }}</span>
-            <a href="{{ url_for('recipe_detail', id=recipe.id) }}"><i class="material-icons">navigate_next</i></a> 
             <a href="{{ url_for('edit_recipe', id=recipe.id) }}"><i class="material-icons">edit</i></a> 
             <a href="{{ url_for('delete_recipe', id=recipe.id) }}" onclick="M.toast({html: 'Recipe Deleted!'})"><i class="material-icons">delete</i></a></div>
         </li>

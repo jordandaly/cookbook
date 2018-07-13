@@ -3,3 +3,7 @@
 }
 
 .dc-chart text.pie-slice {fill: black;}
+
+nav ul li i {
+    display: inline;
+}
