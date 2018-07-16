@@ -9,7 +9,7 @@ from flask_migrate import Migrate
 
 
 # constructor method
-db = SQLAlchemy(app)
+db = SQLAlchemy()
 migrate = Migrate(app, db)
 
 

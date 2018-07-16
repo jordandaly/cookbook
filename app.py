@@ -35,6 +35,11 @@ configure_uploads(app, images)
 
 from models import db, Recipe, Category, Course, Cuisine, Country, Allergen, Dietary, Author, Measurement, Quantity, Ingredient, Method
 
+def init_db():
+    db.init_app(app)
+    db.app = app
+    db.create_all()
+
 #############################INDEX##########################################
 @app.route('/')
 def index():
@@ -555,4 +560,5 @@ def delete_ingredient(id):
     return redirect(url_for('manage_static_data'))
 
 if __name__ == '__main__':
+    app.init_db()
     app.run()
