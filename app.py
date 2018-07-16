@@ -1,9 +1,9 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_heroku import Heroku
-from flask import render_template, redirect, url_for, request
+from flask import render_template, redirect, url_for, request, jsonify
 from flask_uploads import UploadSet, IMAGES, configure_uploads
-import os
+import os, sys
 
 # create an instance of flask = app variable
 app = Flask(__name__)
@@ -40,6 +40,32 @@ from models import db, Recipe, Category, Course, Cuisine, Country, Allergen, Die
 def index():
     
     return render_template('index.html')
+
+@app.route('/get_recipes')
+def get_recipes_json():
+    # recipes = {}
+    recipes = []
+    for r in db.session.query(Recipe).all():
+        print(r, file=sys.stdout)
+        # recipies[r.id] = {
+        #     'recipe_name': r.recipe_name,
+        #     'recipe_description': r.recipe_description,
+        #     'category': r.category.category_name,
+        #     'cuisine': r.cuisine.cuisine_name,
+        #     'course': r.course.course_name,
+        #     'author': r.author.author_name
+        # }
+        recipes.append({
+            'recipe_name': r.recipe_name,
+            'recipe_description': r.recipe_description,
+            'category': r.category.category_name,
+            'cuisine': r.cuisine.cuisine_name,
+            'course': r.course.course_name,
+            'author': r.author.author_name
+        })
+
+
+    return jsonify(recipes)
 
 #############################RECIPE LIST##########################################
 @app.route('/recipe_list')

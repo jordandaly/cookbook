@@ -4,4 +4,6 @@ $(document).ready(function(){
     $('.collapsible').collapsible({
         accordion : true
       });
+    $('.materialboxed').materialbox();
+    $('.modal').modal();
   });
