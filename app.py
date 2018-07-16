@@ -169,7 +169,7 @@ def delete_recipe(id):
 @app.route('/add_quantity/<id>', methods = ['GET','POST'])
 def add_quantity(id):
         measurements_list = Measurement.query.limit(100).all()
-        ingredients_list = Ingredient.query.limit(500).all()
+        # ingredients_list = Ingredient.query.limit(500).all()
         quantity_recipe = Recipe.query.get(id)
         
         if request.method == 'POST':
@@ -177,7 +177,8 @@ def add_quantity(id):
             
             # quantity_recipe = Recipe.query.filter_by(id=recipe.id).first()
             quantity_measurement = Measurement.query.filter_by(id=request.form['quantity_measurement']).first()
-            quantity_ingredient = Ingredient.query.filter_by(id=request.form['quantity_ingredient']).first()
+            # quantity_ingredient = Ingredient.query.filter_by(id=request.form['quantity_ingredient']).first()
+            quantity_ingredient = Ingredient(request.form['quantity_ingredient'])
 
             quantity = Quantity(request.form['quantity'], 
             quantity_recipe, 
@@ -189,21 +190,21 @@ def add_quantity(id):
             db.session.commit()
             return redirect(url_for('recipe_detail', id=id))
         
-        return render_template('add_quantity.html', measurements_list=measurements_list, ingredients_list=ingredients_list, recipe=quantity_recipe)
+        return render_template('add_quantity.html', measurements_list=measurements_list, recipe=quantity_recipe)
 
 @app.route('/edit_quantity/<id>')
 def edit_quantity(id):
         quantity = Quantity.query.get(id)
         quantity_recipe = Recipe.query.get(quantity.recipe_id)
-        ingredients_list = Ingredient.query.limit(500).all()
+        # ingredients_list = Ingredient.query.limit(500).all()
         measurements_list = Measurement.query.limit(100).all()
-        return render_template('edit_quantity.html', quantity=quantity, ingredients_list=ingredients_list, measurements_list=measurements_list, recipe=quantity_recipe)
+        return render_template('edit_quantity.html', quantity=quantity, measurements_list=measurements_list, recipe=quantity_recipe)
 
 @app.route('/update_quantity/<id>', methods = ['GET','POST'])
 def update_quantity(id):
         quantity = Quantity.query.get(id)
         quantity_recipe = Recipe.query.get(quantity.recipe_id)
-        ingredients_list = Ingredient.query.limit(500).all()
+        # ingredients_list = Ingredient.query.limit(500).all()
         measurements_list = Measurement.query.limit(100).all()
         
         
@@ -213,7 +214,8 @@ def update_quantity(id):
             quantity.quantity = request.form['quantity']
             quantity.recipe = quantity_recipe
             quantity.measurement = Measurement.query.filter_by(id=request.form['quantity_measurement']).first()
-            quantity.ingredient = Ingredient.query.filter_by(id=request.form['quantity_ingredient']).first()
+            # quantity.ingredient = Ingredient.query.filter_by(id=request.form['quantity_ingredient']).first()
+            quantity.ingredient = request.form['quantity_ingredient']
 
 
             db.session.commit()

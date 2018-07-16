@@ -13,11 +13,12 @@
         </select>
 
         <label for="quantity_ingredient" >Ingredient:</label>
-        <select id="quantity_ingredient" name="quantity_ingredient">
+        <!-- <select id="quantity_ingredient" name="quantity_ingredient">
             {% for ingredient in ingredients_list %}
             <option value="{{ingredient.id}}" SELECTED>{{ingredient.ingredient_name}}</option>
             {% endfor %}
-        </select>
+        </select> -->
+        <input type="text" id="quantity_ingredient" name="quantity_ingredient" required>
         
         <button class="waves-effect waves-light btn" onclick="M.toast({html: 'Ingredient Added!'})">Add Ingredient</button>
     </form>

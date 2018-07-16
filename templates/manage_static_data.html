@@ -1,13 +1,13 @@
 {% extends 'base.html'%} {% block content %}
 <div class="row">
 <!-- Categories -->
-    <div class="col s12 m4">
+    <div class="col s12 m6 l3">
       <div class="card-panel teal lighten-5">
         <h5>Categories</h5>
     <p>{{ category_count }}</p>
           <ul>
     {% for category in categories_list %}
-        <li>{{ category.category_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn modal-trigger" data-target="Category_{{ category.id }}">Edit</button> <a href="{{ url_for('delete_category', id=category.id) }}">Delete</a></li>
+        <li>{{ category.category_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Category_{{ category.id }}"><i class="material-icons">edit</i></button> <a href="{{ url_for('delete_category', id=category.id) }}" class="waves-effect waves-light btn-flat" onclick="M.toast({html: 'Category Deleted!'})"><i class="material-icons">delete</i></a></li>
     {% endfor %}
     </ul>
           
@@ -21,7 +21,7 @@
                 <label for="category" >Category Name:</label>
                 <input type="text" id="category" name="category" value="{{ category.category_name }}" required>
 
-                <button>Submit</button>
+                <button class="waves-effect waves-light btn">Update</button>
             </form>
         </div>
         <div class="modal-footer">
@@ -32,18 +32,18 @@
     <form method="POST" action=/add_category>
         <label for="category" >New Category:</label>
         <input type="text" id="category" name="category" required>
-        <button class="waves-effect waves-light btn-small">Add</button>
+        <button class="waves-effect waves-light btn">Add</button>
     </form>
       </div>
     </div>
 <!-- Courses -->
-    <div class="col s12 m4">
+    <div class="col s12 m6 l3">
       <div class="card-panel teal lighten-5">
         <h5>Courses</h5>
     <p>{{ course_count }}</p>
     <ul>
     {% for course in courses_list %}
-         <li>{{ course.course_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn modal-trigger" data-target="Course_{{ course.id }}">Edit</button> <a href="{{ url_for('delete_course', id=course.id) }}">Delete</a></li>
+         <li>{{ course.course_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Course_{{ course.id }}"><i class="material-icons">edit</i></button> <a href="{{ url_for('delete_course', id=course.id) }}" class="waves-effect waves-light btn-flat" onclick="M.toast({html: 'Course Deleted!'})"><i class="material-icons">delete</i></a></li>
     {% endfor %}
     </ul>
           
@@ -57,7 +57,7 @@
                 <label for="course" >course Name:</label>
                 <input type="text" id="course" name="course" value="{{ course.course_name }}" required>
 
-                <button>Submit</button>
+                <button class="waves-effect waves-light btn">Update</button>
             </form>
         </div>
         <div class="modal-footer">
@@ -68,17 +68,17 @@
     <form method="POST" action=/add_course>
         <label for="course" >New Course:</label>
         <input type="text" id="course" name="course" required>
-        <button class="waves-effect waves-light btn-small">Add</button>
+        <button class="waves-effect waves-light btn">Add</button>
     </form>
       </div>
     </div>
-    <div class="col s12 m4">
+    <div class="col s12 m6 l3">
       <div class="card-panel teal lighten-5">
         <h5>Cuisines</h5>
     <p>{{ cuisine_count }}</p>
     <ul>
     {% for cuisine in cuisines_list %}
-        <li>{{ cuisine.cuisine_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn modal-trigger" data-target="Cuisine_{{ cuisine.id }}">Edit</button> <a href="{{ url_for('delete_cuisine', id=cuisine.id) }}">Delete</a></li>
+        <li>{{ cuisine.cuisine_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Cuisine_{{ cuisine.id }}"><i class="material-icons">edit</i></button> <a href="{{ url_for('delete_cuisine', id=cuisine.id) }}" class="waves-effect waves-light btn-flat" onclick="M.toast({html: 'Cuisine Deleted!'})"><i class="material-icons">delete</i></a></li>
     {% endfor %}
     </ul>
           
@@ -92,7 +92,7 @@
                 <label for="cuisine" >cuisine Name:</label>
                 <input type="text" id="cuisine" name="cuisine" value="{{ cuisine.cuisine_name }}" required>
 
-                <button>Submit</button>
+                <button class="waves-effect waves-light btn">Update</button>
             </form>
         </div>
         <div class="modal-footer">
@@ -103,19 +103,17 @@
     <form method="POST" action=/add_cuisine>
         <label for="cuisine" >New Cuisine:</label>
         <input type="text" id="cuisine" name="cuisine" required>
-        <button class="waves-effect waves-light btn-small">Add</button>
+        <button class="waves-effect waves-light btn">Add</button>
     </form>
       </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col s12 m4">
+    <div class="col s12 m6 l3">
       <div class="card-panel teal lighten-5">
         <h5>Countries</h5>
     <p>{{ country_count }}</p>
     <ul>
     {% for country in countries_list %}
-        <li>{{ country.country_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn modal-trigger" data-target="Country_{{ country.id }}">Edit</button> <a href="{{ url_for('delete_country', id=country.id) }}">Delete</a></li>
+        <li>{{ country.country_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Country_{{ country.id }}"><i class="material-icons">edit</i></button> <a href="{{ url_for('delete_country', id=country.id) }}" class="waves-effect waves-light btn-flat" onclick="M.toast({html: 'Country Deleted!'})"><i class="material-icons">delete</i></a></li>
     {% endfor %}
     </ul>
           
@@ -129,7 +127,7 @@
                 <label for="country" >country Name:</label>
                 <input type="text" id="country" name="country" value="{{ country.country_name }}" required>
 
-                <button>Submit</button>
+                <button class="waves-effect waves-light btn">Update</button>
             </form>
         </div>
         <div class="modal-footer">
@@ -140,18 +138,20 @@
     <form method="POST" action=/add_country>
         <label for="country" >New Country:</label>
         <input type="text" id="country" name="country" required>
-        <button class="waves-effect waves-light btn-small">Add</button>
+        <button class="waves-effect waves-light btn">Add</button>
     </form>
         </span>
       </div>
     </div>
-    <div class="col s12 m4">
+</div>
+<div class="row">
+    <div class="col s12 m6 l3">
       <div class="card-panel teal lighten-5">
         <h5>Authors</h5>
     <p>{{ author_count }}</p>
     <ul>
     {% for author in authors_list %}
-        <li>{{ author.author_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn modal-trigger" data-target="Author_{{ author.id }}">Edit</button> <a href="{{ url_for('delete_author', id=author.id) }}">Delete</a></li>
+        <li>{{ author.author_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Author_{{ author.id }}"><i class="material-icons">edit</i></button> <a href="{{ url_for('delete_author', id=author.id) }}" class="waves-effect waves-light btn-flat" onclick="M.toast({html: 'Author Deleted!'})"><i class="material-icons">delete</i></a></li>
     {% endfor %}
     </ul>
           
@@ -171,7 +171,7 @@
                 {% endfor %}
             </select>
 
-                <button>Submit</button>
+                <button class="waves-effect waves-light btn">Update</button>
             </form>
         </div>
         <div class="modal-footer">
@@ -189,18 +189,18 @@
             <option value="{{country.id}}" SELECTED>{{country.country_name}}</option>
             {% endfor %}
         </select>
-        <button class="waves-effect waves-light btn-small">Add</button>
+        <button class="waves-effect waves-light btn">Add</button>
     </form>
         </span>
       </div>
     </div>
-    <div class="col s12 m4">
+    <div class="col s12 m6 l3">
       <div class="card-panel teal lighten-5">
         <h5>Allergens</h5>
     <p>{{ allergen_count }}</p>
     <ul>
     {% for allergen in allergens_list %}
-        <li>{{ allergen.allergen_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn modal-trigger" data-target="Allergen_{{ allergen.id }}">Edit</button> <a href="{{ url_for('delete_allergen', id=allergen.id) }}">Delete</a></li>
+        <li>{{ allergen.allergen_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Allergen_{{ allergen.id }}"><i class="material-icons">edit</i></button> <a href="{{ url_for('delete_allergen', id=allergen.id) }}" class="waves-effect waves-light btn-flat" onclick="M.toast({html: 'Allergen Deleted!'})"><i class="material-icons">delete</i></a></li>
     {% endfor %}
     </ul>
           
@@ -214,7 +214,7 @@
                 <label for="allergen" >allergen Name:</label>
                 <input type="text" id="allergen" name="allergen" value="{{ allergen.allergen_name }}" required>
 
-                <button>Submit</button>
+                <button class="waves-effect waves-light btn">Update</button>
             </form>
         </div>
         <div class="modal-footer">
@@ -225,20 +225,18 @@
     <form method="POST" action=/add_allergen>
         <label for="allergen" >New Allergen:</label>
         <input type="text" id="allergen" name="allergen" required>
-        <button class="waves-effect waves-light btn-small">Add</button>
+        <button class="waves-effect waves-light btn">Add</button>
     </form>
         </span>
       </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col s12 m4">
+    <div class="col s12 m6 l3">
       <div class="card-panel teal lighten-5">
         <h5>Dietaries</h5>
     <p>{{ dietary_count }}</p>
     <ul>
     {% for dietary in dietaries_list %}
-        <li>{{ dietary.dietary_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn modal-trigger" data-target="Dietary_{{ dietary.id }}">Edit</button> <a href="{{ url_for('delete_dietary', id=dietary.id) }}">Delete</a></li>
+        <li>{{ dietary.dietary_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Dietary_{{ dietary.id }}"><i class="material-icons">edit</i></button> <a href="{{ url_for('delete_dietary', id=dietary.id) }}" class="waves-effect waves-light btn-flat" onclick="M.toast({html: 'Dietary Deleted!'})"><i class="material-icons">delete</i></a></li>
     {% endfor %}
     </ul>
           
@@ -252,7 +250,7 @@
                 <label for="dietary" >dietary Name:</label>
                 <input type="text" id="dietary" name="dietary" value="{{ dietary.dietary_name }}" required>
 
-                <button>Submit</button>
+                <button class="waves-effect waves-light btn">Update</button>
             </form>
         </div>
         <div class="modal-footer">
@@ -263,18 +261,18 @@
     <form method="POST" action=/add_dietary>
         <label for="dietary" >New Dietary:</label>
         <input type="text" id="dietary" name="dietary" required>
-        <button class="waves-effect waves-light btn-small">Add</button>
+        <button class="waves-effect waves-light btn">Add</button>
     </form>
         </span>
       </div>
     </div>
-    <div class="col s12 m4">
+    <div class="col s12 m6 l3">
       <div class="card-panel teal lighten-5">
         <h5>Measurements</h5>
     <p>{{ measurement_count }}</p>
     <ul>
     {% for measurement in measurements_list %}
-       <li>{{ measurement.measurement_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn modal-trigger" data-target="Measurement_{{ measurement.id }}">Edit</button> <a href="{{ url_for('delete_measurement', id=measurement.id) }}">Delete</a></li>
+       <li>{{ measurement.measurement_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Measurement_{{ measurement.id }}"><i class="material-icons">edit</i></button> <a href="{{ url_for('delete_measurement', id=measurement.id) }}" class="waves-effect waves-light btn-flat" onclick="M.toast({html: 'Measurement Deleted!'})"><i class="material-icons">delete</i></a></li>
     {% endfor %}
     </ul>
           
@@ -288,7 +286,7 @@
                 <label for="measurement" >measurement Name:</label>
                 <input type="text" id="measurement" name="measurement" value="{{ measurement.measurement_name }}" required>
 
-                <button>Submit</button>
+                <button class="waves-effect waves-light btn">Update</button>
             </form>
         </div>
         <div class="modal-footer">
@@ -299,47 +297,10 @@
     <form method="POST" action=/add_measurement>
         <label for="measurement" >New Measurement:</label>
         <input type="text" id="measurement" name="measurement" required>
-        <button class="waves-effect waves-light btn-small">Add</button>
+        <button class="waves-effect waves-light btn">Add</button>
     </form>
         </span>
       </div>
     </div>
-    <div class="col s12 m4">
-      <div class="card-panel teal lighten-5">
-        <h5>Ingredients</h5>
-        <p>{{ ingredient_count }}</p>
-        <ul>
-        {% for ingredient in ingredients_list %}
-            <li>{{ ingredient.ingredient_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn modal-trigger" data-target="Ingredient_{{ ingredient.id }}">Edit</button> <a href="{{ url_for('delete_ingredient', id=ingredient.id) }}">Delete</a></li>
-    {% endfor %}
-    </ul>
-          
-    {% for ingredient in ingredients_list %}
-      <!-- Modal Structure -->
-      <div id="Ingredient_{{ ingredient.id }}" class="modal">
-        <div class="modal-content">
-          <h1>Edit ingredient</h1>
-            <form method="POST" action="{{ url_for('update_ingredient', id=ingredient.id) }}">
-
-                <label for="ingredient" >ingredient Name:</label>
-                <input type="text" id="ingredient" name="ingredient" value="{{ ingredient.ingredient_name }}" required>
-
-                <button>Submit</button>
-            </form>
-        </div>
-        <div class="modal-footer">
-          <a href="#!" class="modal-close waves-effect waves-green btn-flat">Done</a>
-        </div>
-      </div>
-      {% endfor %}
-        <form method="POST" action=/add_ingredient>
-            <label for="ingredient" >New Ingredient:</label>
-            <input type="text" id="ingredient" name="ingredient" required>
-            <button class="waves-effect waves-light btn-small">Add</button>
-        </form>
-        </span>
-      </div>
-    </div>
-  </div>
     
 {% endblock %}
