@@ -76,6 +76,36 @@ def recipe_list():
     recipes_list = Recipe.query.limit(100).all()
     return render_template('recipe_list.html', recipe_count=str(recipe_count), recipes_list=recipes_list)
 
+#############################RECIPE LIST FILTERED##########################################
+@app.route('/recipe_list_filtered', methods = ['GET','POST'])
+def recipe_list_filtered():
+    categories_list = Category.query.limit(100).all()
+    courses_list = Course.query.limit(100).all()
+    cuisines_list = Cuisine.query.limit(100).all()
+    authors_list = Author.query.limit(100).all()
+    
+    if request.method == 'POST':
+        recipe_category = Category.query.filter_by(id=request.form.get('recipe_category')).first()
+        recipe_course = Course.query.filter_by(id=request.form.get('recipe_course')).first()
+        recipe_cuisine = Cuisine.query.filter_by(id=request.form.get('recipe_cuisine')).first()
+        recipe_author = Author.query.filter_by(id=request.form.get('recipe_author')).first()
+        queries = []
+        if recipe_category is not None:
+            queries.append(Recipe.category == recipe_category)
+        if recipe_course is not None:
+            queries.append(Recipe.course == recipe_course)
+        if recipe_cuisine is not None:
+            queries.append(Recipe.cuisine == recipe_cuisine)
+        if recipe_author is not None:
+            queries.append(Recipe.author == recipe_author)
+        
+        recipes_list = Recipe.query.filter(*queries).all()
+        recipe_count = Recipe.query.filter(*queries).count()
+        # recipes_list = Recipe.query.filter_by(category=recipe_category, course=recipe_course, cuisine=recipe_cuisine, author=recipe_author).all()
+        # recipe_count = Recipe.query.filter_by(category=recipe_category, course=recipe_course, cuisine=recipe_cuisine, author=recipe_author).count()
+        return render_template('recipe_list_filtered.html', recipe_count=str(recipe_count), recipes_list=recipes_list, categories_list=categories_list, courses_list=courses_list, cuisines_list=cuisines_list, authors_list=authors_list)
+    return render_template('recipe_list_filtered.html', categories_list=categories_list, courses_list=courses_list, cuisines_list=cuisines_list, authors_list=authors_list)
+
 #############################RECIPE DETAIL##########################################
 @app.route('/recipe_detail/<id>')
 def recipe_detail(id):

@@ -17,56 +17,46 @@
         <input type="number" id="servings" name="servings" required>
 
         <div class="input-field col s12">
-            <label for="recipe_category" >Category:</label>
             <select id="recipe_category" name="recipe_category">
+                <option value="" disabled selected>Choose your option</option>
                 {% for category in categories_list %}
-                <option value="{{category.id}}" SELECTED>{{category.category_name}}</option>
+                <option value="{{category.id}}">{{category.category_name}}</option>
                 {% endfor %}
             </select>
+            <label>Category:</label>
         </div>
         
         <div class="input-field col s12">
-            <label for="recipe_course" >Course:</label>
             <select id="recipe_course" name="recipe_course">
+                <option value="" disabled selected>Choose your option</option>
                 {% for course in courses_list %}
-                <option value="{{course.id}}" SELECTED>{{course.course_name}}</option>
+                <option value="{{course.id}}">{{course.course_name}}</option>
                 {% endfor %}
             </select>
+            <label>Course:</label>
         </div>
         
         <div class="input-field col s12">
-            <label for="recipe_cuisine" >Cuisine:</label>
             <select id="recipe_cuisine" name="recipe_cuisine">
+                <option value="" disabled selected>Choose your option</option>
                 {% for cuisine in cuisines_list %}
-                <option value="{{cuisine.id}}" SELECTED>{{cuisine.cuisine_name}}</option>
+                <option value="{{cuisine.id}}">{{cuisine.cuisine_name}}</option>
                 {% endfor %}
             </select>
+            <label>Cuisine:</label>
         </div>
 
         <div class="input-field col s12">
-            <label for="recipe_author" >Author:</label>
             <select id="recipe_author" name="recipe_author">
+                <option value="" disabled selected>Choose your option</option>
                 {% for author in authors_list %}
-                <option value="{{author.id}}" SELECTED>{{author.author_name}}</option>
+                <option value="{{author.id}}">{{author.author_name}}</option>
                 {% endfor %}
             </select>
+            <label>Author:</label>
         </div>
 
         <input type=file name=recipe_image>
-        
-
-        <!-- <label for="quantity" >Quantity:</label>
-        <input type="number" id="quantity" name="quantity" required>
-
-        <label for="quantity_measurement" >Measurement:</label>
-        <select id="quantity_measurement" name="quantity_measurement">
-            {% for measurement in measurements_list %}
-            <option value="{{measurement.id}}" SELECTED>{{measurement.measurement_name}}</option>
-            {% endfor %}
-        </select>
-
-        <label for="ingredient" >Ingredient:</label>
-        <input type="text" id="ingredient" name="ingredient" required> -->
         
         <button class="btn waves-effect waves-light" type="submit" name="action" onclick="M.toast({html: 'New Recipe Added!'})">Add Recipe
             <i class="material-icons right">send</i>

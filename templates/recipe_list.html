@@ -1,5 +1,6 @@
 {% extends 'base.html'%} {% block content %}
 <div class="row">
+    <a href="{{ url_for('recipe_list_filtered') }}" class="waves-effect waves-light btn-flat"><i class="material-icons left">filter_list</i>Filter List</a></li>
     <p>{{ recipe_count }}</p>
     <ul class="collapsible">
     {% for recipe in recipes_list %}
