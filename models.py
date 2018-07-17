@@ -5,12 +5,13 @@ from datetime import datetime
 from sqlalchemy import Boolean, Column, Date, DateTime, Integer, SmallInteger, String, Text, text, ARRAY, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
-from flask_migrate import Migrate
+# from flask_migrate import Migrate
+from extensions import db, migrate
 
 
 # constructor method
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+# db = SQLAlchemy(app)
+# migrate = Migrate(app, db)
 
 
 class Test(db.Model):

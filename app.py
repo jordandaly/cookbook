@@ -1,9 +1,10 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_heroku import Heroku
+# from flask_sqlalchemy import SQLAlchemy
+# from flask_heroku import Heroku
 from flask import render_template, redirect, url_for, request, jsonify
 from flask_uploads import UploadSet, IMAGES, configure_uploads
 import os, sys
+from extensions import db, migrate, heroku
 
 # create an instance of flask = app variable
 app = Flask(__name__)
@@ -24,7 +25,7 @@ app.config['UPLOADED_IMAGES_DEST'] = TOP_LEVEL_DIR + '/static/img/'
 app.config['UPLOADED_IMAGES_URL'] = 'http://localhost:5000/static/img/'
 
 # get heroku environment variables and pass them to flask
-heroku = Heroku(app)
+# heroku = Heroku(app)
 
 #app.config.from_pyfile('models.py')
 
@@ -32,8 +33,9 @@ heroku = Heroku(app)
 images = UploadSet('images', IMAGES)
 configure_uploads(app, images)
 
+db.init_app(app)
 
-from models import db, Recipe, Category, Course, Cuisine, Country, Allergen, Dietary, Author, Measurement, Quantity, Ingredient, Method
+from models import Recipe, Category, Course, Cuisine, Country, Allergen, Dietary, Author, Measurement, Quantity, Ingredient, Method
 
 #############################INDEX##########################################
 @app.route('/')
