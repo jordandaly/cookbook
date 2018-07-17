@@ -106,6 +106,19 @@ def recipe_list_filtered():
         return render_template('recipe_list_filtered.html', recipe_count=str(recipe_count), recipes_list=recipes_list, categories_list=categories_list, courses_list=courses_list, cuisines_list=cuisines_list, authors_list=authors_list)
     return render_template('recipe_list_filtered.html', categories_list=categories_list, courses_list=courses_list, cuisines_list=cuisines_list, authors_list=authors_list)
 
+#############################RECIPE SEARCH##########################################
+@app.route('/recipe_search', methods = ['GET','POST'])
+def recipe_search():
+
+    
+    if request.method == 'POST':
+        # kwargs = {'recipe_name': request.form['recipe_name']}
+        
+        recipes_list = Recipe.query.filter(Recipe.recipe_name.ilike("%" + request.form['recipe_name'] + "%")).all()
+        recipe_count = Recipe.query.filter(Recipe.recipe_name.ilike("%" + request.form['recipe_name'] + "%")).count()
+        return render_template('recipe_search.html', recipe_count=str(recipe_count), recipes_list=recipes_list)
+    return render_template('recipe_search.html')
+
 #############################RECIPE DETAIL##########################################
 @app.route('/recipe_detail/<id>')
 def recipe_detail(id):
