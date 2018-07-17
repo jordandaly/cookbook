@@ -1,5 +1,5 @@
 from flask import Flask
-from app import app
+# from app import app
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from sqlalchemy import Boolean, Column, Date, DateTime, Integer, SmallInteger, String, Text, text, ARRAY, ForeignKey
