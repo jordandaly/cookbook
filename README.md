@@ -9,7 +9,7 @@ This is a web application which that allows users to store and easily access coo
 
 ## Demo
 
-A demo of this web application is available [here](HEROKU_PROJECT_LINK_HERE).
+A demo of this web application is available [here](https://daly-cookbook.herokuapp.com/).
 
 
 ## Getting started / Deployment
