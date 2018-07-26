@@ -169,9 +169,10 @@ class Recipe(db.Model):
     def __repr__(self):
         return '<Recipe %r>' % self.recipe_name
 
+
 class Ingredient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    ingredient_name = db.Column(String(150), nullable=False, unique=True)
+    ingredient_name = db.Column(String(150), nullable=False)
 
     # quantities = db.relationship('Quantity')
 
@@ -180,6 +181,7 @@ class Ingredient(db.Model):
     
     def __repr__(self):
         return '<Ingredient %r>' % self.ingredient_name
+
 
 class Measurement(db.Model):
     id = db.Column(db.Integer, primary_key=True)

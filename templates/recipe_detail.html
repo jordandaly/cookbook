@@ -19,19 +19,35 @@
         </div>
     </div>
     <div class="row">
-        <h3>Ingredients</h3>
-        <a class="btn-floating btn-large waves-effect waves-light green" href="{{ url_for('add_quantity', id=recipe.id) }}"><i class="material-icons">add</i></a>
-        {% for quantity in quantity_list %}
-        <p>{{ quantity.quantity }} {{ quantity.measurement.measurement_name }} {{ quantity.ingredient.ingredient_name }}</p><a class="btn-floating btn-large waves-effect waves-light blue" href="{{ url_for('edit_quantity', id=quantity.id) }}"><i class="material-icons">edit</i></a> <a class="btn-floating btn-large waves-effect waves-light red" href="{{ url_for('delete_quantity', id=quantity.id) }}" onclick="M.toast({html: 'Ingredient Deleted!'})"><i class="material-icons">delete</i></a>
-        {% endfor %}
-    </div>
-    <div class="row">
-        <h3>Method</h3>
-        <a class="btn-floating btn-large waves-effect waves-light green" href="{{ url_for('add_method', id=recipe.id) }}"><i class="material-icons">add</i></a>
-        {% for method in method_list %}
-        <p>{{ method.method_description }}</p>
-        <a class="btn-floating btn-large waves-effect waves-light blue" href="{{ url_for('edit_method', id=method.id) }}"><i class="material-icons">edit</i></a> <a class="btn-floating btn-large waves-effect waves-light red" href="{{ url_for('delete_method', id=method.id) }}" onclick="M.toast({html: 'Method Deleted!'})"><i class="material-icons">delete</i></a>
-        {% endfor %}
+        <div class="col s12 m4">
+            <h3>Ingredients</h3>
+            <a class="btn-floating btn-large waves-effect waves-light green" href="{{ url_for('add_quantity', id=recipe.id) }}"><i class="material-icons">add</i></a>
+            {% for quantity in quantity_list %}
+            <div class="row">
+                <div class="col s12 m6">
+                    <p>{{ quantity.quantity }} {{ quantity.measurement.measurement_name }} {{ quantity.ingredient.ingredient_name }}</p>
+                </div>
+                <div class="col s12 m6">
+                    <a class="btn-floating btn-small waves-effect waves-light blue" href="{{ url_for('edit_quantity', id=quantity.id) }}"><i class="material-icons">edit</i></a> <a class="btn-floating btn-small waves-effect waves-light red" href="{{ url_for('delete_quantity', id=quantity.id) }}" onclick="M.toast({html: 'Ingredient Deleted!'})"><i class="material-icons">delete</i></a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="col s12 m8">
+            <h3>Method</h3>
+            <a class="btn-floating btn-large waves-effect waves-light green" href="{{ url_for('add_method', id=recipe.id) }}"><i class="material-icons">add</i></a>
+            {% for method in method_list %}
+            <div class="row">
+                <div class="col s12 m6">
+                    <p>{{ method.method_description }}</p>
+                </div>
+                <div class="col s12 m6">
+                    <a class="btn-floating btn-small waves-effect waves-light blue" href="{{ url_for('edit_method', id=method.id) }}"><i class="material-icons">edit</i></a> <a class="btn-floating btn-small waves-effect waves-light red" href="{{ url_for('delete_method', id=method.id) }}" onclick="M.toast({html: 'Method Deleted!'})"><i class="material-icons">delete</i></a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
     </div>
 </div>
 {% endblock %}

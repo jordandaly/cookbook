@@ -34,6 +34,7 @@ images = UploadSet('images', IMAGES)
 configure_uploads(app, images)
 
 db.init_app(app)
+migrate.init_app(app, db)
 
 from models import Recipe, Category, Course, Cuisine, Country, Allergen, Dietary, Author, Measurement, Quantity, Ingredient, Method
 
@@ -146,8 +147,12 @@ def add_recipe():
             recipe_cuisine = Cuisine.query.filter_by(id=request.form['recipe_cuisine']).first()
             recipe_author = Author.query.filter_by(id=request.form['recipe_author']).first()
 
-            filename = images.save(request.files['recipe_image'])
-            url = images.url(filename)
+            if 'recipe_image' in request.files:
+                filename = images.save(request.files['recipe_image'])
+                url = images.url(filename)
+            else:
+                filename = None
+                url = None
 
             recipe = Recipe(request.form['recipe_name'], 
             request.form['recipe_description'], 
@@ -183,8 +188,12 @@ def update_recipe(id):
         if request.method == 'POST':
             recipe = Recipe.query.get(id)
 
-            filename = images.save(request.files['recipe_image'])
-            url = images.url(filename)
+            if 'recipe_image' in request.files:
+                filename = images.save(request.files['recipe_image'])
+                url = images.url(filename)
+            else:
+                filename = None
+                url = None
 
             recipe.recipe_name = request.form['recipe_name']
             recipe.recipe_description = request.form['recipe_description']
