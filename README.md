@@ -14,14 +14,13 @@ Details of the Database design is available in the
 ### Existing Features
 
 This is a web application which that allows users to store and easily access cooking recipes. It is a full stack web application (frontend and backend) that provides CRUD (Create, Read, Update, Delete) functionality to a database hosted in the cloud on Heroku platform as a service. Users can :
-1.	View a list of recipes
+1.	View a list of recipes, filter list, search by recipe name, search by ingredient
 2.	Add a new recipe and add ingredients and method to the recipe
 3.	Manage static data like categories
 4.	Edit and Delete any data
 
 ### Features Left to Implement
 1. Allergens and Dietary
-2. Search/Filter by ingredient
 
 ## Demo
 

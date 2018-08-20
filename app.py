@@ -43,7 +43,7 @@ from models import Recipe, Category, Course, Cuisine, Country, Allergen, Dietary
 def index():
     
     return render_template('index.html')
-
+#############################RECIPE JSON DATA ENDPOINT##########################################
 @app.route('/get_recipes')
 def get_recipes_json():
     # recipes = {}
@@ -120,6 +120,28 @@ def recipe_search():
         return render_template('recipe_search.html', recipe_count=str(recipe_count), recipes_list=recipes_list)
     return render_template('recipe_search.html')
 
+
+#############################INGREDIENT SEARCH##########################################
+@app.route('/ingredient_search', methods=['GET', 'POST'])
+def ingredient_search():
+    if request.method == 'POST':
+        # kwargs = {'recipe_name': request.form['recipe_name']}
+
+        # recipes_list = Recipe.query.filter(Recipe.recipe_name.ilike("%" + request.form['recipe_name'] + "%")).all()
+        # recipe_count = Recipe.query.filter(Recipe.recipe_name.ilike("%" + request.form['recipe_name'] + "%")).count()
+        recipes = []
+
+        quantity_list = Quantity.query.filter(Quantity.ingredient.has(Ingredient.ingredient_name.ilike("%" + request.form['ingredient_name'] + "%"))).all()
+        for quantity in quantity_list:
+            recipe_id = quantity.recipe_id
+            recipes.append(recipe_id)
+
+        recipes_list = Recipe.query.join(Quantity).filter(Recipe.id.in_(recipes)).all()
+        recipe_count = Quantity.query.filter(Quantity.ingredient.has(Ingredient.ingredient_name.ilike("%" + request.form['ingredient_name'] + "%"))).count()
+        return render_template('ingredient_search.html', recipe_count=str(recipe_count), recipes_list=recipes_list)
+    return render_template('ingredient_search.html')
+
+
 #############################RECIPE DETAIL##########################################
 @app.route('/recipe_detail/<id>')
 def recipe_detail(id):
@@ -132,7 +154,7 @@ def recipe_detail(id):
 
     return render_template('recipe_detail.html', recipe=recipe, quantity_list=quantity_list, method_list=method_list)
 
-#############################ADD RECIPE##########################################
+#############################RECIPE##########################################
 @app.route('/add_recipe', methods = ['GET','POST'])
 def add_recipe():
         categories_list = Category.query.limit(100).all()
@@ -219,7 +241,7 @@ def delete_recipe(id):
     db.session.commit()
     return redirect(url_for('recipe_list'))
 
-#############################ADD INGREDIENT##########################################
+#############################INGREDIENT##########################################
 @app.route('/add_quantity/<id>', methods = ['GET','POST'])
 def add_quantity(id):
         measurements_list = Measurement.query.limit(100).all()
@@ -285,7 +307,7 @@ def delete_quantity(id):
     db.session.commit()
     return redirect(url_for('recipe_detail', id=quantity_recipe.id))
 
-#############################ADD METHOD##########################################
+#############################METHOD##########################################
 @app.route('/add_method/<id>', methods = ['GET','POST'])
 def add_method(id):       
         method_recipe = Recipe.query.get(id)   
