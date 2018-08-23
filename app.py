@@ -74,8 +74,14 @@ def get_recipes_json():
 @app.route('/recipe_list')
 def recipe_list():
     recipe_count = Recipe.query.count()
-    recipes_list = Recipe.query.limit(100).all()
-    return render_template('recipe_list.html', recipe_count=str(recipe_count), recipes_list=recipes_list)
+    # recipes_list = Recipe.query.limit(100).all()
+    page = request.args.get('page', 1, type=int)
+    recipes_list = Recipe.query.order_by(Recipe.id.desc()).paginate(page, 10, False)
+    next_url = url_for('recipe_list', page=recipes_list.next_num) \
+        if recipes_list.has_next else None
+    prev_url = url_for('recipe_list', page=recipes_list.prev_num) \
+        if recipes_list.has_prev else None
+    return render_template('recipe_list.html', recipe_count=str(recipe_count), recipes_list=recipes_list.items, next_url=next_url, prev_url=prev_url)
 
 #############################RECIPE LIST FILTERED##########################################
 @app.route('/recipe_list_filtered', methods = ['GET','POST'])
