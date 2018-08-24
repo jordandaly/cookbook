@@ -1,10 +1,14 @@
 from flask import Flask
 # from flask_sqlalchemy import SQLAlchemy
 # from flask_heroku import Heroku
-from flask import render_template, redirect, url_for, request, jsonify
+from werkzeug.urls import url_parse
+from flask import render_template, redirect, url_for, request, jsonify, flash
 from flask_uploads import UploadSet, IMAGES, configure_uploads
 import os, sys
-from extensions import db, migrate, heroku
+from extensions import db, migrate, login_manager
+from flask_login import current_user, login_user, logout_user, login_required
+from models import User
+from forms import RegistrationForm, LoginForm
 
 # create an instance of flask = app variable
 app = Flask(__name__)
@@ -24,6 +28,11 @@ app.config['UPLOADS_DEFAULT_URL'] = 'http://localhost:5000/static/img/'
 app.config['UPLOADED_IMAGES_DEST'] = TOP_LEVEL_DIR + '/static/img/'
 app.config['UPLOADED_IMAGES_URL'] = 'http://localhost:5000/static/img/'
 
+app.config.update(dict(
+    SECRET_KEY="powerful secretkey",
+    WTF_CSRF_SECRET_KEY="a csrf secret key"
+))
+
 # get heroku environment variables and pass them to flask
 # heroku = Heroku(app)
 
@@ -35,8 +44,53 @@ configure_uploads(app, images)
 
 db.init_app(app)
 migrate.init_app(app, db)
+login_manager.init_app(app)
 
-from models import Recipe, Category, Course, Cuisine, Country, Allergen, Dietary, Author, Measurement, Quantity, Ingredient, Method
+login_manager.login_view = 'login'
+
+from models import Recipe, Category, Course, Cuisine, Country, Allergen, Dietary, Author, Measurement, Quantity, Ingredient, Method, User
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.filter(User.id == int(user_id)).first()
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user is None or not user.check_password(form.password.data):
+            flash('Invalid username or password')
+            return redirect(url_for('login'))
+        login_user(user)
+        flash('Congratulations, you are now logged in!')
+        next_page = request.args.get('next')
+        if not next_page or url_parse(next_page).netloc != '':
+            next_page = url_for('index')
+        return redirect(next_page)
+    return render_template('login.html', title='Sign In', form=form)
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data, password=form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash('Congratulations, you are now a registered user!')
+        return redirect(url_for('login'))
+    return render_template('register.html', title='Register', form=form)
 
 #############################INDEX##########################################
 @app.route('/')
@@ -72,6 +126,7 @@ def get_recipes_json():
 
 #############################RECIPE LIST##########################################
 @app.route('/recipe_list')
+@login_required
 def recipe_list():
     recipe_count = Recipe.query.count()
     # recipes_list = Recipe.query.limit(100).all()
@@ -85,6 +140,7 @@ def recipe_list():
 
 #############################RECIPE LIST FILTERED##########################################
 @app.route('/recipe_list_filtered', methods = ['GET','POST'])
+@login_required
 def recipe_list_filtered():
     categories_list = Category.query.limit(100).all()
     courses_list = Course.query.limit(100).all()
@@ -115,6 +171,7 @@ def recipe_list_filtered():
 
 #############################RECIPE SEARCH##########################################
 @app.route('/recipe_search', methods = ['GET','POST'])
+@login_required
 def recipe_search():
 
     
@@ -129,6 +186,7 @@ def recipe_search():
 
 #############################INGREDIENT SEARCH##########################################
 @app.route('/ingredient_search', methods=['GET', 'POST'])
+@login_required
 def ingredient_search():
     if request.method == 'POST':
         # kwargs = {'recipe_name': request.form['recipe_name']}
@@ -150,6 +208,7 @@ def ingredient_search():
 
 #############################RECIPE DETAIL##########################################
 @app.route('/recipe_detail/<id>')
+@login_required
 def recipe_detail(id):
 
     recipe = Recipe.query.filter_by(id=int(id)).first()
@@ -162,6 +221,7 @@ def recipe_detail(id):
 
 #############################RECIPE##########################################
 @app.route('/add_recipe', methods = ['GET','POST'])
+@login_required
 def add_recipe():
         categories_list = Category.query.limit(100).all()
         courses_list = Course.query.limit(100).all()
@@ -202,6 +262,7 @@ def add_recipe():
         return render_template('add_recipe.html', categories_list=categories_list, courses_list=courses_list, cuisines_list=cuisines_list, authors_list=authors_list)
 
 @app.route('/edit_recipe/<id>')
+@login_required
 def edit_recipe(id):
         recipe = Recipe.query.get(id)
         categories_list = Category.query.limit(100).all()
@@ -241,6 +302,7 @@ def update_recipe(id):
         return redirect(url_for('recipe_list'))
 
 @app.route('/delete_recipe/<id>')
+@login_required
 def delete_recipe(id):
     recipe = Recipe.query.get(id)
     db.session.delete(recipe)
@@ -249,6 +311,7 @@ def delete_recipe(id):
 
 #############################INGREDIENT##########################################
 @app.route('/add_quantity/<id>', methods = ['GET','POST'])
+@login_required
 def add_quantity(id):
         measurements_list = Measurement.query.limit(100).all()
         # ingredients_list = Ingredient.query.limit(500).all()
@@ -275,6 +338,7 @@ def add_quantity(id):
         return render_template('add_quantity.html', measurements_list=measurements_list, recipe=quantity_recipe)
 
 @app.route('/edit_quantity/<id>')
+@login_required
 def edit_quantity(id):
         quantity = Quantity.query.get(id)
         quantity_recipe = Recipe.query.get(quantity.recipe_id)
@@ -306,6 +370,7 @@ def update_quantity(id):
         return redirect(url_for('recipe_detail', id=quantity_recipe.id))
 
 @app.route('/delete_quantity/<id>')
+@login_required
 def delete_quantity(id):
     quantity = Quantity.query.get(id)
     quantity_recipe = Recipe.query.get(quantity.recipe_id)
@@ -315,6 +380,7 @@ def delete_quantity(id):
 
 #############################METHOD##########################################
 @app.route('/add_method/<id>', methods = ['GET','POST'])
+@login_required
 def add_method(id):       
         method_recipe = Recipe.query.get(id)   
         if request.method == 'POST':
@@ -331,6 +397,7 @@ def add_method(id):
         return render_template('add_method.html', recipe=method_recipe)
 
 @app.route('/edit_method/<id>')
+@login_required
 def edit_method(id):
         method = Method.query.get(id)
         method_recipe = Recipe.query.get(method.recipe_id)
@@ -354,6 +421,7 @@ def update_method(id):
         return redirect(url_for('recipe_detail', id=method_recipe.id))
 
 @app.route('/delete_method/<id>')
+@login_required
 def delete_method(id):
     method = Method.query.get(id)
     method_recipe = Recipe.query.get(method.recipe_id)
@@ -363,6 +431,7 @@ def delete_method(id):
 
 #############################MANAGE STATIC DATA##########################################
 @app.route('/manage_static_data')
+@login_required
 def manage_static_data():
     category_count = Category.query.count()
     categories_list = Category.query.limit(100).all()

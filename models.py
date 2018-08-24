@@ -1,17 +1,31 @@
 from flask import Flask
-# from app import app
-from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from sqlalchemy import Boolean, Column, Date, DateTime, Integer, SmallInteger, String, Text, text, ARRAY, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
-# from flask_migrate import Migrate
 from extensions import db, migrate
+from flask_login import UserMixin
 
 
 # constructor method
 # db = SQLAlchemy(app)
 # migrate = Migrate(app, db)
+
+class User(UserMixin, db.Model):
+    """ Create user table"""
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), unique=True)
+    password = db.Column(db.String(80))
+
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+
+    def check_password(self, password_input):
+        if password_input == self.password:
+            return True
+        else:
+            return False
 
 
 class Test(db.Model):
@@ -126,6 +140,10 @@ db.Table('recipe_dietary',
 
 class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+
+    # user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    # user = db.relationship('User', backref=db.backref('recipes', lazy=True))
+
     recipe_name = db.Column(String(150), nullable=False, unique=True)
     recipe_description = db.Column(Text)
     preparation_time = db.Column(db.Integer)
