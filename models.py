@@ -1,6 +1,6 @@
 from flask import Flask
 from datetime import datetime
-from sqlalchemy import Boolean, Column, Date, DateTime, Integer, SmallInteger, String, Text, text, ARRAY, ForeignKey
+from sqlalchemy import Boolean, Column, Date, DateTime, Integer, SmallInteger, String, Text, text, ARRAY, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from extensions import db, migrate
@@ -236,5 +236,19 @@ class Quantity(db.Model):
     
     def __repr__(self):
         return '<Quantity %r>' % self.quantity
-    
-    
+
+
+class SavedRecipe(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User', backref=db.backref('savedrecipes', lazy=True))
+
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id', ondelete="CASCADE"), nullable=False)
+    recipe = db.relationship('Recipe', backref=db.backref('savedrecipes', lazy=True))
+
+    UniqueConstraint('user_id', 'recipe_id', name='savedrecipe_user_recipe_uc')
+
+    def __init__(self, user, recipe):
+        self.user = user
+        self.recipe = recipe

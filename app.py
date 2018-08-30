@@ -48,7 +48,7 @@ login_manager.init_app(app)
 
 login_manager.login_view = 'login'
 
-from models import Recipe, Category, Course, Cuisine, Country, Allergen, Dietary, Author, Measurement, Quantity, Ingredient, Method, User
+from models import Recipe, Category, Course, Cuisine, Country, Allergen, Dietary, Author, Measurement, Quantity, Ingredient, Method, User, SavedRecipe
 
 
 @login_manager.user_loader
@@ -443,6 +443,43 @@ def delete_method(id):
     db.session.delete(method)
     db.session.commit()
     return redirect(url_for('recipe_detail', id=method_recipe.id))
+
+#############################SAVEDRECIPE##########################################
+@app.route('/save_recipe/<id>')
+@login_required
+def save_recipe(id):
+    recipe = Recipe.query.get(id)
+    existing_saved_recipe = SavedRecipe.query.filter_by(user=current_user, recipe=recipe).first()
+    if existing_saved_recipe is None:
+        savedrecipe = SavedRecipe(current_user, recipe)
+        db.session.add(savedrecipe)
+        db.session.commit()
+        flash('Recipe added to My Saved Recipes')
+    else:
+        flash('Recipe already added to My Saved Recipes')
+    return redirect(url_for('recipe_detail', id=id))
+
+@app.route('/delete_saved_recipe/<id>')
+@login_required
+def delete_saved_recipe(id):
+    savedrecipe = SavedRecipe.query.get(id)
+    db.session.delete(savedrecipe)
+    db.session.commit()
+    flash('Recipe deleted from My Saved Recipes')
+    return redirect(url_for('my_saved_recipes'))
+
+@app.route('/my_saved_recipes')
+@login_required
+def my_saved_recipes():
+    recipe_count = SavedRecipe.query.filter_by(user=current_user).count()
+    # recipes_list = Recipe.query.limit(100).all()
+    page = request.args.get('page', 1, type=int)
+    recipes_list = SavedRecipe.query.filter_by(user=current_user).order_by(SavedRecipe.id.desc()).paginate(page, 10, False)
+    next_url = url_for('recipe_list', page=recipes_list.next_num) \
+        if recipes_list.has_next else None
+    prev_url = url_for('recipe_list', page=recipes_list.prev_num) \
+        if recipes_list.has_prev else None
+    return render_template('my_saved_recipes.html', recipe_count=str(recipe_count), recipes_list=recipes_list.items, next_url=next_url, prev_url=prev_url)
 
 #############################MANAGE STATIC DATA##########################################
 @app.route('/manage_static_data')

@@ -1,5 +1,14 @@
 {% extends 'base.html'%} {% block content %}
 <div class="card-panel blue-grey lighten-5">
+    {% with messages = get_flashed_messages() %}
+         {% if messages %}
+            <ul class=flashes>
+               {% for message in messages %}
+               <li>{{ message }}</li>
+               {% endfor %}
+            </ul>
+         {% endif %}
+      {% endwith %}
     <div class="row">
         <h1>{{ recipe.recipe_name }}</h1>
         <p>{{ recipe.recipe_description }}</p>
@@ -20,8 +29,9 @@
             <p>Cooking Time: {{ recipe.cooking_time }} mins</p>
             <p>Servings: {{ recipe.servings }}</p>
         </div>
-        <a href="{{ url_for('edit_recipe', id=recipe.id) }}"><i class="material-icons">edit</i></a>
-        <a href="{{ url_for('delete_recipe', id=recipe.id) }}" onclick="M.toast({html: 'Recipe Deleted!'})"><i class="material-icons">delete</i></a>
+        <a class="btn-floating btn waves-effect waves-light yellow" href="{{ url_for('save_recipe', id=recipe.id) }}"><i class="material-icons">star</i></a>
+        <a class="btn-floating btn waves-effect waves-light blue" href="{{ url_for('edit_recipe', id=recipe.id) }}"><i class="material-icons">edit</i></a>
+        <a class="btn-floating btn waves-effect waves-light red" href="{{ url_for('delete_recipe', id=recipe.id) }}" onclick="M.toast({html: 'Recipe Deleted!'})"><i class="material-icons">delete</i></a>
     </div>
     <div class="row">
         <div class="col s12 m4">
