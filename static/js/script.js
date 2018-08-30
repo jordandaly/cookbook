@@ -6,4 +6,5 @@ $(document).ready(function(){
       });
     $('.materialboxed').materialbox();
     $('.modal').modal();
+    $(".dropdown-trigger").dropdown();
   });

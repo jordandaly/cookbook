@@ -138,6 +138,20 @@ def recipe_list():
         if recipes_list.has_prev else None
     return render_template('recipe_list.html', recipe_count=str(recipe_count), recipes_list=recipes_list.items, next_url=next_url, prev_url=prev_url)
 
+#############################RECIPE LIST##########################################
+@app.route('/my_recipes')
+@login_required
+def my_recipes():
+    recipe_count = Recipe.query.filter_by(user=current_user).count()
+    # recipes_list = Recipe.query.limit(100).all()
+    page = request.args.get('page', 1, type=int)
+    recipes_list = Recipe.query.filter_by(user=current_user).order_by(Recipe.id.desc()).paginate(page, 10, False)
+    next_url = url_for('recipe_list', page=recipes_list.next_num) \
+        if recipes_list.has_next else None
+    prev_url = url_for('recipe_list', page=recipes_list.prev_num) \
+        if recipes_list.has_prev else None
+    return render_template('my_recipes.html', recipe_count=str(recipe_count), recipes_list=recipes_list.items, next_url=next_url, prev_url=prev_url)
+
 #############################RECIPE LIST FILTERED##########################################
 @app.route('/recipe_list_filtered', methods = ['GET','POST'])
 @login_required
@@ -242,7 +256,8 @@ def add_recipe():
                 filename = None
                 url = None
 
-            recipe = Recipe(request.form['recipe_name'], 
+            recipe = Recipe(current_user,
+            request.form['recipe_name'],
             request.form['recipe_description'], 
             request.form['preparation_time'], 
             request.form['cooking_time'], 

@@ -141,8 +141,8 @@ db.Table('recipe_dietary',
 class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
-    # user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    # user = db.relationship('User', backref=db.backref('recipes', lazy=True))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    user = db.relationship('User', backref=db.backref('recipes', lazy=True))
 
     recipe_name = db.Column(String(150), nullable=False, unique=True)
     recipe_description = db.Column(Text)
@@ -171,7 +171,8 @@ class Recipe(db.Model):
     allergens = db.relationship('Allergen', secondary='recipe_allergen', backref='recipe', lazy='dynamic')
     dietaries = db.relationship('Dietary', secondary='recipe_dietary', backref='recipe', lazy='dynamic')
 
-    def __init__(self, recipe_name, recipe_description, preparation_time, cooking_time, servings, category, course, cuisine, author, image_filename, image_url):
+    def __init__(self, user, recipe_name, recipe_description, preparation_time, cooking_time, servings, category, course, cuisine, author, image_filename, image_url):
+        self.user = user
         self.recipe_name = recipe_name
         self.recipe_description = recipe_description
         self.preparation_time = preparation_time
