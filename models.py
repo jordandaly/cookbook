@@ -1,6 +1,6 @@
 from flask import Flask
 from datetime import datetime
-from sqlalchemy import Boolean, Column, Date, DateTime, Integer, SmallInteger, String, Text, text, ARRAY, ForeignKey
+from sqlalchemy import Boolean, Column, Date, DateTime, Integer, SmallInteger, String, Text, text, ARRAY, ForeignKey, UniqueConstraint
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from extensions import db, migrate
@@ -141,8 +141,8 @@ db.Table('recipe_dietary',
 class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 
-    # user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    # user = db.relationship('User', backref=db.backref('recipes', lazy=True))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    user = db.relationship('User', backref=db.backref('recipes', lazy=True))
 
     recipe_name = db.Column(String(150), nullable=False, unique=True)
     recipe_description = db.Column(Text)
@@ -171,7 +171,8 @@ class Recipe(db.Model):
     allergens = db.relationship('Allergen', secondary='recipe_allergen', backref='recipe', lazy='dynamic')
     dietaries = db.relationship('Dietary', secondary='recipe_dietary', backref='recipe', lazy='dynamic')
 
-    def __init__(self, recipe_name, recipe_description, preparation_time, cooking_time, servings, category, course, cuisine, author, image_filename, image_url):
+    def __init__(self, user, recipe_name, recipe_description, preparation_time, cooking_time, servings, category, course, cuisine, author, image_filename, image_url):
+        self.user = user
         self.recipe_name = recipe_name
         self.recipe_description = recipe_description
         self.preparation_time = preparation_time
@@ -235,5 +236,19 @@ class Quantity(db.Model):
     
     def __repr__(self):
         return '<Quantity %r>' % self.quantity
-    
-    
+
+
+class SavedRecipe(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User', backref=db.backref('savedrecipes', lazy=True))
+
+    recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id', ondelete="CASCADE"), nullable=False)
+    recipe = db.relationship('Recipe', backref=db.backref('savedrecipes', lazy=True))
+
+    UniqueConstraint('user_id', 'recipe_id', name='savedrecipe_user_recipe_uc')
+
+    def __init__(self, user, recipe):
+        self.user = user
+        self.recipe = recipe

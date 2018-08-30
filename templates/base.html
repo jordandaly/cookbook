@@ -22,22 +22,40 @@
 
 <body>
     <header>
+        <!-- Dropdown Structure -->
+        <ul id="dropdown1" class="dropdown-content">
+            <li><a href="{{url_for('recipe_list')}}"><i class="material-icons right">list</i>All Recipes List&nbsp;</a></li>
+            <li class="divider"></li>
+            <li><a href="{{url_for('my_recipes')}}"><i class="material-icons right">list</i>My Recipes&nbsp;</a></li>
+            <li class="divider"></li>
+            <li><a href="{{url_for('my_saved_recipes')}}"><i class="material-icons right">list</i>My Saved Recipes&nbsp;</a></li>
+        </ul>
+        <ul id="dropdown2" class="dropdown-content">
+            <li><a href="{{url_for('recipe_list_filtered')}}"><i class="material-icons right">filter_list</i>Filter List&nbsp;</a></li>
+            <li class="divider"></li>
+            <li><a href="{{url_for('recipe_search')}}"><i class="material-icons right">search</i>Recipe Name Search&nbsp;</a></li>
+            <li class="divider"></li>
+            <li><a href="{{url_for('ingredient_search')}}"><i class="material-icons right">search</i>Ingredient Search&nbsp;</a></li>
+        </ul>
         <nav>
             <div class="nav-wrapper">
               <a href="{{url_for('index')}}" class="brand-logo">Daly Cookbook</a>
               <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
               <ul class="right hide-on-med-and-down">
-                <li><a href="{{url_for('recipe_list')}}"><i class="material-icons left">list</i>Recipes</a></li>
-                <li><a href="{{url_for('add_recipe')}}"><i class="material-icons left">add</i>Add New Recipe</a></li>
-                <li><a href="{{url_for('manage_static_data')}}"><i class="material-icons left">settings</i>Manage Categories</a></li>
+                  <!-- Dropdown Trigger -->
+                <li><a class="dropdown-trigger" href="{{url_for('recipe_list')}}" data-target="dropdown1"><i class="material-icons right">arrow_drop_down</i>Recipes</a></li>
+                <li><a class="dropdown-trigger" href="{{url_for('recipe_list_filtered')}}" data-target="dropdown2"><i class="material-icons right">arrow_drop_down</i>Search</a></li>
+                <li><a href="{{url_for('add_recipe')}}"><i class="material-icons right">add</i>Add New Recipe</a></li>
+                <li><a href="{{url_for('manage_static_data')}}"><i class="material-icons right">settings</i>Manage Categories</a></li>
               </ul>
             </div>
           </nav>
         
           <ul class="sidenav" id="mobile-demo">
-            <li><a href="{{url_for('recipe_list')}}"><i class="material-icons left">list</i>Recipes</a></li>
-            <li><a href="{{url_for('add_recipe')}}"><i class="material-icons left">add</i>Add New recipe</a></li>
-            <li><a href="{{url_for('manage_static_data')}}"><i class="material-icons left">settings</i>Manage Categories</a></li>
+              <li><a class="dropdown-trigger" href="{{url_for('recipe_list')}}" data-target="recipes-dropdown"><i class="material-icons right">arrow_drop_down</i>Recipes</a></li>
+              <li><a class="dropdown-trigger" href="{{url_for('recipe_list_filtered')}}" data-target="search-dropdown"><i class="material-icons right">arrow_drop_down</i>Search</a></li>
+              <li><a href="{{url_for('add_recipe')}}"><i class="material-icons right">add</i>Add New Recipe</a></li>
+              <li><a href="{{url_for('manage_static_data')}}"><i class="material-icons right">settings</i>Manage Categories</a></li>
           </ul>
     </header>
     <div class="container">
