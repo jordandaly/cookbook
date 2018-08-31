@@ -284,6 +284,9 @@ def edit_recipe(id):
         courses_list = Course.query.limit(100).all()
         cuisines_list = Cuisine.query.limit(100).all()
         authors_list = Author.query.limit(100).all()
+        if recipe.user != current_user:
+            flash('You do not have permission to edit this recipe')
+            return redirect(url_for('index'))
         return render_template('edit_recipe.html', recipe=recipe, categories_list=categories_list, courses_list=courses_list, cuisines_list=cuisines_list, authors_list=authors_list)
 
 @app.route('/update_recipe/<id>', methods = ['GET','POST'])
@@ -320,6 +323,9 @@ def update_recipe(id):
 @login_required
 def delete_recipe(id):
     recipe = Recipe.query.get(id)
+    if recipe.user != current_user:
+        flash('You do not have permission to delete this recipe')
+        return redirect(url_for('index'))
     db.session.delete(recipe)
     db.session.commit()
     return redirect(url_for('recipe_list'))
@@ -331,6 +337,9 @@ def add_quantity(id):
         measurements_list = Measurement.query.limit(100).all()
         # ingredients_list = Ingredient.query.limit(500).all()
         quantity_recipe = Recipe.query.get(id)
+        if quantity_recipe.user != current_user:
+            flash('You do not have permission to add ingredients to this recipe')
+            return redirect(url_for('index'))
         
         if request.method == 'POST':
             # recipe = Recipe.query.filter_by(id=int(id)).first()
@@ -359,6 +368,9 @@ def edit_quantity(id):
         quantity_recipe = Recipe.query.get(quantity.recipe_id)
         # ingredients_list = Ingredient.query.limit(500).all()
         measurements_list = Measurement.query.limit(100).all()
+        if quantity_recipe.user != current_user:
+            flash('You do not have permission to edit this ingredient')
+            return redirect(url_for('index'))
         return render_template('edit_quantity.html', quantity=quantity, measurements_list=measurements_list, recipe=quantity_recipe)
 
 @app.route('/update_quantity/<id>', methods = ['GET','POST'])
@@ -389,6 +401,9 @@ def update_quantity(id):
 def delete_quantity(id):
     quantity = Quantity.query.get(id)
     quantity_recipe = Recipe.query.get(quantity.recipe_id)
+    if quantity_recipe.user != current_user:
+        flash('You do not have permission to delete this ingredient')
+        return redirect(url_for('index'))
     db.session.delete(quantity)
     db.session.commit()
     return redirect(url_for('recipe_detail', id=quantity_recipe.id))
@@ -397,7 +412,10 @@ def delete_quantity(id):
 @app.route('/add_method/<id>', methods = ['GET','POST'])
 @login_required
 def add_method(id):       
-        method_recipe = Recipe.query.get(id)   
+        method_recipe = Recipe.query.get(id)
+        if method_recipe.user != current_user:
+            flash('You do not have permission to add methods to this recipe')
+            return redirect(url_for('index'))
         if request.method == 'POST':
             
             # method_recipe = Recipe.query.filter_by(id=recipe.id).first()
@@ -416,6 +434,9 @@ def add_method(id):
 def edit_method(id):
         method = Method.query.get(id)
         method_recipe = Recipe.query.get(method.recipe_id)
+        if method_recipe.user != current_user:
+            flash('You do not have permission to edit this method')
+            return redirect(url_for('index'))
         return render_template('edit_method.html', method=method, recipe=method_recipe)
 
 @app.route('/update_method/<id>', methods = ['GET','POST'])
@@ -440,6 +461,9 @@ def update_method(id):
 def delete_method(id):
     method = Method.query.get(id)
     method_recipe = Recipe.query.get(method.recipe_id)
+    if method_recipe.user != current_user:
+        flash('You do not have permission to delete this method')
+        return redirect(url_for('index'))
     db.session.delete(method)
     db.session.commit()
     return redirect(url_for('recipe_detail', id=method_recipe.id))
