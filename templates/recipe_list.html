@@ -11,8 +11,8 @@
             {% if recipe.image_url %}
             <img class="materialboxed" src="{{ recipe.image_url }}" alt="{{ recipe.image_filename }}" style="width:25%;height:150px;">
             {% endif %}
+            <a class="btn-floating btn waves-effect waves-light teal" href="{{ url_for('recipe_detail', id=recipe.id) }}"><i class="material-icons">navigate_next</i></a>
             <span>{{ recipe.recipe_description }}</span>
-            <a href="{{ url_for('recipe_detail', id=recipe.id) }}"><i class="material-icons">navigate_next</i></a>
         </div>
         </li>
     {% endfor %}
