@@ -1,0 +1,38 @@
+{% extends 'base.html'%} {% block content %}
+<div class="container">
+    {% with messages = get_flashed_messages() %}
+         {% if messages %}
+            <ul class=flashes>
+               {% for message in messages %}
+               <li>{{ message }}</li>
+               {% endfor %}
+            </ul>
+         {% endif %}
+      {% endwith %}
+        {% if current_user.is_anonymous %}
+        <a href="{{ url_for('login') }}">Login</a>
+        {% else %}
+        <a href="{{ url_for('logout') }}">Logout</a>
+        {% endif %}
+
+        <div class="row">
+            <h1>Recipes</h1>
+        </div>
+
+        <!--<div class="row">-->
+            <!--<div>Select Category</div>-->
+        <!--</div>-->
+        <!--<div class="row">-->
+            <!--<div id="category-selector"></div>-->
+        <!--</div>-->
+
+        <div class="row">
+            <div id="category-graph" class="col s12 m6"></div>
+            <div id="course-graph" class="col s12 m6"></div>
+        </div>
+        <div class="row">
+            <div id="cuisine-graph" class="col s12 m6"></div>
+            <div id="author-graph" class="col s12 m6"></div>
+        </div>
+    </div>
+{% endblock %}

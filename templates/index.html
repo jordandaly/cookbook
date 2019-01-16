@@ -1,38 +1,27 @@
 {% extends 'base.html'%} {% block content %}
-<div class="container">
-    {% with messages = get_flashed_messages() %}
-         {% if messages %}
-            <ul class=flashes>
-               {% for message in messages %}
-               <li>{{ message }}</li>
-               {% endfor %}
-            </ul>
-         {% endif %}
-      {% endwith %}
-        {% if current_user.is_anonymous %}
-        <a href="{{ url_for('login') }}">Login</a>
-        {% else %}
-        <a href="{{ url_for('logout') }}">Logout</a>
-        {% endif %}
-
-        <div class="row">
-            <h1>Recipes</h1>
+<div class="row">
+    <p>All Recipes: {{ recipe_count }}</p>
+    <ul class="collapsible">
+    {% for recipe in recipes_list %}
+        <li>
+             
+        <div class="collapsible-header"><i class="material-icons">expand_more</i>{{ recipe.recipe_name }}
         </div>
-
-        <!--<div class="row">-->
-            <!--<div>Select Category</div>-->
-        <!--</div>-->
-        <!--<div class="row">-->
-            <!--<div id="category-selector"></div>-->
-        <!--</div>-->
-
-        <div class="row">
-            <div id="category-graph" class="col s12 m6"></div>
-            <div id="course-graph" class="col s12 m6"></div>
+        <div class="collapsible-body">
+            {% if recipe.image_url %}
+            <img class="materialboxed" src="{{ recipe.image_url }}" alt="{{ recipe.image_filename }}" style="width:25%;height:150px;">
+            {% endif %}
+            <a class="btn-floating btn waves-effect waves-light teal" href="{{ url_for('recipe_detail', id=recipe.id) }}"><i class="material-icons">navigate_next</i></a>
+            <span>{{ recipe.recipe_description }}</span>
         </div>
-        <div class="row">
-            <div id="cuisine-graph" class="col s12 m6"></div>
-            <div id="author-graph" class="col s12 m6"></div>
-        </div>
-    </div>
+        </li>
+    {% endfor %}
+    </ul>
+    {% if prev_url %}
+    <a href="{{ prev_url }}">Previous page of recipes</a>
+    {% endif %}
+    {% if next_url %}
+    <a href="{{ next_url }}">Next page of recipes</a>
+    {% endif %}
+</div>
 {% endblock %}

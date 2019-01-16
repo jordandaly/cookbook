@@ -92,11 +92,11 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
-#############################INDEX##########################################
-@app.route('/')
-def index():
+#############################DASHBOARD##########################################
+@app.route('/dashboard')
+def dashboard():
     
-    return render_template('index.html')
+    return render_template('dashboard.html')
 #############################RECIPE JSON DATA ENDPOINT##########################################
 @app.route('/get_recipes')
 def get_recipes_json():
@@ -104,14 +104,6 @@ def get_recipes_json():
     recipes = []
     for r in db.session.query(Recipe).all():
         print(r, file=sys.stdout)
-        # recipies[r.id] = {
-        #     'recipe_name': r.recipe_name,
-        #     'recipe_description': r.recipe_description,
-        #     'category': r.category.category_name,
-        #     'cuisine': r.cuisine.cuisine_name,
-        #     'course': r.course.course_name,
-        #     'author': r.author.author_name
-        # }
         recipes.append({
             'recipe_name': r.recipe_name,
             'recipe_description': r.recipe_description,
@@ -124,21 +116,21 @@ def get_recipes_json():
 
     return jsonify(recipes)
 
-#############################RECIPE LIST##########################################
-@app.route('/recipe_list')
+#############################INDEX##########################################
+@app.route('/')
 @login_required
-def recipe_list():
+def index():
     recipe_count = Recipe.query.count()
     # recipes_list = Recipe.query.limit(100).all()
     page = request.args.get('page', 1, type=int)
     recipes_list = Recipe.query.order_by(Recipe.id.desc()).paginate(page, 10, False)
-    next_url = url_for('recipe_list', page=recipes_list.next_num) \
+    next_url = url_for('index', page=recipes_list.next_num) \
         if recipes_list.has_next else None
-    prev_url = url_for('recipe_list', page=recipes_list.prev_num) \
+    prev_url = url_for('index', page=recipes_list.prev_num) \
         if recipes_list.has_prev else None
-    return render_template('recipe_list.html', recipe_count=str(recipe_count), recipes_list=recipes_list.items, next_url=next_url, prev_url=prev_url)
+    return render_template('index.html', recipe_count=str(recipe_count), recipes_list=recipes_list.items, next_url=next_url, prev_url=prev_url)
 
-#############################RECIPE LIST##########################################
+#############################MY RECIPES##########################################
 @app.route('/my_recipes')
 @login_required
 def my_recipes():
