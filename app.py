@@ -1,19 +1,26 @@
-from flask import Flask
-# from flask_sqlalchemy import SQLAlchemy
-# from flask_heroku import Heroku
-from werkzeug.urls import url_parse
-from flask import render_template, redirect, url_for, request, jsonify, flash
-from flask_uploads import UploadSet, IMAGES, configure_uploads
+# python imports
 import os, sys
+
+# local imports
 from extensions import db, migrate, login_manager
-from flask_login import current_user, login_user, logout_user, login_required
 from models import User
 from forms import RegistrationForm, LoginForm
 
+#flask imports
+from flask import Flask
+from flask_dotenv import DotEnv
+from werkzeug.urls import url_parse
+from flask import render_template, redirect, url_for, request, jsonify, flash
+from flask_uploads import UploadSet, IMAGES, configure_uploads
+from flask_login import current_user, login_user, logout_user, login_required
+
+
 # create an instance of flask = app variable
 app = Flask(__name__)
+env = DotEnv(app)
+env.init_app(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://kysizwusmalerj:34940a84c506261a35979f764de8bf76b8d685213c52691ab175e4ef8f7613b2@ec2-54-83-59-120.compute-1.amazonaws.com:5432/dd373to8dgntk1"
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -29,14 +36,9 @@ app.config['UPLOADED_IMAGES_DEST'] = TOP_LEVEL_DIR + '/static/img/'
 app.config['UPLOADED_IMAGES_URL'] = 'http://localhost:5000/static/img/'
 
 app.config.update(dict(
-    SECRET_KEY="powerful secretkey",
-    WTF_CSRF_SECRET_KEY="a csrf secret key"
+    SECRET_KEY=os.getenv('SECRET_KEY'),
+    WTF_CSRF_SECRET_KEY=os.getenv('WTF_CSRF_SECRET_KEY')
 ))
-
-# get heroku environment variables and pass them to flask
-# heroku = Heroku(app)
-
-#app.config.from_pyfile('models.py')
 
 # Configure the image uploading via Flask-Uploads
 images = UploadSet('images', IMAGES)
