@@ -11,8 +11,8 @@ from flask import Flask
 from flask_dotenv import DotEnv
 from werkzeug.urls import url_parse
 from flask import render_template, redirect, url_for, request, jsonify, flash
-from flask_uploads import UploadSet, IMAGES, configure_uploads
 from flask_login import current_user, login_user, logout_user, login_required
+import boto3
 
 
 # create an instance of flask = app variable
@@ -28,21 +28,23 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
 TOP_LEVEL_DIR = os.path.abspath(os.curdir)
 
-# Uploads
-app.config['UPLOADS_DEFAULT_DEST'] = TOP_LEVEL_DIR + '/static/img/'
-app.config['UPLOADS_DEFAULT_URL'] = 'http://localhost:5000/static/img/'
- 
-app.config['UPLOADED_IMAGES_DEST'] = TOP_LEVEL_DIR + '/static/img/'
-app.config['UPLOADED_IMAGES_URL'] = 'http://localhost:5000/static/img/'
-
 app.config.update(dict(
     SECRET_KEY=os.getenv('SECRET_KEY'),
     WTF_CSRF_SECRET_KEY=os.getenv('WTF_CSRF_SECRET_KEY')
 ))
 
-# Configure the image uploading via Flask-Uploads
-images = UploadSet('images', IMAGES)
-configure_uploads(app, images)
+# Configure the image uploading via AWS S3 boto3
+
+S3_BUCKET                 = os.environ.get("S3_BUCKET_NAME")
+S3_KEY                    = os.environ.get("S3_ACCESS_KEY")
+S3_SECRET                 = os.environ.get("S3_SECRET_ACCESS_KEY")
+S3_LOCATION               = 'http://s3-eu-west-1.amazonaws.com/{}/'.format(S3_BUCKET)
+
+s3 = boto3.client(
+   "s3",
+   aws_access_key_id=S3_KEY,
+   aws_secret_access_key=S3_SECRET
+)
 
 db.init_app(app)
 migrate.init_app(app, db)
@@ -52,6 +54,30 @@ login_manager.login_view = 'login'
 
 from models import Recipe, Category, Course, Cuisine, Country, Allergen, Dietary, Author, Measurement, Quantity, Ingredient, Method, User, SavedRecipe
 
+#################AWS_S3_file_upload###########################
+def upload_file_to_s3(file, bucket_name, acl="public-read"):
+
+    """
+    Docs: http://boto3.readthedocs.io/en/latest/guide/s3.html
+    """
+
+    try:
+
+        s3.upload_fileobj(
+            file,
+            bucket_name,
+            file.filename,
+            ExtraArgs={
+                "ACL": acl,
+                "ContentType": file.content_type
+            }
+        )
+
+    except Exception as e:
+        print("Something Happened: ", e)
+        return e
+
+    return "{}{}".format(S3_LOCATION, file.filename)
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -140,9 +166,9 @@ def my_recipes():
     # recipes_list = Recipe.query.limit(100).all()
     page = request.args.get('page', 1, type=int)
     recipes_list = Recipe.query.filter_by(user=current_user).order_by(Recipe.id.desc()).paginate(page, 10, False)
-    next_url = url_for('recipe_list', page=recipes_list.next_num) \
+    next_url = url_for('index', page=recipes_list.next_num) \
         if recipes_list.has_next else None
-    prev_url = url_for('recipe_list', page=recipes_list.prev_num) \
+    prev_url = url_for('index', page=recipes_list.prev_num) \
         if recipes_list.has_prev else None
     return render_template('my_recipes.html', recipe_count=str(recipe_count), recipes_list=recipes_list.items, next_url=next_url, prev_url=prev_url)
 
@@ -244,8 +270,10 @@ def add_recipe():
             recipe_author = Author.query.filter_by(id=request.form['recipe_author']).first()
 
             if 'recipe_image' in request.files:
-                filename = images.save(request.files['recipe_image'])
-                url = images.url(filename)
+                file = request.files["recipe_image"]
+                output  = upload_file_to_s3(file, S3_BUCKET)
+                filename = file.filename
+                url = str(output)
             else:
                 filename = None
                 url = None
@@ -266,7 +294,7 @@ def add_recipe():
             db.session.add(recipe)
 
             db.session.commit()
-            return redirect(url_for('recipe_list'))
+            return redirect(url_for('index'))
         
         return render_template('add_recipe.html', categories_list=categories_list, courses_list=courses_list, cuisines_list=cuisines_list, authors_list=authors_list)
 
@@ -290,8 +318,13 @@ def update_recipe(id):
             recipe = Recipe.query.get(id)
 
             if 'recipe_image' in request.files:
-                filename = images.save(request.files['recipe_image'])
-                url = images.url(filename)
+                file = request.files["recipe_image"]
+                output  = upload_file_to_s3(file, S3_BUCKET)
+                filename = file.filename
+                url = str(output)
+            elif recipe.image_url is not None:
+                filename = recipe.image_filename
+                url = recipe.image_url              
             else:
                 filename = None
                 url = None
@@ -301,17 +334,17 @@ def update_recipe(id):
             recipe.preparation_time = request.form['preparation_time']
             recipe.cooking_time = request.form['cooking_time']
             recipe.servings = request.form['servings']
-            recipe.recipe_category = Category.query.filter_by(id=request.form['recipe_category']).first()
-            recipe.recipe_course = Course.query.filter_by(id=request.form['recipe_course']).first()
-            recipe.recipe_cuisine = Cuisine.query.filter_by(id=request.form['recipe_cuisine']).first()
-            recipe.recipe_author = Author.query.filter_by(id=request.form['recipe_author']).first()
+            recipe.category = Category.query.filter_by(id=request.form['recipe_category']).first()
+            recipe.course = Course.query.filter_by(id=request.form['recipe_course']).first()
+            recipe.cuisine = Cuisine.query.filter_by(id=request.form['recipe_cuisine']).first()
+            recipe.author = Author.query.filter_by(id=request.form['recipe_author']).first()
             recipe.image_filename = filename
             recipe.image_url = url
 
             db.session.commit()
-            return redirect(url_for('recipe_list'))
+            return redirect(url_for('recipe_detail', id=recipe.id))
         
-        return redirect(url_for('recipe_list'))
+        return redirect(url_for('index'))
 
 @app.route('/delete_recipe/<id>')
 @login_required
@@ -322,7 +355,7 @@ def delete_recipe(id):
         return redirect(url_for('index'))
     db.session.delete(recipe)
     db.session.commit()
-    return redirect(url_for('recipe_list'))
+    return redirect(url_for('index'))
 
 #############################INGREDIENT##########################################
 @app.route('/add_quantity/<id>', methods = ['GET','POST'])
@@ -377,12 +410,15 @@ def update_quantity(id):
         
         if request.method == 'POST':
             quantity = Quantity.query.get(id)
-
             quantity.quantity = request.form['quantity']
             quantity.recipe = quantity_recipe
             quantity.measurement = Measurement.query.filter_by(id=request.form['quantity_measurement']).first()
-            # quantity.ingredient = Ingredient.query.filter_by(id=request.form['quantity_ingredient']).first()
-            quantity.ingredient = request.form['quantity_ingredient']
+
+            existing_ingredient = Ingredient.query.filter_by(ingredient_name=request.form['quantity_ingredient']).first()
+            if existing_ingredient is not None:
+                quantity.ingredient = existing_ingredient
+            else:
+                quantity.ingredient = Ingredient(request.form['quantity_ingredient'])
 
 
             db.session.commit()
@@ -493,9 +529,9 @@ def my_saved_recipes():
     # recipes_list = Recipe.query.limit(100).all()
     page = request.args.get('page', 1, type=int)
     recipes_list = SavedRecipe.query.filter_by(user=current_user).order_by(SavedRecipe.id.desc()).paginate(page, 10, False)
-    next_url = url_for('recipe_list', page=recipes_list.next_num) \
+    next_url = url_for('index', page=recipes_list.next_num) \
         if recipes_list.has_next else None
-    prev_url = url_for('recipe_list', page=recipes_list.prev_num) \
+    prev_url = url_for('index', page=recipes_list.prev_num) \
         if recipes_list.has_prev else None
     return render_template('my_saved_recipes.html', recipe_count=str(recipe_count), recipes_list=recipes_list.items, next_url=next_url, prev_url=prev_url)
 
