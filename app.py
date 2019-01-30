@@ -539,33 +539,16 @@ def my_saved_recipes():
 @app.route('/manage_static_data')
 @login_required
 def manage_static_data():
-    category_count = Category.query.count()
     categories_list = Category.query.limit(100).all()
-
-    course_count = Course.query.count()
     courses_list = Course.query.limit(100).all()
-
-    cuisine_count = Cuisine.query.count()
     cuisines_list = Cuisine.query.limit(100).all()
-
-    country_count = Country.query.count()
     countries_list = Country.query.limit(250).all()
-
-    author_count = Author.query.count()
     authors_list = Author.query.limit(100).all()
-
-    allergen_count = Allergen.query.count()
     allergens_list = Allergen.query.limit(100).all()
-
-    dietary_count = Dietary.query.count()
     dietaries_list = Dietary.query.limit(100).all()
-
-    measurement_count = Measurement.query.count()
     measurements_list = Measurement.query.limit(100).all()
-
-    ingredient_count = Ingredient.query.count()
     ingredients_list = Ingredient.query.limit(500).all()
-    return render_template('manage_static_data.html', category_count=str(category_count), categories_list=categories_list, course_count=str(course_count), courses_list=courses_list, cuisine_count=str(cuisine_count), cuisines_list=cuisines_list, country_count=str(country_count), countries_list=countries_list, author_count=str(author_count), authors_list=authors_list, allergen_count=str(allergen_count), allergens_list=allergens_list, dietary_count=str(dietary_count), dietaries_list=dietaries_list, measurement_count=str(measurement_count), measurements_list=measurements_list, ingredient_count=ingredient_count, ingredients_list=ingredients_list)
+    return render_template('manage_static_data.html', categories_list=categories_list, courses_list=courses_list, cuisines_list=cuisines_list, countries_list=countries_list, authors_list=authors_list, allergens_list=allergens_list, dietaries_list=dietaries_list, measurements_list=measurements_list, ingredients_list=ingredients_list)
 
 #############################CATEGORY##########################################
 @app.route('/add_category', methods = ['POST'])
@@ -584,13 +567,6 @@ def edit_category(id):
 def update_category(id):
     category = Category.query.get(id)
     category.category_name = request.form['category']
-    db.session.commit()
-    return redirect(url_for('manage_static_data'))
-
-@app.route('/delete_category/<id>')
-def delete_category(id):
-    category = Category.query.get(id)
-    db.session.delete(category)
     db.session.commit()
     return redirect(url_for('manage_static_data'))
 
@@ -614,13 +590,6 @@ def update_course(id):
     db.session.commit()
     return redirect(url_for('manage_static_data'))
 
-@app.route('/delete_course/<id>')
-def delete_course(id):
-    course = Course.query.get(id)
-    db.session.delete(course)
-    db.session.commit()
-    return redirect(url_for('manage_static_data'))
-
 #############################CUISINE##########################################
 @app.route('/add_cuisine', methods = ['POST'])
 def add_cuisine():
@@ -641,13 +610,6 @@ def update_cuisine(id):
     db.session.commit()
     return redirect(url_for('manage_static_data'))
 
-@app.route('/delete_cuisine/<id>')
-def delete_cuisine(id):
-    cuisine = Cuisine.query.get(id)
-    db.session.delete(cuisine)
-    db.session.commit()
-    return redirect(url_for('manage_static_data'))
-
 #############################COUNTRY##########################################
 @app.route('/add_country', methods = ['POST'])
 def add_country():
@@ -665,13 +627,6 @@ def edit_country(id):
 def update_country(id):
     country = Country.query.get(id)
     country.country_name = request.form['country']
-    db.session.commit()
-    return redirect(url_for('manage_static_data'))
-
-@app.route('/delete_country/<id>')
-def delete_country(id):
-    country = Country.query.get(id)
-    db.session.delete(country)
     db.session.commit()
     return redirect(url_for('manage_static_data'))
 
@@ -699,13 +654,6 @@ def update_author(id):
     db.session.commit()
     return redirect(url_for('manage_static_data'))
 
-@app.route('/delete_author/<id>')
-def delete_author(id):
-    author = Author.query.get(id)
-    db.session.delete(author)
-    db.session.commit()
-    return redirect(url_for('manage_static_data'))
-
 #############################ALLERGEN##########################################
 @app.route('/add_allergen', methods = ['POST'])
 def add_allergen():
@@ -723,13 +671,6 @@ def edit_allergen(id):
 def update_allergen(id):
     allergen = Allergen.query.get(id)
     allergen.allergen_name = request.form['allergen']
-    db.session.commit()
-    return redirect(url_for('manage_static_data'))
-
-@app.route('/delete_allergen/<id>')
-def delete_allergen(id):
-    allergen = Allergen.query.get(id)
-    db.session.delete(allergen)
     db.session.commit()
     return redirect(url_for('manage_static_data'))
 
@@ -753,12 +694,6 @@ def update_dietary(id):
     db.session.commit()
     return redirect(url_for('manage_static_data'))
 
-@app.route('/delete_dietary/<id>')
-def delete_dietary(id):
-    dietary = Dietary.query.get(id)
-    db.session.delete(dietary)
-    db.session.commit()
-    return redirect(url_for('manage_static_data'))
 #############################MEASUREMENT##########################################
 @app.route('/add_measurement', methods = ['POST'])
 def add_measurement():
@@ -779,13 +714,6 @@ def update_measurement(id):
     db.session.commit()
     return redirect(url_for('manage_static_data'))
 
-@app.route('/delete_measurement/<id>')
-def delete_measurement(id):
-    measurement = Measurement.query.get(id)
-    db.session.delete(measurement)
-    db.session.commit()
-    return redirect(url_for('manage_static_data'))
-
 #############################INGREDIENT##########################################
 @app.route('/add_ingredient', methods = ['POST'])
 def add_ingredient():
@@ -803,13 +731,6 @@ def edit_ingredient(id):
 def update_ingredient(id):
     ingredient = Ingredient.query.get(id)
     ingredient.ingredient_name = request.form['ingredient']
-    db.session.commit()
-    return redirect(url_for('manage_static_data'))
-
-@app.route('/delete_ingredient/<id>')
-def delete_ingredient(id):
-    ingredient = Ingredient.query.get(id)
-    db.session.delete(ingredient)
     db.session.commit()
     return redirect(url_for('manage_static_data'))
 

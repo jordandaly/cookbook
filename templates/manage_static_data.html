@@ -7,7 +7,7 @@
     <p>{{ category_count }}</p>
           <ul>
     {% for category in categories_list %}
-        <li>{{ category.category_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Category_{{ category.id }}"><i class="material-icons">edit</i></button> <a href="{{ url_for('delete_category', id=category.id) }}" class="waves-effect waves-light btn-flat" onclick="M.toast({html: 'Category Deleted!'})"><i class="material-icons">delete</i></a></li>
+        <li>{{ category.category_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Category_{{ category.id }}"><i class="material-icons">edit</i></button></li>
     {% endfor %}
     </ul>
           
@@ -43,7 +43,7 @@
     <p>{{ course_count }}</p>
     <ul>
     {% for course in courses_list %}
-         <li>{{ course.course_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Course_{{ course.id }}"><i class="material-icons">edit</i></button> <a href="{{ url_for('delete_course', id=course.id) }}" class="waves-effect waves-light btn-flat" onclick="M.toast({html: 'Course Deleted!'})"><i class="material-icons">delete</i></a></li>
+         <li>{{ course.course_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Course_{{ course.id }}"><i class="material-icons">edit</i></button></li>
     {% endfor %}
     </ul>
           
@@ -78,7 +78,7 @@
     <p>{{ cuisine_count }}</p>
     <ul>
     {% for cuisine in cuisines_list %}
-        <li>{{ cuisine.cuisine_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Cuisine_{{ cuisine.id }}"><i class="material-icons">edit</i></button> <a href="{{ url_for('delete_cuisine', id=cuisine.id) }}" class="waves-effect waves-light btn-flat" onclick="M.toast({html: 'Cuisine Deleted!'})"><i class="material-icons">delete</i></a></li>
+        <li>{{ cuisine.cuisine_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Cuisine_{{ cuisine.id }}"><i class="material-icons">edit</i></button></li>
     {% endfor %}
     </ul>
           
@@ -113,7 +113,7 @@
     <p>{{ country_count }}</p>
     <ul>
     {% for country in countries_list %}
-        <li>{{ country.country_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Country_{{ country.id }}"><i class="material-icons">edit</i></button> <a href="{{ url_for('delete_country', id=country.id) }}" class="waves-effect waves-light btn-flat" onclick="M.toast({html: 'Country Deleted!'})"><i class="material-icons">delete</i></a></li>
+        <li>{{ country.country_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Country_{{ country.id }}"><i class="material-icons">edit</i></button></li>
     {% endfor %}
     </ul>
           
@@ -151,7 +151,7 @@
     <p>{{ author_count }}</p>
     <ul>
     {% for author in authors_list %}
-        <li>{{ author.author_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Author_{{ author.id }}"><i class="material-icons">edit</i></button> <a href="{{ url_for('delete_author', id=author.id) }}" class="waves-effect waves-light btn-flat" onclick="M.toast({html: 'Author Deleted!'})"><i class="material-icons">delete</i></a></li>
+        <li>{{ author.author_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Author_{{ author.id }}"><i class="material-icons">edit</i></button></li>
     {% endfor %}
     </ul>
           
@@ -200,7 +200,7 @@
     <p>{{ allergen_count }}</p>
     <ul>
     {% for allergen in allergens_list %}
-        <li>{{ allergen.allergen_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Allergen_{{ allergen.id }}"><i class="material-icons">edit</i></button> <a href="{{ url_for('delete_allergen', id=allergen.id) }}" class="waves-effect waves-light btn-flat" onclick="M.toast({html: 'Allergen Deleted!'})"><i class="material-icons">delete</i></a></li>
+        <li>{{ allergen.allergen_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Allergen_{{ allergen.id }}"><i class="material-icons">edit</i></button></li>
     {% endfor %}
     </ul>
           
@@ -236,7 +236,7 @@
     <p>{{ dietary_count }}</p>
     <ul>
     {% for dietary in dietaries_list %}
-        <li>{{ dietary.dietary_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Dietary_{{ dietary.id }}"><i class="material-icons">edit</i></button> <a href="{{ url_for('delete_dietary', id=dietary.id) }}" class="waves-effect waves-light btn-flat" onclick="M.toast({html: 'Dietary Deleted!'})"><i class="material-icons">delete</i></a></li>
+        <li>{{ dietary.dietary_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Dietary_{{ dietary.id }}"><i class="material-icons">edit</i></button></li>
     {% endfor %}
     </ul>
           
@@ -272,7 +272,7 @@
     <p>{{ measurement_count }}</p>
     <ul>
     {% for measurement in measurements_list %}
-       <li>{{ measurement.measurement_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Measurement_{{ measurement.id }}"><i class="material-icons">edit</i></button> <a href="{{ url_for('delete_measurement', id=measurement.id) }}" class="waves-effect waves-light btn-flat" onclick="M.toast({html: 'Measurement Deleted!'})"><i class="material-icons">delete</i></a></li>
+       <li>{{ measurement.measurement_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Measurement_{{ measurement.id }}"><i class="material-icons">edit</i></button></li>
     {% endfor %}
     </ul>
           
