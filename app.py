@@ -150,13 +150,18 @@ def get_recipes_json():
 def index():
     recipe_count = Recipe.query.count()
     # recipes_list = Recipe.query.limit(100).all()
+    categories_list = Category.query.limit(100).all()
+    courses_list = Course.query.limit(100).all()
+    cuisines_list = Cuisine.query.limit(100).all()
+    authors_list = Author.query.limit(100).all()
+
     page = request.args.get('page', 1, type=int)
     recipes_list = Recipe.query.order_by(Recipe.id.desc()).paginate(page, 10, False)
     next_url = url_for('index', page=recipes_list.next_num) \
         if recipes_list.has_next else None
     prev_url = url_for('index', page=recipes_list.prev_num) \
         if recipes_list.has_prev else None
-    return render_template('index.html', recipe_count=str(recipe_count), recipes_list=recipes_list.items, next_url=next_url, prev_url=prev_url)
+    return render_template('index.html', recipe_count=str(recipe_count), recipes_list=recipes_list.items, next_url=next_url, prev_url=prev_url, categories_list=categories_list, courses_list=courses_list, cuisines_list=cuisines_list, authors_list=authors_list)
 
 #############################MY RECIPES##########################################
 @app.route('/my_recipes')
@@ -173,7 +178,7 @@ def my_recipes():
     return render_template('my_recipes.html', recipe_count=str(recipe_count), recipes_list=recipes_list.items, next_url=next_url, prev_url=prev_url)
 
 #############################RECIPE LIST FILTERED##########################################
-@app.route('/recipe_list_filtered', methods = ['GET','POST'])
+@app.route('/recipe_list_filtered', methods = ['POST'])
 @login_required
 def recipe_list_filtered():
     categories_list = Category.query.limit(100).all()
@@ -181,63 +186,57 @@ def recipe_list_filtered():
     cuisines_list = Cuisine.query.limit(100).all()
     authors_list = Author.query.limit(100).all()
     
-    if request.method == 'POST':
-        recipe_category = Category.query.filter_by(id=request.form.get('recipe_category')).first()
-        recipe_course = Course.query.filter_by(id=request.form.get('recipe_course')).first()
-        recipe_cuisine = Cuisine.query.filter_by(id=request.form.get('recipe_cuisine')).first()
-        recipe_author = Author.query.filter_by(id=request.form.get('recipe_author')).first()
-        queries = []
-        if recipe_category is not None:
-            queries.append(Recipe.category == recipe_category)
-        if recipe_course is not None:
-            queries.append(Recipe.course == recipe_course)
-        if recipe_cuisine is not None:
-            queries.append(Recipe.cuisine == recipe_cuisine)
-        if recipe_author is not None:
-            queries.append(Recipe.author == recipe_author)
-        
-        recipes_list = Recipe.query.filter(*queries).all()
-        recipe_count = Recipe.query.filter(*queries).count()
-        # recipes_list = Recipe.query.filter_by(category=recipe_category, course=recipe_course, cuisine=recipe_cuisine, author=recipe_author).all()
-        # recipe_count = Recipe.query.filter_by(category=recipe_category, course=recipe_course, cuisine=recipe_cuisine, author=recipe_author).count()
-        return render_template('recipe_list_filtered.html', recipe_count=str(recipe_count), recipes_list=recipes_list, categories_list=categories_list, courses_list=courses_list, cuisines_list=cuisines_list, authors_list=authors_list)
-    return render_template('recipe_list_filtered.html', categories_list=categories_list, courses_list=courses_list, cuisines_list=cuisines_list, authors_list=authors_list)
+    recipe_category = Category.query.filter_by(id=request.form.get('recipe_category')).first()
+    recipe_course = Course.query.filter_by(id=request.form.get('recipe_course')).first()
+    recipe_cuisine = Cuisine.query.filter_by(id=request.form.get('recipe_cuisine')).first()
+    recipe_author = Author.query.filter_by(id=request.form.get('recipe_author')).first()
+    queries = []
+    if recipe_category is not None:
+        queries.append(Recipe.category == recipe_category)
+    if recipe_course is not None:
+        queries.append(Recipe.course == recipe_course)
+    if recipe_cuisine is not None:
+        queries.append(Recipe.cuisine == recipe_cuisine)
+    if recipe_author is not None:
+        queries.append(Recipe.author == recipe_author)
+    
+    recipes_list = Recipe.query.filter(*queries).all()
+    recipe_count = Recipe.query.filter(*queries).count()
+    # recipes_list = Recipe.query.filter_by(category=recipe_category, course=recipe_course, cuisine=recipe_cuisine, author=recipe_author).all()
+    # recipe_count = Recipe.query.filter_by(category=recipe_category, course=recipe_course, cuisine=recipe_cuisine, author=recipe_author).count()
+    return render_template('index.html', recipe_count=str(recipe_count), recipes_list=recipes_list, categories_list=categories_list, courses_list=courses_list, cuisines_list=cuisines_list, authors_list=authors_list)
+    
 
 #############################RECIPE SEARCH##########################################
-@app.route('/recipe_search', methods = ['GET','POST'])
+@app.route('/recipe_search', methods = ['POST'])
 @login_required
 def recipe_search():
 
-    
-    if request.method == 'POST':
         # kwargs = {'recipe_name': request.form['recipe_name']}
         
-        recipes_list = Recipe.query.filter(Recipe.recipe_name.ilike("%" + request.form['recipe_name'] + "%")).all()
-        recipe_count = Recipe.query.filter(Recipe.recipe_name.ilike("%" + request.form['recipe_name'] + "%")).count()
-        return render_template('recipe_search.html', recipe_count=str(recipe_count), recipes_list=recipes_list)
-    return render_template('recipe_search.html')
+    recipes_list = Recipe.query.filter(Recipe.recipe_name.ilike("%" + request.form['recipe_name'] + "%")).all()
+    recipe_count = Recipe.query.filter(Recipe.recipe_name.ilike("%" + request.form['recipe_name'] + "%")).count()
+    return render_template('index.html', recipe_count=str(recipe_count), recipes_list=recipes_list)
 
 
 #############################INGREDIENT SEARCH##########################################
-@app.route('/ingredient_search', methods=['GET', 'POST'])
+@app.route('/ingredient_search', methods=['POST'])
 @login_required
 def ingredient_search():
-    if request.method == 'POST':
-        # kwargs = {'recipe_name': request.form['recipe_name']}
+    # kwargs = {'recipe_name': request.form['recipe_name']}
 
-        # recipes_list = Recipe.query.filter(Recipe.recipe_name.ilike("%" + request.form['recipe_name'] + "%")).all()
-        # recipe_count = Recipe.query.filter(Recipe.recipe_name.ilike("%" + request.form['recipe_name'] + "%")).count()
-        recipes = []
+    # recipes_list = Recipe.query.filter(Recipe.recipe_name.ilike("%" + request.form['recipe_name'] + "%")).all()
+    # recipe_count = Recipe.query.filter(Recipe.recipe_name.ilike("%" + request.form['recipe_name'] + "%")).count()
+    recipes = []
 
-        quantity_list = Quantity.query.filter(Quantity.ingredient.has(Ingredient.ingredient_name.ilike("%" + request.form['ingredient_name'] + "%"))).all()
-        for quantity in quantity_list:
-            recipe_id = quantity.recipe_id
-            recipes.append(recipe_id)
+    quantity_list = Quantity.query.filter(Quantity.ingredient.has(Ingredient.ingredient_name.ilike("%" + request.form['ingredient_name'] + "%"))).all()
+    for quantity in quantity_list:
+        recipe_id = quantity.recipe_id
+        recipes.append(recipe_id)
 
-        recipes_list = Recipe.query.join(Quantity).filter(Recipe.id.in_(recipes)).all()
-        recipe_count = Quantity.query.filter(Quantity.ingredient.has(Ingredient.ingredient_name.ilike("%" + request.form['ingredient_name'] + "%"))).count()
-        return render_template('ingredient_search.html', recipe_count=str(recipe_count), recipes_list=recipes_list)
-    return render_template('ingredient_search.html')
+    recipes_list = Recipe.query.join(Quantity).filter(Recipe.id.in_(recipes)).all()
+    recipe_count = Quantity.query.filter(Quantity.ingredient.has(Ingredient.ingredient_name.ilike("%" + request.form['ingredient_name'] + "%"))).count()
+    return render_template('index.html', recipe_count=str(recipe_count), recipes_list=recipes_list)
 
 
 #############################RECIPE DETAIL##########################################
