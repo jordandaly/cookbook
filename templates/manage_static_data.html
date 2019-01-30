@@ -4,7 +4,6 @@
     <div class="col s12 m6 l3">
       <div class="card-panel teal lighten-5">
         <h5>Categories</h5>
-    <p>{{ category_count }}</p>
           <ul>
     {% for category in categories_list %}
         <li>{{ category.category_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Category_{{ category.id }}"><i class="material-icons">edit</i></button></li>
@@ -40,7 +39,6 @@
     <div class="col s12 m6 l3">
       <div class="card-panel teal lighten-5">
         <h5>Courses</h5>
-    <p>{{ course_count }}</p>
     <ul>
     {% for course in courses_list %}
          <li>{{ course.course_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Course_{{ course.id }}"><i class="material-icons">edit</i></button></li>
@@ -75,7 +73,6 @@
     <div class="col s12 m6 l3">
       <div class="card-panel teal lighten-5">
         <h5>Cuisines</h5>
-    <p>{{ cuisine_count }}</p>
     <ul>
     {% for cuisine in cuisines_list %}
         <li>{{ cuisine.cuisine_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Cuisine_{{ cuisine.id }}"><i class="material-icons">edit</i></button></li>
@@ -110,7 +107,6 @@
     <div class="col s12 m6 l3">
       <div class="card-panel teal lighten-5">
         <h5>Countries</h5>
-    <p>{{ country_count }}</p>
     <ul>
     {% for country in countries_list %}
         <li>{{ country.country_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Country_{{ country.id }}"><i class="material-icons">edit</i></button></li>
@@ -148,7 +144,6 @@
     <div class="col s12 m6 l3">
       <div class="card-panel teal lighten-5">
         <h5>Authors</h5>
-    <p>{{ author_count }}</p>
     <ul>
     {% for author in authors_list %}
         <li>{{ author.author_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Author_{{ author.id }}"><i class="material-icons">edit</i></button></li>
@@ -197,7 +192,6 @@
     <div class="col s12 m6 l3">
       <div class="card-panel teal lighten-5">
         <h5>Allergens</h5>
-    <p>{{ allergen_count }}</p>
     <ul>
     {% for allergen in allergens_list %}
         <li>{{ allergen.allergen_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Allergen_{{ allergen.id }}"><i class="material-icons">edit</i></button></li>
@@ -233,7 +227,6 @@
     <div class="col s12 m6 l3">
       <div class="card-panel teal lighten-5">
         <h5>Dietaries</h5>
-    <p>{{ dietary_count }}</p>
     <ul>
     {% for dietary in dietaries_list %}
         <li>{{ dietary.dietary_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Dietary_{{ dietary.id }}"><i class="material-icons">edit</i></button></li>
@@ -269,7 +262,6 @@
     <div class="col s12 m6 l3">
       <div class="card-panel teal lighten-5">
         <h5>Measurements</h5>
-    <p>{{ measurement_count }}</p>
     <ul>
     {% for measurement in measurements_list %}
        <li>{{ measurement.measurement_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Measurement_{{ measurement.id }}"><i class="material-icons">edit</i></button></li>
