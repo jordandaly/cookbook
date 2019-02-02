@@ -17,12 +17,13 @@
         <div class="collapsible-header"><i class="material-icons">expand_more</i>{{ savedrecipe.recipe.recipe_name }}
         </div>
         <div class="collapsible-body">
-            {% if savedrecipe.recipe.image_url %}
-            <img class="materialboxed" src="{{ savedrecipe.recipe.image_url }}" alt="{{ savedrecipe.recipe.image_filename }}" style="width:25%;height:150px;">
-            {% endif %}
             <a class="btn-floating btn waves-effect waves-light teal" href="{{ url_for('recipe_detail', id=savedrecipe.recipe.id) }}"><i class="material-icons">navigate_next</i></a>
             <span>{{ savedrecipe.recipe.recipe_description }}</span>
             <a class="btn-floating btn waves-effect waves-light teal" href="{{ url_for('delete_saved_recipe', id=savedrecipe.id) }}"><i class="material-icons">delete</i></a>
+            <br><br>
+            {% if savedrecipe.recipe.image_url %}
+            <img class="materialboxed" src="{{ savedrecipe.recipe.image_url }}" alt="{{ savedrecipe.recipe.image_filename }}">
+            {% endif %}
         </div>
         </li>
     {% endfor %}

@@ -14,3 +14,9 @@
    width: max-content !important;
    height:auto !important;
 }
+
+img {
+  display: block;
+  width: auto;
+  height: auto;
+}

@@ -69,11 +69,12 @@
         <div class="collapsible-header"><i class="material-icons">expand_more</i>{{ recipe.recipe_name }}
         </div>
         <div class="collapsible-body">
-            {% if recipe.image_url %}
-            <img class="materialboxed" src="{{ recipe.image_url }}" alt="{{ recipe.image_filename }}" style="width:25%;height:150px;">
-            {% endif %}
             <a class="btn-floating btn waves-effect waves-light teal" href="{{ url_for('recipe_detail', id=recipe.id) }}"><i class="material-icons">navigate_next</i></a>
             <span>{{ recipe.recipe_description }}</span>
+            <br><br>
+            {% if recipe.image_url %}
+            <img class="materialboxed responsive-img" src="{{ recipe.image_url }}" alt="{{ recipe.image_filename }}">
+            {% endif %}
         </div>
         </li>
     {% endfor %}
