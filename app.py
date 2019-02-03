@@ -91,11 +91,14 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
-        if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password')
+        if user is None:
+            flash('Invalid username','error')
+            return redirect(url_for('login'))
+        if not user.check_password(form.password.data):
+            flash('Invalid password','error')
             return redirect(url_for('login'))
         login_user(user)
-        flash('Congratulations, you are now logged in!')
+        flash('Success, you are now logged in!')
         next_page = request.args.get('next')
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
@@ -105,6 +108,7 @@ def login():
 @app.route('/logout')
 def logout():
     logout_user()
+    flash('Logout successful')
     return redirect(url_for('index'))
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -146,7 +150,6 @@ def get_recipes_json():
 
 #############################INDEX##########################################
 @app.route('/')
-@login_required
 def index():
     recipe_count = Recipe.query.count()
     # recipes_list = Recipe.query.limit(100).all()
@@ -179,7 +182,6 @@ def my_recipes():
 
 #############################RECIPE LIST FILTERED##########################################
 @app.route('/recipe_list_filtered', methods = ['POST'])
-@login_required
 def recipe_list_filtered():
     categories_list = Category.query.limit(100).all()
     courses_list = Course.query.limit(100).all()
@@ -209,7 +211,6 @@ def recipe_list_filtered():
 
 #############################RECIPE SEARCH##########################################
 @app.route('/recipe_search', methods = ['POST'])
-@login_required
 def recipe_search():
 
         # kwargs = {'recipe_name': request.form['recipe_name']}
@@ -221,7 +222,6 @@ def recipe_search():
 
 #############################INGREDIENT SEARCH##########################################
 @app.route('/ingredient_search', methods=['POST'])
-@login_required
 def ingredient_search():
     # kwargs = {'recipe_name': request.form['recipe_name']}
 
@@ -241,7 +241,6 @@ def ingredient_search():
 
 #############################RECIPE DETAIL##########################################
 @app.route('/recipe_detail/<id>')
-@login_required
 def recipe_detail(id):
 
     recipe = Recipe.query.filter_by(id=int(id)).first()

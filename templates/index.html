@@ -1,5 +1,19 @@
 {% extends 'base.html'%} {% block content %}
 <div class="row">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+           <ul class=flashes>
+              {% for message in messages %}
+              <li>{{ message }}</li>
+              {% endfor %}
+           </ul>
+        {% endif %}
+     {% endwith %}
+       {% if current_user.is_anonymous %}
+       <a href="{{ url_for('login') }}">Login</a>
+       {% else %}
+       <a href="{{ url_for('logout') }}">Logout</a>
+       {% endif %}
     <p>Recipe count: {{ recipe_count }}</p>
     <form class="card-panel col s12 m6" method="POST" action="/recipe_search">
         <div class="input-field col s12">
