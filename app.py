@@ -106,6 +106,7 @@ def login():
     return render_template('login.html', title='Sign In', form=form)
 
 @app.route('/logout')
+@login_required
 def logout():
     logout_user()
     flash('Logout successful')
@@ -372,7 +373,13 @@ def add_quantity(id):
             # quantity_recipe = Recipe.query.filter_by(id=recipe.id).first()
             quantity_measurement = Measurement.query.filter_by(id=request.form['quantity_measurement']).first()
             # quantity_ingredient = Ingredient.query.filter_by(id=request.form['quantity_ingredient']).first()
-            quantity_ingredient = Ingredient(request.form['quantity_ingredient'])
+            
+            # check if ingredient has already been created and if so use the existing before creating (same) new ingredient to avoid duplicate data
+            existing_ingredient = Ingredient.query.filter_by(ingredient_name=request.form['quantity_ingredient']).first()
+            if existing_ingredient is not None:
+                quantity_ingredient = existing_ingredient
+            else:
+                quantity_ingredient = Ingredient(request.form['quantity_ingredient'])
 
             quantity = Quantity(request.form['quantity'], 
             quantity_recipe, 
@@ -411,13 +418,7 @@ def update_quantity(id):
             quantity.quantity = request.form['quantity']
             quantity.recipe = quantity_recipe
             quantity.measurement = Measurement.query.filter_by(id=request.form['quantity_measurement']).first()
-
-            existing_ingredient = Ingredient.query.filter_by(ingredient_name=request.form['quantity_ingredient']).first()
-            if existing_ingredient is not None:
-                quantity.ingredient = existing_ingredient
-            else:
-                quantity.ingredient = Ingredient(request.form['quantity_ingredient'])
-
+            quantity.ingredient.ingredient_name = request.form['quantity_ingredient']
 
             db.session.commit()
             return redirect(url_for('recipe_detail', id=quantity_recipe.id))
@@ -731,6 +732,15 @@ def update_ingredient(id):
     ingredient.ingredient_name = request.form['ingredient']
     db.session.commit()
     return redirect(url_for('manage_static_data'))
+
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template('404.html'), 404
+
+@app.errorhandler(500)
+def internal_error(error):
+    db.session.rollback()
+    return render_template('500.html'), 500
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))

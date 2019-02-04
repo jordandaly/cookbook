@@ -10,7 +10,7 @@
       
     <div class="input-field col s12">
         <label for="recipe_description" >Recipe Description:</label>
-        <input type="text" id="recipe_description" name="recipe_description" value="{{recipe.recipe_description}}">
+        <input type="text" id="recipe_description" name="recipe_description" value="{{recipe.recipe_description}}" required>
     </div>
      
     <div class="input-field col s12 m4">
@@ -31,7 +31,7 @@
 
     <div class="col s12 m6">
         <label for="recipe_category" >Category:</label>
-        <select id="recipe_category" name="recipe_category">
+        <select id="recipe_category" name="recipe_category" required>
             {% for category in categories_list %}
             <option value="{{category.id}}" {% if category.id==recipe.category_id %} SELECTED{% endif %}>{{category.category_name}}</option>
             {% endfor %}
@@ -40,7 +40,7 @@
 
     <div class="col s12 m6">
         <label for="recipe_course" >Course:</label>
-        <select id="recipe_course" name="recipe_course">
+        <select id="recipe_course" name="recipe_course" required>
             {% for course in courses_list %}
             <option value="{{course.id}}" {% if course.id==recipe.course_id %} SELECTED{% endif %}>{{course.course_name}}</option>
             {% endfor %}
@@ -49,7 +49,7 @@
 
     <div class="col s12 m6">
         <label for="recipe_cuisine" >Cuisine:</label>
-        <select id="recipe_cuisine" name="recipe_cuisine">
+        <select id="recipe_cuisine" name="recipe_cuisine" required>
             {% for cuisine in cuisines_list %}
             <option value="{{cuisine.id}}" {% if cuisine.id==recipe.cuisine_id %} SELECTED{% endif %}>{{cuisine.cuisine_name}}</option>
             {% endfor %}
@@ -58,7 +58,7 @@
 
     <div class="col s12 m6">
         <label for="recipe_author" >Author:</label>
-        <select id="recipe_author" name="recipe_author">
+        <select id="recipe_author" name="recipe_author" required>
             {% for author in authors_list %}
             <option value="{{author.id}}" {% if author.id==recipe.author_id %} SELECTED{% endif %}>{{author.author_name}}</option>
             {% endfor %}
@@ -67,14 +67,14 @@
 
     <div class="col s12">
         {% if recipe.image_url %}
-        <img src="{{ recipe.image_url }}" alt="{{ recipe.image_filename }}" style="width:100%;height:450px;">
+        <img src="{{ recipe.image_url }}" alt="{{ recipe.image_filename }}">
         {% endif %}
 
         <input type=file name=recipe_image>
     </div>
     
     <div class="col s12">
-        <button class="waves-effect waves-light btn" onclick="M.toast({html: 'Recipe Updated!'})">Update Recipe</button>
+        <button class="waves-effect waves-light btn right" onclick="M.toast({html: 'Recipe Updated!'})">Update Recipe</button>
     </div>
     </form>
 </div>

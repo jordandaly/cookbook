@@ -25,8 +25,8 @@
             <p><b>Author:</b> {{ recipe.author.author_name }}</p>
         </div>
         <div class="col s12 m6">
-            <p><b>Preparation Time:</b> {{ recipe.preparation_time }} Mins</p>
-            <p><b>Cooking Time:</b> {{ recipe.cooking_time }} mins</p>
+            <p><b>Preparation Time:</b> {{ recipe.preparation_time }} Minutes</p>
+            <p><b>Cooking Time:</b> {{ recipe.cooking_time }} Minutes</p>
             <p><b>Servings:</b> {{ recipe.servings }}</p>
         </div>
         <a class="btn-floating btn waves-effect waves-light teal" href="{{ url_for('save_recipe', id=recipe.id) }}"><i class="material-icons">star</i></a>

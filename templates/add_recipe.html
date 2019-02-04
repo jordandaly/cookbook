@@ -9,7 +9,7 @@
      
     <div class="input-field col s12">
         <label for="recipe_description" >Recipe Description:</label>
-        <input type="text" id="recipe_description" name="recipe_description">
+        <input type="text" id="recipe_description" name="recipe_description" required>
     </div>
      
     <div class="input-field col s12 m4">
@@ -29,7 +29,7 @@
 
     <div class="col s12 m6">
         <label for="recipe_category" >Category:</label>
-        <select id="recipe_category" name="recipe_category">
+        <select id="recipe_category" name="recipe_category" required>
             <option value="" disabled selected>Choose your option</option>
             {% for category in categories_list %}
             <option value="{{category.id}}">{{category.category_name}}</option>
@@ -39,7 +39,7 @@
         
     <div class="col s12 m6">
         <label for="recipe_course" >Course:</label>
-        <select id="recipe_course" name="recipe_course">
+        <select id="recipe_course" name="recipe_course" required>
             <option value="" disabled selected>Choose your option</option>
             {% for course in courses_list %}
             <option value="{{course.id}}">{{course.course_name}}</option>
@@ -49,7 +49,7 @@
         
     <div class="col s12 m6">
         <label for="recipe_cuisine" >Cuisine:</label>
-        <select id="recipe_cuisine" name="recipe_cuisine">
+        <select id="recipe_cuisine" name="recipe_cuisine" required>
             <option value="" disabled selected>Choose your option</option>
             {% for cuisine in cuisines_list %}
             <option value="{{cuisine.id}}">{{cuisine.cuisine_name}}</option>
@@ -59,7 +59,7 @@
 
     <div class="col s12 m6">
         <label for="recipe_author" >Author:</label>
-        <select id="recipe_author" name="recipe_author">
+        <select id="recipe_author" name="recipe_author" required>
             <option value="" disabled selected>Choose your option</option>
             {% for author in authors_list %}
             <option value="{{author.id}}">{{author.author_name}}</option>
@@ -72,7 +72,7 @@
     </div>
         
     <div class="col s12">
-        <button class="btn waves-effect waves-light" type="submit" name="action" onclick="M.toast({html: 'New Recipe Added!'})">Add Recipe
+        <button class="btn waves-effect waves-light right" type="submit" name="action" onclick="M.toast({html: 'New Recipe Added!'})">Add Recipe
             <i class="material-icons right">send</i>
           </button>
     </div>
