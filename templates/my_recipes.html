@@ -1,6 +1,7 @@
 {% extends 'base.html'%} {% block content %}
 <div class="row">
-    <p>My Recipes: {{ recipe_count }}</p>
+    <h1>My Recipes</h1>
+    <p>Recipe count: {{ recipe_count }}</p>
     <ul class="collapsible">
     {% for recipe in recipes_list %}
         <li>

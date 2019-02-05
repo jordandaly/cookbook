@@ -52,7 +52,7 @@ login_manager.init_app(app)
 
 login_manager.login_view = 'login'
 
-from models import Recipe, Category, Course, Cuisine, Country, Allergen, Dietary, Author, Measurement, Quantity, Ingredient, Method, User, SavedRecipe
+from models import Recipe, Category, Course, Cuisine, Country, Author, Measurement, Quantity, Ingredient, Method, User, SavedRecipe
 
 #################AWS_S3_file_upload###########################
 def upload_file_to_s3(file, bucket_name, acl="public-read"):
@@ -133,7 +133,6 @@ def dashboard():
 #############################RECIPE JSON DATA ENDPOINT##########################################
 @app.route('/get_recipes')
 def get_recipes_json():
-    # recipes = {}
     recipes = []
     for r in db.session.query(Recipe).all():
         print(r, file=sys.stdout)
@@ -153,7 +152,6 @@ def get_recipes_json():
 @app.route('/')
 def index():
     recipe_count = Recipe.query.count()
-    # recipes_list = Recipe.query.limit(100).all()
     categories_list = Category.query.limit(100).all()
     courses_list = Course.query.limit(100).all()
     cuisines_list = Cuisine.query.limit(100).all()
@@ -172,7 +170,6 @@ def index():
 @login_required
 def my_recipes():
     recipe_count = Recipe.query.filter_by(user=current_user).count()
-    # recipes_list = Recipe.query.limit(100).all()
     page = request.args.get('page', 1, type=int)
     recipes_list = Recipe.query.filter_by(user=current_user).order_by(Recipe.id.desc()).paginate(page, 10, False)
     next_url = url_for('index', page=recipes_list.next_num) \
@@ -205,17 +202,12 @@ def recipe_list_filtered():
     
     recipes_list = Recipe.query.filter(*queries).all()
     recipe_count = Recipe.query.filter(*queries).count()
-    # recipes_list = Recipe.query.filter_by(category=recipe_category, course=recipe_course, cuisine=recipe_cuisine, author=recipe_author).all()
-    # recipe_count = Recipe.query.filter_by(category=recipe_category, course=recipe_course, cuisine=recipe_cuisine, author=recipe_author).count()
     return render_template('index.html', recipe_count=str(recipe_count), recipes_list=recipes_list, categories_list=categories_list, courses_list=courses_list, cuisines_list=cuisines_list, authors_list=authors_list)
     
 
 #############################RECIPE SEARCH##########################################
 @app.route('/recipe_search', methods = ['POST'])
-def recipe_search():
-
-        # kwargs = {'recipe_name': request.form['recipe_name']}
-        
+def recipe_search():      
     recipes_list = Recipe.query.filter(Recipe.recipe_name.ilike("%" + request.form['recipe_name'] + "%")).all()
     recipe_count = Recipe.query.filter(Recipe.recipe_name.ilike("%" + request.form['recipe_name'] + "%")).count()
     return render_template('index.html', recipe_count=str(recipe_count), recipes_list=recipes_list)
@@ -224,12 +216,7 @@ def recipe_search():
 #############################INGREDIENT SEARCH##########################################
 @app.route('/ingredient_search', methods=['POST'])
 def ingredient_search():
-    # kwargs = {'recipe_name': request.form['recipe_name']}
-
-    # recipes_list = Recipe.query.filter(Recipe.recipe_name.ilike("%" + request.form['recipe_name'] + "%")).all()
-    # recipe_count = Recipe.query.filter(Recipe.recipe_name.ilike("%" + request.form['recipe_name'] + "%")).count()
     recipes = []
-
     quantity_list = Quantity.query.filter(Quantity.ingredient.has(Ingredient.ingredient_name.ilike("%" + request.form['ingredient_name'] + "%"))).all()
     for quantity in quantity_list:
         recipe_id = quantity.recipe_id
@@ -245,9 +232,7 @@ def ingredient_search():
 def recipe_detail(id):
 
     recipe = Recipe.query.filter_by(id=int(id)).first()
-
     quantity_list = Quantity.query.filter_by(recipe_id=id)
-
     method_list = Method.query.filter_by(recipe_id=id)
 
     return render_template('recipe_detail.html', recipe=recipe, quantity_list=quantity_list, method_list=method_list)
@@ -260,7 +245,6 @@ def add_recipe():
         courses_list = Course.query.limit(100).all()
         cuisines_list = Cuisine.query.limit(100).all()
         authors_list = Author.query.limit(100).all()
-        
         
         if request.method == 'POST':
             recipe_category = Category.query.filter_by(id=request.form['recipe_category']).first()
@@ -361,18 +345,14 @@ def delete_recipe(id):
 @login_required
 def add_quantity(id):
         measurements_list = Measurement.query.limit(100).all()
-        # ingredients_list = Ingredient.query.limit(500).all()
         quantity_recipe = Recipe.query.get(id)
         if quantity_recipe.user != current_user:
             flash('You do not have permission to add ingredients to this recipe')
             return redirect(url_for('index'))
         
         if request.method == 'POST':
-            # recipe = Recipe.query.filter_by(id=int(id)).first()
             
-            # quantity_recipe = Recipe.query.filter_by(id=recipe.id).first()
             quantity_measurement = Measurement.query.filter_by(id=request.form['quantity_measurement']).first()
-            # quantity_ingredient = Ingredient.query.filter_by(id=request.form['quantity_ingredient']).first()
             
             # check if ingredient has already been created and if so use the existing before creating (same) new ingredient to avoid duplicate data
             existing_ingredient = Ingredient.query.filter_by(ingredient_name=request.form['quantity_ingredient']).first()
@@ -398,7 +378,6 @@ def add_quantity(id):
 def edit_quantity(id):
         quantity = Quantity.query.get(id)
         quantity_recipe = Recipe.query.get(quantity.recipe_id)
-        # ingredients_list = Ingredient.query.limit(500).all()
         measurements_list = Measurement.query.limit(100).all()
         if quantity_recipe.user != current_user:
             flash('You do not have permission to edit this ingredient')
@@ -409,9 +388,7 @@ def edit_quantity(id):
 def update_quantity(id):
         quantity = Quantity.query.get(id)
         quantity_recipe = Recipe.query.get(quantity.recipe_id)
-        # ingredients_list = Ingredient.query.limit(500).all()
         measurements_list = Measurement.query.limit(100).all()
-        
         
         if request.method == 'POST':
             quantity = Quantity.query.get(id)
@@ -446,13 +423,9 @@ def add_method(id):
             flash('You do not have permission to add methods to this recipe')
             return redirect(url_for('index'))
         if request.method == 'POST':
-            
-            # method_recipe = Recipe.query.filter_by(id=recipe.id).first()
 
             method = Method(method_recipe,(request.form['method']))
-
             db.session.add(method)
-
             db.session.commit()
             return redirect(url_for('recipe_detail', id=id))
         
@@ -507,9 +480,9 @@ def save_recipe(id):
         savedrecipe = SavedRecipe(current_user, recipe)
         db.session.add(savedrecipe)
         db.session.commit()
-        flash('Recipe added to My Saved Recipes')
+        flash('Recipe added to Saved Recipes')
     else:
-        flash('Recipe already added to My Saved Recipes')
+        flash('Recipe already added to Saved Recipes')
     return redirect(url_for('recipe_detail', id=id))
 
 @app.route('/delete_saved_recipe/<id>')
@@ -525,7 +498,6 @@ def delete_saved_recipe(id):
 @login_required
 def my_saved_recipes():
     recipe_count = SavedRecipe.query.filter_by(user=current_user).count()
-    # recipes_list = Recipe.query.limit(100).all()
     page = request.args.get('page', 1, type=int)
     recipes_list = SavedRecipe.query.filter_by(user=current_user).order_by(SavedRecipe.id.desc()).paginate(page, 10, False)
     next_url = url_for('index', page=recipes_list.next_num) \
@@ -543,11 +515,8 @@ def manage_static_data():
     cuisines_list = Cuisine.query.limit(100).all()
     countries_list = Country.query.limit(250).all()
     authors_list = Author.query.limit(100).all()
-    allergens_list = Allergen.query.limit(100).all()
-    dietaries_list = Dietary.query.limit(100).all()
     measurements_list = Measurement.query.limit(100).all()
-    ingredients_list = Ingredient.query.limit(500).all()
-    return render_template('manage_static_data.html', categories_list=categories_list, courses_list=courses_list, cuisines_list=cuisines_list, countries_list=countries_list, authors_list=authors_list, allergens_list=allergens_list, dietaries_list=dietaries_list, measurements_list=measurements_list, ingredients_list=ingredients_list)
+    return render_template('manage_static_data.html', categories_list=categories_list, courses_list=courses_list, cuisines_list=cuisines_list, countries_list=countries_list, authors_list=authors_list, measurements_list=measurements_list)
 
 #############################CATEGORY##########################################
 @app.route('/add_category', methods = ['POST'])
@@ -556,11 +525,6 @@ def add_category():
     db.session.add(category)
     db.session.commit()
     return redirect(url_for('manage_static_data'))
-
-@app.route('/edit_category/<id>')
-def edit_category(id):
-    category = Category.query.get(id)
-    return render_template('edit_category.html', category=category)
 
 @app.route('/update_category/<id>', methods = ['POST'])
 def update_category(id):
@@ -577,11 +541,6 @@ def add_course():
     db.session.commit()
     return redirect(url_for('manage_static_data'))
 
-@app.route('/edit_course/<id>')
-def edit_course(id):
-    course = Course.query.get(id)
-    return render_template('edit_course.html', course=course)
-
 @app.route('/update_course/<id>', methods = ['POST'])
 def update_course(id):
     course = Course.query.get(id)
@@ -597,11 +556,6 @@ def add_cuisine():
     db.session.commit()
     return redirect(url_for('manage_static_data'))
 
-@app.route('/edit_cuisine/<id>')
-def edit_cuisine(id):
-    cuisine = Cuisine.query.get(id)
-    return render_template('edit_cuisine.html', cuisine=cuisine)
-
 @app.route('/update_cuisine/<id>', methods = ['POST'])
 def update_cuisine(id):
     cuisine = Cuisine.query.get(id)
@@ -616,11 +570,6 @@ def add_country():
     db.session.add(country)
     db.session.commit()
     return redirect(url_for('manage_static_data'))
-
-@app.route('/edit_country/<id>')
-def edit_country(id):
-    country = Country.query.get(id)
-    return render_template('edit_country.html', country=country)
 
 @app.route('/update_country/<id>', methods = ['POST'])
 def update_country(id):
@@ -639,57 +588,11 @@ def add_author():
     db.session.commit()
     return redirect(url_for('manage_static_data'))
 
-@app.route('/edit_author/<id>')
-def edit_author(id):
-    author = Author.query.get(id)
-    countries_list = Country.query.limit(250).all()
-    return render_template('edit_author.html', author=author, countries_list=countries_list)
-
 @app.route('/update_author/<id>', methods = ['POST'])
 def update_author(id):
     author = Author.query.get(id)
     author.author_name = request.form['author']
     author.country = Country.query.filter_by(id=request.form['author_country']).first()
-    db.session.commit()
-    return redirect(url_for('manage_static_data'))
-
-#############################ALLERGEN##########################################
-@app.route('/add_allergen', methods = ['POST'])
-def add_allergen():
-    allergen = Allergen(request.form['allergen'])
-    db.session.add(allergen)
-    db.session.commit()
-    return redirect(url_for('manage_static_data'))
-
-@app.route('/edit_allergen/<id>')
-def edit_allergen(id):
-    allergen = Allergen.query.get(id)
-    return render_template('edit_allergen.html', allergen=allergen)
-
-@app.route('/update_allergen/<id>', methods = ['POST'])
-def update_allergen(id):
-    allergen = Allergen.query.get(id)
-    allergen.allergen_name = request.form['allergen']
-    db.session.commit()
-    return redirect(url_for('manage_static_data'))
-
-#############################DIETARY##########################################
-@app.route('/add_dietary', methods = ['POST'])
-def add_dietary():
-    dietary = Dietary(request.form['dietary'])
-    db.session.add(dietary)
-    db.session.commit()
-    return redirect(url_for('manage_static_data'))
-
-@app.route('/edit_dietary/<id>')
-def edit_dietary(id):
-    dietary = Dietary.query.get(id)
-    return render_template('edit_dietary.html', dietary=dietary)
-
-@app.route('/update_dietary/<id>', methods = ['POST'])
-def update_dietary(id):
-    dietary = Dietary.query.get(id)
-    dietary.dietary_name = request.form['dietary']
     db.session.commit()
     return redirect(url_for('manage_static_data'))
 
@@ -701,11 +604,6 @@ def add_measurement():
     db.session.commit()
     return redirect(url_for('manage_static_data'))
 
-@app.route('/edit_measurement/<id>')
-def edit_measurement(id):
-    measurement = Measurement.query.get(id)
-    return render_template('edit_measurement.html', measurement=measurement)
-
 @app.route('/update_measurement/<id>', methods = ['POST'])
 def update_measurement(id):
     measurement = Measurement.query.get(id)
@@ -713,26 +611,7 @@ def update_measurement(id):
     db.session.commit()
     return redirect(url_for('manage_static_data'))
 
-#############################INGREDIENT##########################################
-@app.route('/add_ingredient', methods = ['POST'])
-def add_ingredient():
-    ingredient = Ingredient(request.form['ingredient'])
-    db.session.add(ingredient)
-    db.session.commit()
-    return redirect(url_for('manage_static_data'))
-
-@app.route('/edit_ingredient/<id>')
-def edit_ingredient(id):
-    ingredient = Ingredient.query.get(id)
-    return render_template('edit_ingredient.html', ingredient=ingredient)
-
-@app.route('/update_ingredient/<id>', methods = ['POST'])
-def update_ingredient(id):
-    ingredient = Ingredient.query.get(id)
-    ingredient.ingredient_name = request.form['ingredient']
-    db.session.commit()
-    return redirect(url_for('manage_static_data'))
-
+#############################HTTP ERRORS##########################################
 @app.errorhandler(404)
 def not_found_error(error):
     return render_template('404.html'), 404

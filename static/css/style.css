@@ -24,3 +24,8 @@ img {
 .error {
   color: red
 }
+
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+}

@@ -9,7 +9,8 @@
             </ul>
          {% endif %}
       {% endwith %}
-    <p>Saved Recipes: {{ recipe_count }}</p>
+      <h1>Saved Recipes</h1>
+      <p>Recipe count: {{ recipe_count }}</p>
     <ul class="collapsible">
     {% for savedrecipe in recipes_list %}
         <li>
