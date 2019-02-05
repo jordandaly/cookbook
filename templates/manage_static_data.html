@@ -1,13 +1,13 @@
 {% extends 'base.html'%} {% block content %}
-<div class="row">
+<h1>Manage Categories</h1>
+<div class="row flex">
 <!-- Categories -->
-    <div class="col s12 m6 l3">
+    <div class="col s12 m6 l4">
       <div class="card-panel teal lighten-5">
         <h5>Categories</h5>
-    <p>{{ category_count }}</p>
           <ul>
     {% for category in categories_list %}
-        <li>{{ category.category_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Category_{{ category.id }}"><i class="material-icons">edit</i></button> <a href="{{ url_for('delete_category', id=category.id) }}" class="waves-effect waves-light btn-flat" onclick="M.toast({html: 'Category Deleted!'})"><i class="material-icons">delete</i></a></li>
+        <li>{{ category.category_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Category_{{ category.id }}"><i class="material-icons">edit</i></button></li>
     {% endfor %}
     </ul>
           
@@ -37,13 +37,12 @@
       </div>
     </div>
 <!-- Courses -->
-    <div class="col s12 m6 l3">
+    <div class="col s12 m6 l4">
       <div class="card-panel teal lighten-5">
         <h5>Courses</h5>
-    <p>{{ course_count }}</p>
     <ul>
     {% for course in courses_list %}
-         <li>{{ course.course_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Course_{{ course.id }}"><i class="material-icons">edit</i></button> <a href="{{ url_for('delete_course', id=course.id) }}" class="waves-effect waves-light btn-flat" onclick="M.toast({html: 'Course Deleted!'})"><i class="material-icons">delete</i></a></li>
+         <li>{{ course.course_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Course_{{ course.id }}"><i class="material-icons">edit</i></button></li>
     {% endfor %}
     </ul>
           
@@ -72,13 +71,13 @@
     </form>
       </div>
     </div>
-    <div class="col s12 m6 l3">
+    <!-- Cuisines -->
+    <div class="col s12 m6 l4">
       <div class="card-panel teal lighten-5">
         <h5>Cuisines</h5>
-    <p>{{ cuisine_count }}</p>
     <ul>
     {% for cuisine in cuisines_list %}
-        <li>{{ cuisine.cuisine_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Cuisine_{{ cuisine.id }}"><i class="material-icons">edit</i></button> <a href="{{ url_for('delete_cuisine', id=cuisine.id) }}" class="waves-effect waves-light btn-flat" onclick="M.toast({html: 'Cuisine Deleted!'})"><i class="material-icons">delete</i></a></li>
+        <li>{{ cuisine.cuisine_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Cuisine_{{ cuisine.id }}"><i class="material-icons">edit</i></button></li>
     {% endfor %}
     </ul>
           
@@ -107,13 +106,13 @@
     </form>
       </div>
     </div>
-    <div class="col s12 m6 l3">
+    <!-- Countries -->
+    <div class="col s12 m6 l4">
       <div class="card-panel teal lighten-5">
         <h5>Countries</h5>
-    <p>{{ country_count }}</p>
     <ul>
     {% for country in countries_list %}
-        <li>{{ country.country_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Country_{{ country.id }}"><i class="material-icons">edit</i></button> <a href="{{ url_for('delete_country', id=country.id) }}" class="waves-effect waves-light btn-flat" onclick="M.toast({html: 'Country Deleted!'})"><i class="material-icons">delete</i></a></li>
+        <li>{{ country.country_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Country_{{ country.id }}"><i class="material-icons">edit</i></button></li>
     {% endfor %}
     </ul>
           
@@ -143,15 +142,13 @@
         </span>
       </div>
     </div>
-</div>
-<div class="row">
-    <div class="col s12 m6 l3">
+  <!-- Authors -->
+    <div class="col s12 m6 l4">
       <div class="card-panel teal lighten-5">
         <h5>Authors</h5>
-    <p>{{ author_count }}</p>
     <ul>
     {% for author in authors_list %}
-        <li>{{ author.author_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Author_{{ author.id }}"><i class="material-icons">edit</i></button> <a href="{{ url_for('delete_author', id=author.id) }}" class="waves-effect waves-light btn-flat" onclick="M.toast({html: 'Author Deleted!'})"><i class="material-icons">delete</i></a></li>
+        <li>{{ author.author_name }}, {{ author.country.country_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Author_{{ author.id }}"><i class="material-icons">edit</i></button></li>
     {% endfor %}
     </ul>
           
@@ -162,9 +159,10 @@
           <h1>Edit author</h1>
             <form method="POST" action="{{ url_for('update_author', id=author.id) }}">
 
-                <label for="author" >author Name:</label>
+                <label for="author" >Author Name:</label>
                 <input type="text" id="author" name="author" value="{{ author.author_name }}" required>
                 
+                <label for="author_country" >Author Country:</label>
                 <select id="author_country" name="author_country">
                 {% for country in countries_list %}
                 <option value="{{country.id}}" {% if country.id==author.country_id %} SELECTED{% endif %}>{{country.country_name}}</option>
@@ -185,8 +183,9 @@
         <label for="author_country" >New Author Country:</label>
         <!-- <input type="text" id="author_country" name="author_country" required> -->
         <select id="author_country" name="author_country">
+            <option value="" disabled selected>Choose your option</option>
             {% for country in countries_list %}
-            <option value="{{country.id}}" SELECTED>{{country.country_name}}</option>
+            <option value="{{country.id}}">{{country.country_name}}</option>
             {% endfor %}
         </select>
         <button class="waves-effect waves-light btn">Add</button>
@@ -194,85 +193,13 @@
         </span>
       </div>
     </div>
-    <div class="col s12 m6 l3">
-      <div class="card-panel teal lighten-5">
-        <h5>Allergens</h5>
-    <p>{{ allergen_count }}</p>
-    <ul>
-    {% for allergen in allergens_list %}
-        <li>{{ allergen.allergen_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Allergen_{{ allergen.id }}"><i class="material-icons">edit</i></button> <a href="{{ url_for('delete_allergen', id=allergen.id) }}" class="waves-effect waves-light btn-flat" onclick="M.toast({html: 'Allergen Deleted!'})"><i class="material-icons">delete</i></a></li>
-    {% endfor %}
-    </ul>
-          
-    {% for allergen in allergens_list %}
-      <!-- Modal Structure -->
-      <div id="Allergen_{{ allergen.id }}" class="modal">
-        <div class="modal-content">
-          <h1>Edit allergen</h1>
-            <form method="POST" action="{{ url_for('update_allergen', id=allergen.id) }}">
-
-                <label for="allergen" >allergen Name:</label>
-                <input type="text" id="allergen" name="allergen" value="{{ allergen.allergen_name }}" required>
-
-                <button class="waves-effect waves-light btn">Update</button>
-            </form>
-        </div>
-        <div class="modal-footer">
-          <a href="#!" class="modal-close waves-effect waves-green btn-flat">Done</a>
-        </div>
-      </div>
-      {% endfor %}
-    <form method="POST" action=/add_allergen>
-        <label for="allergen" >New Allergen:</label>
-        <input type="text" id="allergen" name="allergen" required>
-        <button class="waves-effect waves-light btn">Add</button>
-    </form>
-        </span>
-      </div>
-    </div>
-    <div class="col s12 m6 l3">
-      <div class="card-panel teal lighten-5">
-        <h5>Dietaries</h5>
-    <p>{{ dietary_count }}</p>
-    <ul>
-    {% for dietary in dietaries_list %}
-        <li>{{ dietary.dietary_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Dietary_{{ dietary.id }}"><i class="material-icons">edit</i></button> <a href="{{ url_for('delete_dietary', id=dietary.id) }}" class="waves-effect waves-light btn-flat" onclick="M.toast({html: 'Dietary Deleted!'})"><i class="material-icons">delete</i></a></li>
-    {% endfor %}
-    </ul>
-          
-    {% for dietary in dietaries_list %}
-      <!-- Modal Structure -->
-      <div id="Dietary_{{ dietary.id }}" class="modal">
-        <div class="modal-content">
-          <h1>Edit dietary</h1>
-            <form method="POST" action="{{ url_for('update_dietary', id=dietary.id) }}">
-
-                <label for="dietary" >dietary Name:</label>
-                <input type="text" id="dietary" name="dietary" value="{{ dietary.dietary_name }}" required>
-
-                <button class="waves-effect waves-light btn">Update</button>
-            </form>
-        </div>
-        <div class="modal-footer">
-          <a href="#!" class="modal-close waves-effect waves-green btn-flat">Done</a>
-        </div>
-      </div>
-      {% endfor %}
-    <form method="POST" action=/add_dietary>
-        <label for="dietary" >New Dietary:</label>
-        <input type="text" id="dietary" name="dietary" required>
-        <button class="waves-effect waves-light btn">Add</button>
-    </form>
-        </span>
-      </div>
-    </div>
-    <div class="col s12 m6 l3">
+    <!-- Measurements -->
+    <div class="col s12 m6 l4">
       <div class="card-panel teal lighten-5">
         <h5>Measurements</h5>
-    <p>{{ measurement_count }}</p>
     <ul>
     {% for measurement in measurements_list %}
-       <li>{{ measurement.measurement_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Measurement_{{ measurement.id }}"><i class="material-icons">edit</i></button> <a href="{{ url_for('delete_measurement', id=measurement.id) }}" class="waves-effect waves-light btn-flat" onclick="M.toast({html: 'Measurement Deleted!'})"><i class="material-icons">delete</i></a></li>
+       <li>{{ measurement.measurement_name }} <!-- Modal Trigger --><button class="waves-effect waves-light btn-flat modal-trigger" data-target="Measurement_{{ measurement.id }}"><i class="material-icons">edit</i></button></li>
     {% endfor %}
     </ul>
           
@@ -302,5 +229,7 @@
         </span>
       </div>
     </div>
+  
+  </div>
     
 {% endblock %}

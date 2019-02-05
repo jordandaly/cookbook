@@ -7,12 +7,7 @@ from extensions import db, migrate
 from flask_login import UserMixin
 
 
-# constructor method
-# db = SQLAlchemy(app)
-# migrate = Migrate(app, db)
-
 class User(UserMixin, db.Model):
-    """ Create user table"""
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True)
     password = db.Column(db.String(80))
@@ -28,14 +23,9 @@ class User(UserMixin, db.Model):
             return False
 
 
-class Test(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     category_name = db.Column(String(150), nullable=False, unique=True)
-
-    #recipes = db.relationship('Recipe', backref='category', lazy='dynamic')
 
     def __init__(self, category_name):
         self.category_name = category_name
@@ -47,8 +37,6 @@ class Course(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     course_name = db.Column(String(150), nullable=False, unique=True)
 
-    #recipes = db.relationship('Recipe', backref='course', lazy='dynamic')
-
     def __init__(self, course_name):
         self.course_name = course_name
 
@@ -58,8 +46,6 @@ class Course(db.Model):
 class Cuisine(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     cuisine_name = db.Column(String(150), nullable=False, unique=True)
-
-    #recipes = db.relationship('Recipe', backref='cuisine', lazy='dynamic')
 
     def __init__(self, cuisine_name):
         self.cuisine_name = cuisine_name
@@ -72,8 +58,6 @@ class Author(db.Model):
     author_name = db.Column(String(150), nullable=False, unique=True)
     country_id = db.Column(db.Integer, db.ForeignKey('country.id'), nullable=False)
     country = db.relationship('Country', backref=db.backref('authors', lazy=True))
-
-    #recipes = db.relationship('Recipe', backref='author', lazy='dynamic')
 
     def __init__(self, author_name):
         self.author_name = author_name
@@ -94,49 +78,15 @@ class Country(db.Model):
 class Method(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id', ondelete="CASCADE"), nullable=False)
-    recipe = db.relationship('Recipe', backref=db.backref('methods', lazy=True))
+    recipe = db.relationship('Recipe', backref=db.backref('methods', cascade="all,delete", lazy=True))
     method_description = db.Column(Text)
-    #step_number = db.Column(db.Integer)
-
 
     def __init__(self, recipe, method_description):
-        #self.step_number = step_number
         self.recipe = recipe
         self.method_description = method_description
         
-    
     def __repr__(self):
         return '<Method %r>' % self.method_description
-
-class Allergen(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    allergen_name = db.Column(String(150), nullable=False, unique=True)
-
-    def __init__(self, allergen_name):
-        self.allergen_name = allergen_name
-    
-    def __repr__(self):
-        return '<Allergen %r>' % self.allergen_name
-
-db.Table('recipe_allergen',
-    db.Column('recipe_id', db.Integer, db.ForeignKey('recipe.id')),
-    db.Column('allergen_id', db.Integer, db.ForeignKey('allergen.id'))
-    )
-
-class Dietary(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    dietary_name = db.Column(String(150), nullable=False, unique=True)
-
-    def __init__(self, dietary_name):
-        self.dietary_name = dietary_name
-    
-    def __repr__(self):
-        return '<Dietary %r>' % self.dietary_name
-
-db.Table('recipe_dietary',
-    db.Column('recipe_id', db.Integer, db.ForeignKey('recipe.id')),
-    db.Column('dietary_id', db.Integer, db.ForeignKey('dietary.id'))
-    )
 
 class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -165,12 +115,6 @@ class Recipe(db.Model):
     image_filename = db.Column(db.String, default=None, nullable=True)
     image_url = db.Column(db.String, default=None, nullable=True)
 
-    #steps = db.relationship('Step', backref='recipe', lazy='dynamic')
-    # quantities = db.relationship('Quantity')
-    
-    allergens = db.relationship('Allergen', secondary='recipe_allergen', backref='recipe', lazy='dynamic')
-    dietaries = db.relationship('Dietary', secondary='recipe_dietary', backref='recipe', lazy='dynamic')
-
     def __init__(self, user, recipe_name, recipe_description, preparation_time, cooking_time, servings, category, course, cuisine, author, image_filename, image_url):
         self.user = user
         self.recipe_name = recipe_name
@@ -193,8 +137,6 @@ class Ingredient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     ingredient_name = db.Column(String(150), nullable=False)
 
-    # quantities = db.relationship('Quantity')
-
     def __init__(self, ingredient_name):
         self.ingredient_name = ingredient_name
     
@@ -205,8 +147,6 @@ class Ingredient(db.Model):
 class Measurement(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     measurement_name = db.Column(String(150), nullable=False, unique=True)
-
-    # quantities = db.relationship('Quantity')
 
     def __init__(self, measurement_name):
         self.measurement_name = measurement_name
@@ -220,7 +160,7 @@ class Quantity(db.Model):
     quantity = db.Column(db.Float)
     
     recipe_id = db.Column(db.Integer, db.ForeignKey('recipe.id', ondelete="CASCADE"), nullable=False)
-    recipe = db.relationship('Recipe', backref=db.backref('quantities', lazy=True))
+    recipe = db.relationship('Recipe', backref=db.backref('quantities', cascade="all,delete", lazy=True))
     
     ingredient_id = db.Column(db.Integer, db.ForeignKey('ingredient.id'), nullable=False)
     ingredient = db.relationship('Ingredient', backref=db.backref('quantities', lazy=True))

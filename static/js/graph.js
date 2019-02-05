@@ -33,7 +33,7 @@ function show_category_graph(ndx) {
     dc.barChart("#category-graph")
         .width(350)
         .height(250)
-        .margins({top: 10, right: 50, bottom: 30, left: 50})
+        .margins({top: 20, right: 20, bottom: 30, left: 10})
         .dimension(categoryDim)
         .group(categoryMix)
         .transitionDuration(500)
@@ -52,7 +52,7 @@ function show_cuisine_graph(ndx) {
     dc.rowChart("#cuisine-graph")
         .width(350)
         .height(250)
-        .margins({top: 10, right: 50, bottom: 30, left: 50})
+        .margins({top: 20, right: 20, bottom: 20, left: 10})
         .dimension(cuisineDim)
         .group(cuisineMix)
 //        .transitionDuration(500)
@@ -101,7 +101,7 @@ function show_category_graph(ndx) {
     dc.barChart("#category-graph")
         .width(350)
         .height(250)
-        .margins({top: 10, right: 50, bottom: 30, left: 50})
+        .margins({top: 20, right: 20, bottom: 30, left: 10})
         .dimension(categoryDim)
         .group(categoryMix)
         .transitionDuration(500)
@@ -116,16 +116,16 @@ function show_category_graph(ndx) {
     var authorMix = authorDim.group();
 
     dc.barChart("#author-graph")
-        .width(500)
+        .width(400)
         .height(250)
-        .margins({top: 10, right: 50, bottom: 30, left: 50})
+        .margins({top: 20, right: 20, bottom: 30, left: 10})
         .dimension(authorDim)
         .group(authorMix)
         .transitionDuration(500)
         .x(d3.scale.ordinal())
         .xUnits(dc.units.ordinal)
         .elasticY(true)
-        .xAxisLabel("author")
+        .xAxisLabel("Author")
         .yAxis().tickFormat(d3.format("d"));
 
 }

@@ -1,5 +1,4 @@
 {% extends 'base.html'%} {% block content %}
-<div class="card-panel teal lighten-3">
     {% with messages = get_flashed_messages() %}
          {% if messages %}
             <ul class=flashes>
@@ -17,7 +16,7 @@
         <p>Submitted by: {{ recipe.user.username }}</p>
         {% endif %}
         {% if recipe.image_url %}
-        <img class="materialboxed" src="{{ recipe.image_url }}" alt="{{ recipe.image_filename }}" style="width:100%;height:450px;">
+        <img class="materialboxed responsive-img" src="{{ recipe.image_url }}" alt="{{ recipe.image_filename }}">
         {% endif %}
         <div class="col s12 m6">
             <p><b>Category:</b> {{ recipe.category.category_name }}</p>
@@ -26,8 +25,8 @@
             <p><b>Author:</b> {{ recipe.author.author_name }}</p>
         </div>
         <div class="col s12 m6">
-            <p><b>Preparation Time:</b> {{ recipe.preparation_time }} Mins</p>
-            <p><b>Cooking Time:</b> {{ recipe.cooking_time }} mins</p>
+            <p><b>Preparation Time:</b> {{ recipe.preparation_time }} Minutes</p>
+            <p><b>Cooking Time:</b> {{ recipe.cooking_time }} Minutes</p>
             <p><b>Servings:</b> {{ recipe.servings }}</p>
         </div>
         <a class="btn-floating btn waves-effect waves-light teal" href="{{ url_for('save_recipe', id=recipe.id) }}"><i class="material-icons">star</i></a>
@@ -46,10 +45,10 @@
             {% endif %}
             {% for quantity in quantity_list %}
             <div class="row">
-                <div class="col s12 m10">
+                <div class="col s12 m8">
                     <p>{{ quantity.quantity }} {{ quantity.measurement.measurement_name }} {{ quantity.ingredient.ingredient_name }}</p>
                 </div>
-                <div class="col s12 m2">
+                <div class="col s12 m4">
                     {% if recipe.user == current_user %}
                     <a class="btn-floating btn-small waves-effect waves-light teal" href="{{ url_for('edit_quantity', id=quantity.id) }}"><i class="material-icons">edit</i></a> <a class="btn-floating btn-small waves-effect waves-light teal" href="{{ url_for('delete_quantity', id=quantity.id) }}" onclick="M.toast({html: 'Ingredient Deleted!'})"><i class="material-icons">delete</i></a>
                     {% endif %}
@@ -80,5 +79,4 @@
             </div>
         </div>
     </div>
-</div>
 {% endblock %}
