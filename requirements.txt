@@ -38,7 +38,7 @@ requests==2.19.1
 s3transfer==0.1.13
 six==1.11.0
 SQLAlchemy==1.2.9
-urllib3==1.23
+urllib3==1.26.5
 virtualenv==16.0.0
 Werkzeug==0.14.1
 wrapt==1.10.11
